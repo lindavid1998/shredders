@@ -11,7 +11,7 @@ module.exports = async(req, res, next) => {
 
     // if no token in header
     if (!jwtToken) {
-      res.status(403).send('not authorized, no JWT token')
+      return res.status(403).send('not authorized, no JWT token')
     }
 
     // reconstruct token and check if it matches
