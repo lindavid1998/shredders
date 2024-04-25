@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 const apiVersion = process.env.API_VERSION;
 const pool = require('./db')
 const morgan = require('morgan')
+const authorization = require('./middleware/authorization')
 
 // import routers
 const authRouter = require('./routes/jwtAuth')
@@ -25,8 +26,8 @@ app.use(cors())
 app.use(`/${apiVersion}/auth`, authRouter)
 
 // home page 
-app.get(`/${apiVersion}/home`, (req, res) => {
-  res.send('Show home page after user logged in')
+app.get(`/${apiVersion}/home`, authorization, (req, res) => {
+  res.json({ message: 'This is a protected route (home page)' });
 })
 
 // app.get(`/${apiVersion}/trips/plan`, (req, res) => {
