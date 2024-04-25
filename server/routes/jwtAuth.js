@@ -32,7 +32,7 @@ router.post(`/signup`, validateSignup, async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(400).json(errors)
+    return res.status(400).json({ errors: errors.array() })
   }
 
   const { email, password, first_name, last_name } = req.body
@@ -42,7 +42,7 @@ router.post(`/signup`, validateSignup, async (req, res) => {
     const queryResult = await pool.query(query, [email])
 
     if (queryResult.rows.length > 0) {
-      return res.status(500).send('Email already in use')
+      return res.status(500).json({ errors: [{ msg: 'Email already in use' }]})
     }
 
     // encrypt password
@@ -71,7 +71,7 @@ router.post(`/login`, validateLogin, async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(400).json(errors)
+    return res.status(400).json({ errors: errors.array() })
   }
 
   const { email, password } = req.body
@@ -83,7 +83,7 @@ router.post(`/login`, validateLogin, async (req, res) => {
 
     // if no result
     if (queryResult.rows.length == 0) {
-      return res.status(401).send('Email or password is wrong')
+      return res.status(401).json({ errors: [{ msg: 'Incorrect email or password' }]})
     } 
 
     const user = queryResult.rows[0]
@@ -96,10 +96,10 @@ router.post(`/login`, validateLogin, async (req, res) => {
       const token = jwtGenerator(user_id, first_name, last_name, email)
       res.json({ token })
     } else {
-      res.status(401).send('Email or password is wrong')
+      res.status(401).json({ errors: [{ msg: 'Incorrect email or password' }]})
     }
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).json({ errors: [{ msg: err }]});
   }
 })
 

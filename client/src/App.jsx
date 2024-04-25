@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from 'react'
+import LoginForm from './LoginForm'
 
 function App() {
   return (
     <>
+      <LoginForm />
     </>
   )
 }
