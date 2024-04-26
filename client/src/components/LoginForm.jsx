@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Button from './components/Button';
-import TextInput from './components/TextInput';
+import Button from './Button';
+import TextInput from './TextInput';
 
 const LoginForm = () => {
 	const [email, setEmail] = useState('');
@@ -37,7 +37,7 @@ const LoginForm = () => {
 
 	return (
 		<div className='max-w-lg p-4 flex flex-col gap-4'>
-			<h2 className='tracking-tight text-xl font-bold'>Welcome back!</h2>
+			<h2 className='tracking-tight text-2xl font-bold'>Welcome back!</h2>
 
 			<form onSubmit={handleSubmit} className='flex flex-col gap-4'>
 				<TextInput
@@ -47,18 +47,22 @@ const LoginForm = () => {
 					onChange={(e) => setEmail(e.target.value)}
 				/>
 
-        <TextInput
-          type='password'
+				<TextInput
+					type='password'
 					label='Password'
 					placeholder='Password'
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 
+				{error && <p className='text-red-500 text-center'>{error}</p>}
+
 				<Button type='submit' text='Login' />
 			</form>
 
-			{error && <p className='text-red-500 text-center'>{error}</p>}
+			<p className='text-center'>
+				Don&apos;t have an account? <a href='/' className='text-blue-600'>Sign up now</a>
+			</p>
 		</div>
 	);
 };
