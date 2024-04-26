@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from './Button';
 import TextInput from './TextInput';
+
+const version = import.meta.env.VITE_API_VERSION;
 
 const LoginForm = () => {
 	const [email, setEmail] = useState('');
@@ -11,13 +14,16 @@ const LoginForm = () => {
 		e.preventDefault();
 
 		try {
-			const response = await fetch('http://localhost:3000/v1/auth/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ email, password }),
-			});
+			const response = await fetch(
+				`http://localhost:3000/${version}/auth/login`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ email, password }),
+				}
+			);
 
 			const data = await response.json();
 
@@ -30,6 +36,8 @@ const LoginForm = () => {
 
 			console.log(`token: ${data.token}`);
 			setError('');
+
+			// route to home
 		} catch (error) {
 			setError(error);
 		}
@@ -61,7 +69,10 @@ const LoginForm = () => {
 			</form>
 
 			<p className='text-center'>
-				Don&apos;t have an account? <a href='/' className='text-blue-600'>Sign up now</a>
+				Don&apos;t have an account?{' '}
+				<Link className='text-blue-600' to={`/${version}/auth/signup`}>
+					Sign up now
+				</Link>
 			</p>
 		</div>
 	);

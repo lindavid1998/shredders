@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from './Button';
 import TextInput from './TextInput';
+
+const version = import.meta.env.VITE_API_VERSION;
 
 const SignupForm = () => {
 	const [email, setEmail] = useState('');
@@ -13,7 +16,7 @@ const SignupForm = () => {
 		e.preventDefault();
 
 		try {
-			const response = await fetch('http://localhost:3000/v1/auth/signup', {
+			const response = await fetch(`http://localhost:3000/${version}/auth/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -77,9 +80,9 @@ const SignupForm = () => {
 
 			<p className='text-center'>
 				Already have an account?{' '}
-				<a href='/' className='text-blue-600'>
+				<Link className='text-blue-600' to={`/${version}/auth/login`}>
 					Log in
-				</a>
+				</Link>
 			</p>
 		</div>
 	);
