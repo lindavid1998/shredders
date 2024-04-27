@@ -5,7 +5,7 @@ import TextInput from './TextInput';
 
 const version = import.meta.env.VITE_API_VERSION;
 
-const LoginForm = () => {
+const LoginForm = ({ className }) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
@@ -44,15 +44,17 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className='max-w-lg p-4 flex flex-col gap-4'>
+		<div className={`max-w-lg p-4 flex flex-col gap-4 ${className}`}>
 			<h2 className='tracking-tight text-2xl font-bold'>Welcome back!</h2>
 
 			<form onSubmit={handleSubmit} className='flex flex-col gap-4'>
 				<TextInput
+					type='email'
 					label='Email'
 					placeholder='Email'
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
+					required={true}
 				/>
 
 				<TextInput
@@ -61,6 +63,7 @@ const LoginForm = () => {
 					placeholder='Password'
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
+					required={true}
 				/>
 
 				{error && <p className='text-red-500 text-center'>{error}</p>}

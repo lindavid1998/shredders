@@ -1,5 +1,4 @@
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
+import Auth from './pages/Auth';
 import Home from './pages/Home';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -15,11 +14,11 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: 'signup',
-				element: <SignupForm />,
+				element: <Auth type='Signup' />,
 			},
 			{
 				path: 'login',
-				element: <LoginForm />,
+				element: <Auth type='Login' />,
 			},
 		],
 	},

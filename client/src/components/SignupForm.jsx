@@ -5,7 +5,7 @@ import TextInput from './TextInput';
 
 const version = import.meta.env.VITE_API_VERSION;
 
-const SignupForm = () => {
+const SignupForm = ({ className }) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
@@ -16,13 +16,16 @@ const SignupForm = () => {
 		e.preventDefault();
 
 		try {
-			const response = await fetch(`http://localhost:3000/${version}/auth/signup`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ email, password, first_name, last_name }),
-			});
+			const response = await fetch(
+				`http://localhost:3000/${version}/auth/signup`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ email, password, first_name, last_name }),
+				}
+			);
 
 			const data = await response.json();
 
@@ -40,7 +43,7 @@ const SignupForm = () => {
 	};
 
 	return (
-		<div className='max-w-lg p-4 flex flex-col gap-4'>
+		<div className={`max-w-lg p-4 flex flex-col gap-4 ${className}`}>
 			<h2 className='tracking-tight text-2xl font-bold'>Create an account</h2>
 
 			<form onSubmit={handleSubmit} className='flex flex-col gap-4'>
@@ -49,6 +52,7 @@ const SignupForm = () => {
 					placeholder='First name'
 					value={first_name}
 					onChange={(e) => setFirstname(e.target.value)}
+					required={true}
 				/>
 
 				<TextInput
@@ -56,13 +60,16 @@ const SignupForm = () => {
 					placeholder='Last name'
 					value={last_name}
 					onChange={(e) => setLastname(e.target.value)}
+					required={true}
 				/>
 
 				<TextInput
+					type='email'
 					label='Email'
 					placeholder='Email'
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
+					required={true}
 				/>
 
 				<TextInput
@@ -71,6 +78,7 @@ const SignupForm = () => {
 					placeholder='Password'
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
+					required={true}
 				/>
 
 				{error && <p className='text-red-500 text-center'>{error}</p>}
