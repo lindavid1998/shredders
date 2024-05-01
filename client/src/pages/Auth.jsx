@@ -3,11 +3,21 @@ import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
 import LoginImg from '../../public/snowboard-login-hero.jpg';
 import SignupImg from '../../public/snowboard-signup-hero.jpg';
+import { useAuth } from '../hooks/useAuth';
+import { Navigate } from 'react-router-dom';
+const version = import.meta.env.VITE_API_VERSION;
 
 const Auth = ({ type }) => {
-  const HeroImg = type == 'Login' ? LoginImg : SignupImg
+	const { user } = useAuth();
 
-  const Form = type == 'Login' ? LoginForm : SignupForm
+	if (user) {
+		// user is already authenticated, redirect to home
+		return <Navigate to={`/${version}`} />;
+	}
+
+	const HeroImg = type == 'Login' ? LoginImg : SignupImg;
+
+	const Form = type == 'Login' ? LoginForm : SignupForm;
 
 	return (
 		<div className='flex h-screen flex-col justify-center items-center md:gap-8 md:flex-row'>
