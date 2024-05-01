@@ -582,6 +582,10 @@ video {
   width: 50%;
 }
 
+.w-screen {
+  width: 100vw;
+}
+
 .max-w-lg {
   max-width: 32rem;
 }

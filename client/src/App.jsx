@@ -1,33 +1,25 @@
 import Auth from './pages/Auth';
 import Home from './pages/Home';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
+import Landing from './pages/Landing';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
 const version = import.meta.env.VITE_API_VERSION;
-
-const router = createBrowserRouter([
-	{
-		path: `/${version}`,
-		element: <Home />,
-	},
-	{
-		path: `/${version}/auth/`,
-		children: [
-			{
-				path: 'signup',
-				element: <Auth type='Signup' />,
-			},
-			{
-				path: 'login',
-				element: <Auth type='Login' />,
-			},
-		],
-	},
-]);
 
 function App() {
 	return (
 		<>
-			<RouterProvider router={router} />
+			<BrowserRouter>
+				<Routes>
+					<Route path='/' element={<Landing />} />
+					<Route element={<PrivateRoute />}>
+						<Route path={`/${version}`} element={<Home />} />
+					</Route>
+					<Route path={`/${version}/auth/`}>
+						<Route path={`signup`} element={<Auth type='Signup' />} />
+						<Route path={`login`} element={<Auth type='Login' />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }

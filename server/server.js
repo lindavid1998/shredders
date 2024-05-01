@@ -1,37 +1,45 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const apiVersion = process.env.API_VERSION;
-const pool = require('./db')
-const morgan = require('morgan')
-const authorization = require('./middleware/authorization')
+const morgan = require('morgan');
+const authorization = require('./middleware/authorization');
+const cookieParser = require('cookie-parser');
 
 // import routers
-const authRouter = require('./routes/jwtAuth')
+const authRouter = require('./routes/jwtAuth');
 
 // MIDDLEWARE
 
-app.use(express.json())  // enables req.body
-app.use(cors())
+app.use(express.json()); // enables req.body
 
-// ROUTES 
+app.use(cookieParser());
+
+const corsOptions = {
+	origin: 'http://localhost:5000', // client's origin
+	credentials: true, // Allow credentials
+};
+
+app.use(cors(corsOptions));
+
+// ROUTES
 
 // app.get(`/`, (req, res) => {
 //   res.send('Show landing page')
 // })
 
 // log in and sign up pages
-app.use(`/${apiVersion}/auth`, authRouter)
+app.use(`/${apiVersion}/auth`, authRouter);
 
-// home page 
+// home page
 app.get(`/${apiVersion}/home`, authorization, (req, res) => {
-  res.json({ message: 'This is a protected route (home page)' });
-})
+	res.json({ message: 'This is a protected route (home page)' });
+});
 
 // app.get(`/${apiVersion}/trips/plan`, (req, res) => {
-//   res.send('plan a trip') 
+//   res.send('plan a trip')
 // })
 
 // app.post(`/${apiVersion}/trips/plan`, (req, res) => {
@@ -40,7 +48,7 @@ app.get(`/${apiVersion}/home`, authorization, (req, res) => {
 // });
 
 // app.get(`/${apiVersion}/trips/:id`, async (req, res) => {
-//   // view trip 
+//   // view trip
 //   try {
 //     const tripId = req.params.id
 //     const query = 'SELECT * FROM trips WHERE trip_id = $1';
@@ -57,5 +65,5 @@ app.get(`/${apiVersion}/home`, authorization, (req, res) => {
 // })
 
 app.listen(port, () => {
-  console.log(`server listening on port ${port}!`);
+	console.log(`server listening on port ${port}!`);
 });

@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { useAuth } from '../hooks/useAuth';
+
+const version = import.meta.env.VITE_API_VERSION;
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+	const { user } = useAuth();
+	return <div>Home {user.first_name}</div>;
+};
 
-export default Home
+export default Home;

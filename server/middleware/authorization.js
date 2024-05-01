@@ -1,26 +1,27 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config()
+require('dotenv').config();
 
-module.exports = async(req, res, next) => {
-  // verify JWT is valid
-  // modify req object to include payload if JWT is valid
+module.exports = async (req, res, next) => {
+	// verify JWT is valid
+	// modify req object to include payload if JWT is valid
 
-  try {
-    // destructure token from request header
-    const jwtToken = req.header('token')
+	try {
+		// const token = req.header('token');
+		const token = req.cookies.token;
 
-    // if no token in header
-    if (!jwtToken) {
-      return res.status(403).send('not authorized, no JWT token')
-    }
+		if (!token) {
+			return res
+				.status(403)
+				.json({ errors: [{ msg: 'not authorized, no JWT token' }] });
+		}
 
-    // reconstruct token and check if it matches
-    const payload = jwt.verify(jwtToken, process.env.JWT_KEY)
+		// reconstruct token and check if it matches
+		const payload = jwt.verify(token, process.env.JWT_KEY);
 
-    req.user = payload;
+		req.user = payload;
 
-    next()
-  } catch (err) {
-    res.status(403).send('not authorized, invalid JWT')
-  }
-}
+		next();
+	} catch (err) {
+		res.status(403).json({ errors: [{ msg: 'not authorized, invalid JWT' }] });
+	}
+};

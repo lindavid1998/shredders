@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
 import TextInput from './TextInput';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const version = import.meta.env.VITE_API_VERSION;
 
@@ -9,6 +11,8 @@ const LoginForm = ({ className }) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const navigate = useNavigate();
+	const { setUser } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -21,6 +25,7 @@ const LoginForm = ({ className }) => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
+					credentials: 'include',
 					body: JSON.stringify({ email, password }),
 				}
 			);
@@ -29,15 +34,13 @@ const LoginForm = ({ className }) => {
 
 			if (!response.ok) {
 				const error = data.errors[0].msg;
-				console.log(`error: ${error}`);
 				setError(error);
 				return;
 			}
 
-			console.log(`token: ${data.token}`);
 			setError('');
-
-			// route to home
+			setUser(data.user);
+			navigate(`/${version}`);
 		} catch (error) {
 			setError(error);
 		}
