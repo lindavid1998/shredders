@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 const version = import.meta.env.VITE_API_VERSION;
 import { useAuth } from '../hooks/useAuth';
+import Button from '../components/Button';
 
 const Landing = () => {
-	const { logout } = useAuth();
+	const { user, logout } = useAuth();
 
 	return (
 		<div className='flex flex-col'>
@@ -21,7 +22,7 @@ const Landing = () => {
 				Home
 			</Link>
 
-			<div onClick={logout}>Log out</div>
+			{user && <Button type='button' text='Log out' onClick={logout}></Button>}
 		</div>
 	);
 };

@@ -70,8 +70,7 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 
 		delete user.password;
 
-		// res.cookie('token', token, { httpOnly: true }); // add this back later
-		res.cookie('token', token, { maxAge: 900000 });
+		res.cookie('token', token, { maxAge: 900000, httpOnly: true });
 
 		res.json({ user });
 	} catch (err) {
@@ -116,8 +115,7 @@ router.post(`/login`, validateLogin, async (req, res) => {
 
 			delete user.password;
 
-			// res.cookie('token', token, { httpOnly: true }); // add this back later
-			res.cookie('token', token, { maxAge: 900000 });
+			res.cookie('token', token, { maxAge: 900000, httpOnly: true });
 
 			res.json({ user });
 		} else {
