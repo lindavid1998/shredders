@@ -32,14 +32,11 @@ export const AuthProvider = ({ children }) => {
 
 				const { user } = await response.json();
 
-				if (response.ok) {
-					setUser(user);
-					setIsLoading(false);
-				}
+				if (response.ok) setUser(user);
 			} catch (error) {
 				console.log(error);
-				setIsLoading(false);
 			}
+			setIsLoading(false);
 		};
 
 		checkAuth();
@@ -50,6 +47,7 @@ export const AuthProvider = ({ children }) => {
 		setUser,
 		logout,
 		isLoading,
+		setIsLoading,
 	};
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -12,12 +12,13 @@ const LoginForm = ({ className }) => {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const navigate = useNavigate();
-	const { setUser } = useAuth();
+	const { setIsLoading, setUser } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		try {
+			setIsLoading(true);
 			const response = await fetch(
 				`http://localhost:3000/${version}/auth/login`,
 				{
@@ -44,6 +45,7 @@ const LoginForm = ({ className }) => {
 		} catch (error) {
 			setError(error);
 		}
+		setIsLoading(false);
 	};
 
 	return (

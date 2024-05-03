@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 
 // import routers
 const authRouter = require('./routes/jwtAuth');
+const tripRouter = require('./routes/trips');
 
 // MIDDLEWARE
 
@@ -33,19 +34,16 @@ app.use(cors(corsOptions));
 // log in and sign up pages
 app.use(`/${apiVersion}/auth`, authRouter);
 
+app.use(`/${apiVersion}/trips`, tripRouter);
+
 // home page
-app.get(`/${apiVersion}/home`, authorization, (req, res) => {
-	res.json({ message: 'This is a protected route (home page)' });
-});
+// app.get(`/${apiVersion}/home`, authorization, (req, res) => {
+// 	res.json({ message: 'This is a protected route (home page)' });
+// });
 
 // app.get(`/${apiVersion}/trips/plan`, (req, res) => {
 //   res.send('plan a trip')
 // })
-
-// app.post(`/${apiVersion}/trips/plan`, (req, res) => {
-//   res.send('save new trip')
-//   // INSERT INTO trips (destination_id, start_date, end_date) values (2, (DATE '2024-01-03'), (DATE '2024-01-05'));
-// });
 
 // app.get(`/${apiVersion}/trips/:id`, async (req, res) => {
 //   // view trip

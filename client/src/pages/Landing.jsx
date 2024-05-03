@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 const version = import.meta.env.VITE_API_VERSION;
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/Button';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
 	const { user, logout } = useAuth();
+	const navigate = useNavigate();
 
 	return (
 		<div className='flex flex-col'>
@@ -22,7 +24,15 @@ const Landing = () => {
 				Home
 			</Link>
 
-			{user && <Button type='button' text='Log out' onClick={logout}></Button>}
+			{user && (
+				<Button
+					type='button'
+					text='Plan a trip'
+					onClick={() => navigate(`/${version}/trips/plan`)}
+				/>
+			)}
+
+			{user && <Button type='button' text='Log out' onClick={logout} />}
 		</div>
 	);
 };

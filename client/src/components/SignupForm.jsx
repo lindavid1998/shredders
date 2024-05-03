@@ -14,10 +14,11 @@ const SignupForm = ({ className }) => {
 	const [first_name, setFirstname] = useState('');
 	const [last_name, setLastname] = useState('');
 	const navigate = useNavigate();
-	const { setUser } = useAuth();
+	const { setIsLoading, setUser } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 
 		try {
 			const response = await fetch(
@@ -46,6 +47,7 @@ const SignupForm = ({ className }) => {
 		} catch (error) {
 			setError(error);
 		}
+		setIsLoading(false);
 	};
 
 	return (

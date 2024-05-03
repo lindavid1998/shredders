@@ -8,20 +8,20 @@ import { Link } from 'react-router-dom';
 const Home = () => {
 	const { user } = useAuth();
 
-	const fetchData = () => {
-		// dummy API call
-		return new Promise((resolve, reject) => {
-			setTimeout(() => {
-				resolve();
-			}, 1000);
-		});
-	};
+	// const fetchData = () => {
+	// 	// dummy API call
+	// 	return new Promise((resolve, reject) => {
+	// 		setTimeout(() => {
+	// 			resolve();
+	// 		}, 1000);
+	// 	});
+	// };
 
-	const isLoading = useLoad(fetchData);
+	// const isLoading = useLoad(fetchData);
 
-	if (isLoading) {
-		return <Spinner />;
-	}
+	// if (isLoading) {
+	// 	return <Spinner />;
+	// }
 
 	return (
 		<>
