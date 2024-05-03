@@ -20,7 +20,7 @@ const validateInput = [
 	check('end_date').notEmpty().withMessage('End date cannot be empty'),
 ];
 
-router.post(`/plan`, authorization, validateInput, async (req, res) => {
+router.post(`/plan`, validateInput, async (req, res) => {
 	// validate input
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -30,19 +30,58 @@ router.post(`/plan`, authorization, validateInput, async (req, res) => {
 	const { destination_id, start_date, end_date, user_id } = req.body;
 
 	try {
+		const query = `
+			INSERT INTO trips (destination_id, start_date, end_date, creator)
+			VALUES ($1, $2, $3, $4) RETURNING trip_id
+		`;
 		// insert into db
-		await pool.query(
-			'INSERT INTO trips (destination_id, start_date, end_date, creator) values ($1, $2, $3, $4)',
-			[destination_id, start_date, end_date, user_id]
-		);
+		const result = await pool.query(query, [
+			destination_id,
+			start_date,
+			end_date,
+			user_id,
+		]);
+		const trip_id = result.rows[0].trip_id;
 
-		res.status(200).json('success');
+		res.status(200).json({ trip_id });
 	} catch (err) {
 		if (typeof err === 'object') {
 			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
 		} else {
 			res.status(500).json({ errors: [{ msg: err }] });
 		}
+	}
+});
+
+router.get('/:id', async (req, res) => {
+	// view trip
+	try {
+		const tripId = req.params.id;
+
+		const query = `
+			SELECT
+				start_date,
+				end_date,
+				name AS location,
+				creator,
+				first_name AS creator_first_name,
+				last_name AS creator_last_name
+			FROM
+				trips
+			INNER JOIN destinations
+				ON trips.destination_id = destinations.destination_id
+			INNER JOIN users
+				ON trips.creator = users.user_id
+			WHERE
+				trips.trip_id = $1
+	`;
+
+		const result = await pool.query(query, [tripId]);
+		const data = result.rows[0];
+
+		res.status(200).json(data);
+	} catch (err) {
+		res.status(500).json({ errors: [{ msg: err }] });
 	}
 });
 

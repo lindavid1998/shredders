@@ -27,40 +27,10 @@ app.use(cors(corsOptions));
 
 // ROUTES
 
-// app.get(`/`, (req, res) => {
-//   res.send('Show landing page')
-// })
-
 // log in and sign up pages
 app.use(`/${apiVersion}/auth`, authRouter);
 
-app.use(`/${apiVersion}/trips`, tripRouter);
-
-// home page
-// app.get(`/${apiVersion}/home`, authorization, (req, res) => {
-// 	res.json({ message: 'This is a protected route (home page)' });
-// });
-
-// app.get(`/${apiVersion}/trips/plan`, (req, res) => {
-//   res.send('plan a trip')
-// })
-
-// app.get(`/${apiVersion}/trips/:id`, async (req, res) => {
-//   // view trip
-//   try {
-//     const tripId = req.params.id
-//     const query = 'SELECT * FROM trips WHERE trip_id = $1';
-//     const result = await pool.query(query, [tripId]);
-//     const data = result.rows[0]
-
-//     res.json({
-//       status: 'OK',
-//       data
-//     });
-//   } catch (err) {
-//     res.status(500).send(err)
-//   }
-// })
+app.use(`/${apiVersion}/trips`, authorization, tripRouter);
 
 app.listen(port, () => {
 	console.log(`server listening on port ${port}!`);

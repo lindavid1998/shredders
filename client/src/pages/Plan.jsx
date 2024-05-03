@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 const version = import.meta.env.VITE_API_VERSION;
+import { useNavigate } from 'react-router-dom';
 
 // submit trip with hard-coded destinations
 // then dynamically add destinations using api call
@@ -12,6 +13,7 @@ const Plan = () => {
 	const [start_date, setStartDate] = useState(null);
 	const [end_date, setEndDate] = useState(null);
 	const [error, setError] = useState('');
+	const navigate = useNavigate();
 
 	const { user } = useAuth();
 
@@ -38,6 +40,7 @@ const Plan = () => {
 			);
 
 			const data = await response.json();
+			console.log(data);
 
 			if (!response.ok) {
 				const error = data.errors[0].msg;
@@ -46,6 +49,7 @@ const Plan = () => {
 			}
 
 			setError('');
+			navigate(`/${version}/trips/${data.trip_id}`);
 		} catch (error) {
 			setError(error);
 		}
