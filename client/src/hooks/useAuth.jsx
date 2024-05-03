@@ -11,9 +11,20 @@ export const AuthProvider = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [cookies, setCookies, removeCookie] = useCookies(['token']);
 
-	const logout = () => {
-		removeCookie('token');
-		setUser(null);
+	const logout = async () => {
+		try {
+			// clear cookie from backend
+			await fetch(`http://localhost:3000/${version}/auth/logout`, {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			setUser(null);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {
