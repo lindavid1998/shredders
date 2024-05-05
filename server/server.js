@@ -48,7 +48,7 @@ app.get(`/${apiVersion}`, authorization, async (req, res) => {
 				ON trips.destination_id = destinations.destination_id
 			WHERE
 				rsvps.user_id = $1
-			ORDER BY trips.start_date; 
+			ORDER BY trips.start_date DESC; 
 		`;
 
 		const result = await pool.query(query, [userId]);

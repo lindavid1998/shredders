@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 const version = import.meta.env.VITE_API_VERSION;
+import { getFormattedDate } from '../utils/utils';
 
 const Trip = () => {
 	const { id } = useParams();
@@ -51,9 +52,9 @@ const Trip = () => {
 
 	return (
 		<div>
-			<div>Destination: {location}</div>
-			<div>Start: {start_date}</div>
-			<div>End: {end_date}</div>
+			<div>{location}</div>
+			<div>Start: {getFormattedDate(start_date)}</div>
+			<div>End: {getFormattedDate(end_date)}</div>
 			<div>
 				Created by: {creator_first_name} {creator_last_name}
 			</div>

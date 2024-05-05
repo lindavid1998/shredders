@@ -8,7 +8,7 @@ const Button = ({ type, text, onClick, className }) => {
 		<button
 			type={type}
 			onClick={onClick}
-			className={className || defaultClasses}
+			className={className ? className + defaultClasses : defaultClasses}
 		>
 			{text}
 		</button>
