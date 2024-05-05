@@ -30,18 +30,29 @@ router.post(`/plan`, validateInput, async (req, res) => {
 	const { destination_id, start_date, end_date, user_id } = req.body;
 
 	try {
-		const query = `
+		let query = `
 			INSERT INTO trips (destination_id, start_date, end_date, creator)
 			VALUES ($1, $2, $3, $4) RETURNING trip_id
 		`;
 		// insert into db
-		const result = await pool.query(query, [
+		let result = await pool.query(query, [
 			destination_id,
 			start_date,
 			end_date,
 			user_id,
 		]);
 		const trip_id = result.rows[0].trip_id;
+
+		query = `
+			INSERT INTO rsvps(user_id, trip_id, status)
+			VALUES ($1, $2, $3)
+		`
+		
+		result = await pool.query(query, [
+			user_id,
+			trip_id,
+			'Going'
+		]);
 
 		res.status(200).json({ trip_id });
 	} catch (err) {
