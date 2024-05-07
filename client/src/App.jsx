@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Plan from './pages/Plan';
 import Trip from './pages/Trip';
+import Navbar from './components/Navbar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 const version = import.meta.env.VITE_API_VERSION;
@@ -11,6 +12,7 @@ function App() {
 	return (
 		<>
 			<BrowserRouter>
+				<Navbar></Navbar>
 				<Routes>
 					<Route path='/' element={<Landing />} />
 					<Route element={<PrivateRoute />}>

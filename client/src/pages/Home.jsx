@@ -107,7 +107,7 @@ const Home = () => {
 	return (
 		<div className='flex flex-col gap-6'>
 			<div>
-				<h1>Welcome, {user.first_name}</h1>
+				<h2>Welcome, {user.first_name}</h2>
 
 				<Button
 					text='Create a trip'

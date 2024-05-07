@@ -52,7 +52,7 @@ const SignupForm = ({ className }) => {
 
 	return (
 		<div className={`max-w-lg p-4 flex flex-col gap-4 ${className}`}>
-			<h2 className='tracking-tight text-2xl font-bold'>Create an account</h2>
+			<h2>Create an account</h2>
 
 			<form onSubmit={handleSubmit} className='flex flex-col gap-4'>
 				<TextInput

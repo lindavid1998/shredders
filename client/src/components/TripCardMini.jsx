@@ -11,7 +11,7 @@ const TripCardMini = ({ data }) => {
 	end_date = getFormattedDate(end_date);
 
 	return (
-		<div className='max-w-sm p-2 flex'>
+		<div className='w-60 p-2 flex h-12'>
 			<Link className='size-16' to={`/${version}/trips/${trip_id}`}>
 				<img src={Icon} />
 			</Link>
