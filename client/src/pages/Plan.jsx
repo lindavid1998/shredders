@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 const version = import.meta.env.VITE_API_VERSION;
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
 
-// submit trip with hard-coded destinations
-// then dynamically add destinations using api call
-// update styling
-
 const Plan = () => {
+	const [destinationToId, setDestinationToId] = useState({});
 	const [destination, setDestination] = useState(null);
 	const [start_date, setStartDate] = useState(null);
 	const [end_date, setEndDate] = useState(null);
@@ -18,17 +15,39 @@ const Plan = () => {
 
 	const { user } = useAuth();
 
-	const destinationToId = {
-		'Mammoth': 1,
-		'Bear Mountain': 2,
-		'Brighton': 3,
-	}
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await fetch(
+				`http://localhost:3000/${version}/trips/plan`,
+				{
+					method: 'GET',
+					credentials: 'include',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
 
-	const options = Object.keys(destinationToId)
+			const data = await response.json();
+
+			if (!response.ok) {
+				const error = data.errors[0].msg;
+				setError(error);
+				return;
+			}
+
+			setError('');
+			setDestinationToId(data);
+		};
+
+		fetchData();
+	}, []);
+
+	const options = Object.keys(destinationToId);
 
 	const handleSelect = (destination) => {
 		setDestination(destination);
-	}
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -44,7 +63,6 @@ const Plan = () => {
 					},
 					credentials: 'include',
 					body: JSON.stringify({
-						// destination_id,
 						destination_id: destinationToId[destination],
 						start_date,
 						end_date,
@@ -73,8 +91,12 @@ const Plan = () => {
 		<form className='flex flex-col max-w-md gap-3' onSubmit={handleSubmit}>
 			<h2>Plan a trip</h2>
 
-			<label htmlFor="">Destination</label>
-			<Dropdown options={options} selected={destination} onSelect={handleSelect} />
+			<label htmlFor=''>Destination</label>
+			<Dropdown
+				options={options}
+				selected={destination}
+				onSelect={handleSelect}
+			/>
 
 			<label htmlFor='start_date'>Start:</label>
 			<input

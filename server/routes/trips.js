@@ -21,6 +21,27 @@ const validateInput = [
 	check('end_date').notEmpty().withMessage('End date cannot be empty'),
 ];
 
+router.get('/plan', async (req, res) => {
+	try {
+		const query = 'SELECT * FROM destinations'
+		const result = await pool.query(query);
+		const destinations = result.rows
+		const destinationToId = {};
+		
+		destinations.forEach((destination) => {
+			destinationToId[destination.name] = destination.destination_id;
+		});
+		
+		res.status(200).json(destinationToId)
+	} catch (error) {
+		if (typeof err === 'object') {
+			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
+		} else {
+			res.status(500).json({ errors: [{ msg: err }] });
+		}
+	}
+})
+
 router.post(`/plan`, validateInput, async (req, res) => {
 	// validate input
 	const errors = validationResult(req);
