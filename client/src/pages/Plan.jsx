@@ -3,19 +3,32 @@ import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 const version = import.meta.env.VITE_API_VERSION;
 import { useNavigate } from 'react-router-dom';
+import Dropdown from '../components/Dropdown';
 
 // submit trip with hard-coded destinations
 // then dynamically add destinations using api call
 // update styling
 
 const Plan = () => {
-	const [destination_id, setDestinationId] = useState(1);
+	const [destination, setDestination] = useState(null);
 	const [start_date, setStartDate] = useState(null);
 	const [end_date, setEndDate] = useState(null);
 	const [error, setError] = useState('');
 	const navigate = useNavigate();
 
 	const { user } = useAuth();
+
+	const destinationToId = {
+		'Mammoth': 1,
+		'Bear Mountain': 2,
+		'Brighton': 3,
+	}
+
+	const options = Object.keys(destinationToId)
+
+	const handleSelect = (destination) => {
+		setDestination(destination);
+	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -31,7 +44,8 @@ const Plan = () => {
 					},
 					credentials: 'include',
 					body: JSON.stringify({
-						destination_id,
+						// destination_id,
+						destination_id: destinationToId[destination],
 						start_date,
 						end_date,
 						user_id,
@@ -59,21 +73,8 @@ const Plan = () => {
 		<form className='flex flex-col max-w-md gap-3' onSubmit={handleSubmit}>
 			<h2>Plan a trip</h2>
 
-			<label htmlFor='destination_id'>Destination:</label>
-			<select
-				id='destination_id'
-				name='destination_id'
-				onChange={(e) => setDestinationId(parseInt(e.target.value))}
-				required
-				defaultValue=''
-			>
-				<option disabled value=''>
-					Select an option
-				</option>
-				<option value='1'>Mammoth</option>
-				<option value='2'>Bear Mountain</option>
-				<option value='3'>Brighton</option>
-			</select>
+			<label htmlFor="">Destination</label>
+			<Dropdown options={options} selected={destination} onSelect={handleSelect} />
 
 			<label htmlFor='start_date'>Start:</label>
 			<input

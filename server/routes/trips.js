@@ -4,6 +4,7 @@ const authorization = require('../middleware/authorization');
 const { check, validationResult } = require('express-validator');
 
 const validateInput = [
+	check('destination_id').exists().withMessage('Destination cannot be empty'),
 	check('start_date')
 		.notEmpty()
 		.withMessage('Start date cannot be empty')
@@ -46,13 +47,9 @@ router.post(`/plan`, validateInput, async (req, res) => {
 		query = `
 			INSERT INTO rsvps(user_id, trip_id, status)
 			VALUES ($1, $2, $3)
-		`
-		
-		result = await pool.query(query, [
-			user_id,
-			trip_id,
-			'Going'
-		]);
+		`;
+
+		result = await pool.query(query, [user_id, trip_id, 'Going']);
 
 		res.status(200).json({ trip_id });
 	} catch (err) {
