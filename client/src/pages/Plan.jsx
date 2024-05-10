@@ -88,38 +88,42 @@ const Plan = () => {
 	};
 
 	return (
-		<form className='flex flex-col max-w-md gap-3' onSubmit={handleSubmit}>
-			<h2>Plan a trip</h2>
-
-			<label htmlFor=''>Destination</label>
-			<Dropdown
-				options={options}
-				selected={destination}
-				onSelect={handleSelect}
-			/>
-
-			<label htmlFor='start_date'>Start:</label>
-			<input
-				type='date'
-				id='start_date'
-				name='start_date'
-				required
-				onChange={(e) => setStartDate(e.target.value)}
-			></input>
-
-			{/* add client side validation that end date cannot be before start date? */}
-			<label htmlFor='end_date'>End:</label>
-			<input
-				type='date'
-				id='end_date'
-				name='end_date'
-				required
-				onChange={(e) => setEndDate(e.target.value)}
-			></input>
-
-			<p className='text-red-500 text-center'>{error}</p>
-			<Button type='submit' text='Create' />
-		</form>
+		<div className='w-screen flex justify-center items-center'>
+			<form className='flex flex-col w-full max-w-lg gap-3 p-4' onSubmit={handleSubmit}>
+				<h2>Plan a trip</h2>
+				<div className='input-container'>
+					<label>Destination</label>
+					<Dropdown
+						options={options}
+						selected={destination}
+						onSelect={handleSelect}
+					/>
+				</div>
+				<div className='input-container'>
+					<label htmlFor='start_date'>Start</label>
+					<input
+						type='date'
+						id='start_date'
+						name='start_date'
+						required
+						onChange={(e) => setStartDate(e.target.value)}
+					></input>
+				</div>
+				<div className='input-container'>
+					{/* add client side validation that end date cannot be before start date? */}
+					<label htmlFor='end_date'>End</label>
+					<input
+						type='date'
+						id='end_date'
+						name='end_date'
+						required
+						onChange={(e) => setEndDate(e.target.value)}
+					></input>
+				</div>
+				<p className='text-red-500 text-center'>{error}</p>
+				<Button type='submit' text='Create' />
+			</form>
+		</div>
 	);
 };
 

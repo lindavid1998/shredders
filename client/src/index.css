@@ -3,13 +3,43 @@
 @tailwind utilities;
 
 h1 {
-  @apply text-4xl font-bold text-gray-900; 
+	@apply text-4xl font-bold text-gray-900;
 }
 
 h2 {
-  @apply text-3xl font-bold text-gray-800; 
+	@apply text-3xl font-bold text-gray-800;
 }
 
-h1, h2, h3, h4 {
-  @apply tracking-tight
+h1,
+h2,
+h3,
+h4 {
+	@apply tracking-tight;
+}
+
+.input-container {
+	@apply flex flex-row items-center justify-between;
+}
+
+.input-container label {
+	@apply min-w-36;
+}
+
+input[type='date'] {
+	@apply inline-flex;
+	@apply w-full;
+	@apply max-w-64;
+	@apply justify-center;
+	@apply gap-x-1.5;
+	@apply rounded-md;
+	@apply bg-white;
+	@apply px-3;
+	@apply py-2;
+	@apply text-sm;
+	@apply text-gray-900;
+	@apply shadow-sm;
+	@apply ring-1;
+	@apply ring-inset;
+	@apply ring-gray-300;
+	@apply hover:bg-gray-50;
 }
