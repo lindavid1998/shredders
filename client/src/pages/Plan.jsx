@@ -88,7 +88,7 @@ const Plan = () => {
 	};
 
 	return (
-		<div className='w-screen flex justify-center items-center'>
+		<div className='w-full flex justify-center items-center'>
 			<form className='flex flex-col w-full max-w-lg gap-3 p-4' onSubmit={handleSubmit}>
 				<h2>Plan a trip</h2>
 				<div className='input-container'>

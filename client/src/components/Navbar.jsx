@@ -16,8 +16,8 @@ const Navbar = () => {
 	const link = user ? `/${version}` : '/';
 
 	return (
-		<div className='w-screen h-16 flex items-center'>
-			<div className='flex items-center max-w-2xl w-5/6 mx-auto'>
+		<div className='w-full max-w-screen-lg h-16 flex items-center px-10'>
+			<div className='flex items-center w-full'>
 				<Link to={link}>
 					<h1>Shredders</h1>
 				</Link>
