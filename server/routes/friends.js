@@ -6,25 +6,17 @@ router.get('/', async (req, res) => {
 		const user_id = req.query.user_id;
 
 		const query = `
-			SELECT u.first_name, u.last_name
+			SELECT u.first_name, u.last_name, u.user_id
 			FROM users u
 			JOIN friends f ON u.user_id = f.user1_id OR u.user_id = f.user2_id
 			WHERE (f.user1_id = $1 OR f.user2_id = $1) AND u.user_id <> $1
 			LIMIT 3;
 		`;
 
-		let result = await pool.query(query, [user_id]);
-		let friends = result.rows;
+		const result = await pool.query(query, [user_id]);
+		const friends = result.rows;
 
-		result = [];
-
-		friends.forEach((friend) =>
-			result.push(`${friend.first_name} ${friend.last_name}`)
-		);
-
-		console.log(result)
-
-		res.status(200).json(result);
+		res.status(200).json(friends);
 	} catch (err) {
 		if (typeof err === 'object') {
 			console.log(err);

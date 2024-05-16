@@ -13,6 +13,7 @@ const Plan = () => {
 	const [error, setError] = useState('');
 	const [friends, setFriends] = useState([]);
 	const [showFriends, setShowFriends] = useState(false);
+	const [addedFriends, setAddedFriends] = useState([]);
 	const navigate = useNavigate();
 
 	const { user } = useAuth();
@@ -165,7 +166,7 @@ const Plan = () => {
 							placeholder='Enter name'
 							className='input-field'
 							onFocus={() => setShowFriends(true)}
-							onBlur={() => setShowFriends(false)}
+							// onBlur={() => setShowFriends(false)}
 						/>
 
 						<div
@@ -173,17 +174,32 @@ const Plan = () => {
 								showFriends ? '' : 'hidden'
 							}`}
 						>
-							{friends.map((friend, index) => (
+							{friends.map((friend) => (
 								<div
-									key={index}
+									key={friend.user_id}
+									id={friend.user_id}
 									className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100 cursor-pointer'
+									onClick={() => {
+										setAddedFriends((prevState) => [...prevState, friend]);
+									}}
 								>
-									{friend}
+									{friend.first_name} {friend.last_name}
 								</div>
 							))}
 						</div>
 					</div>
 				</div>
+
+				{addedFriends.length > 0 && (
+					<div className='w-full border-t flex flex-col pt-2 gap-3 justify-start'>
+						<div className='font-bold'>Invited people</div>
+						{addedFriends.map((friend) => (
+							<div key={friend.user_id} id={friend.user_id}>
+								{friend.first_name} {friend.last_name}
+							</div>
+						))}
+					</div>
+				)}
 
 				<p className='text-red-500 text-center'>{error}</p>
 
