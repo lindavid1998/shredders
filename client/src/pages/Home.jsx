@@ -134,10 +134,6 @@ const Home = () => {
 					))}
 				</div>
 			</div>
-
-			<Link className='text-blue-600' to={`/`}>
-				Back to landing page
-			</Link>
 		</div>
 	);
 };

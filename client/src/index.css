@@ -43,3 +43,29 @@ input[type='date'] {
 	@apply ring-gray-300;
 	@apply hover:bg-gray-50;
 }
+
+.landing .hero-text {
+	position: absolute;
+	right: 20%;
+	top: 20%;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	align-items: flex-start;
+  max-width: 33%;
+}
+
+.landing .hero-img {
+	background-image: url('../public/landing.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	width: 100%;
+	height: calc(100vh - 4rem);
+	z-index: -1;
+}
+
+@media (max-width: 600px) {
+  .landing .hero-text {
+    left: 20%;
+  }
+}

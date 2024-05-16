@@ -12,26 +12,30 @@ const Navbar = () => {
 
 	if (pathname.includes('/auth')) return null;
 
-	// route to home if logged in, otherwise route to landing
-	const link = user ? `/${version}` : '/';
-
 	return (
-		<div className='w-full max-w-screen-lg h-16 flex items-center px-10'>
+		<div className='w-full max-w-screen-lg min-h-16 h-16 flex items-center grow-0'>
 			<div className='flex items-center w-full'>
-				<Link to={link}>
+				<Link to={user ? `/${version}` : '/'}>
 					<h1>Shredders</h1>
 				</Link>
 
 				<ul className='flex ml-auto gap-4'>
-					{!user && (
-						<Link to={`/${version}/auth/login`}>
-							<Button text='Log in' color='secondary' />
-						</Link>
+					{user ? (
+						<>
+							<Button text='Sign out' color='tertiary' onClick={logout} />
+							<Avatar />
+						</>
+					) : (
+						<>
+							<Link to={`/${version}/auth/login`}>
+								<Button text='Log in' color='primary' />
+							</Link>
+
+							<Link to={`/${version}/auth/signup`}>
+								<Button text='Sign up' color='secondary' />
+							</Link>
+						</>
 					)}
-
-					{user && <Button text='Sign out' color='tertiary' onClick={logout} />}
-
-					{user && <Avatar />}
 				</ul>
 			</div>
 		</div>

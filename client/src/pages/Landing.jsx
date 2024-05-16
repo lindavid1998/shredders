@@ -1,38 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 const version = import.meta.env.VITE_API_VERSION;
-import { useAuth } from '../hooks/useAuth';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
-	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 
 	return (
-		<div className='flex flex-col'>
-			<h1>Welcome to Shredders!</h1>
-			<Link className='text-blue-600' to={`/${version}/auth/login`}>
-				Log in
-			</Link>
-
-			<Link className='text-blue-600' to={`/${version}/auth/signup`}>
-				Sign up
-			</Link>
-
-			<Link className='text-blue-600' to={`/${version}`}>
-				Home
-			</Link>
-
-			{user && (
+		<div className='landing w-screen'>
+			<div className='hero-text'>
+				<h1>Plan Your Perfect Snow Adventure with your Friends</h1>
+				
 				<Button
-					type='button'
-					text='Plan a trip'
-					onClick={() => navigate(`/${version}/trips/plan`)}
+					text='Get started'
+					onClick={() => navigate(`/${version}/auth/login`)}
 				/>
-			)}
+			</div>
 
-			{user && <Button type='button' text='Log out' onClick={logout} />}
+			<div className='hero-img' />
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({ type, text, onClick, className = '', color = 'primary' }) => {
+const Button = ({ type = 'button', text, onClick, className = '', color = 'primary' }) => {
 	const colorToClass = {
 		primary: 'bg-blue-500 hover:bg-blue-700 text-white',
 		secondary: `
@@ -15,7 +15,7 @@ const Button = ({ type, text, onClick, className = '', color = 'primary' }) => {
 
 	const defaultStyle = 'py-2 px-4 rounded-lg';
 
-	const classes = `${colorToClass[color]} ${defaultStyle}`;
+	const classes = `${colorToClass[color]} ${defaultStyle} ${className}`;
 
 	return (
 		<button type={type} onClick={onClick} className={classes}>
