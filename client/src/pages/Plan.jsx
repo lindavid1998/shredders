@@ -11,12 +11,37 @@ const Plan = () => {
 	const [start_date, setStartDate] = useState(null);
 	const [end_date, setEndDate] = useState(null);
 	const [error, setError] = useState('');
+	const [friends, setFriends] = useState([]);
 	const [showFriends, setShowFriends] = useState(false);
 	const navigate = useNavigate();
 
 	const { user } = useAuth();
 
 	useEffect(() => {
+		const fetchFriends = async () => {
+			const response = await fetch(
+				`http://localhost:3000/${version}/friends?user_id=${user.user_id}`,
+				{
+					method: 'GET',
+					credentials: 'include',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				const error = data.errors[0].msg;
+				setError(error);
+				return;
+			}
+
+			setError('');
+			setFriends(data);
+		};
+
 		const fetchData = async () => {
 			const response = await fetch(
 				`http://localhost:3000/${version}/trips/plan`,
@@ -41,6 +66,7 @@ const Plan = () => {
 			setDestinationToId(data);
 		};
 
+		fetchFriends();
 		fetchData();
 	}, []);
 
@@ -87,8 +113,6 @@ const Plan = () => {
 			setError(error);
 		}
 	};
-
-	const friends = ['Alvin', 'Chester', 'David'];
 
 	return (
 		<div className='w-full flex justify-center items-center'>
@@ -152,7 +176,7 @@ const Plan = () => {
 							{friends.map((friend, index) => (
 								<div
 									key={index}
-									className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100'
+									className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100 cursor-pointer'
 								>
 									{friend}
 								</div>

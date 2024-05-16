@@ -12,6 +12,7 @@ const pool = require('./db');
 // import routers
 const authRouter = require('./routes/jwtAuth');
 const tripRouter = require('./routes/trips');
+const friendsRouter = require('./routes/friends');
 
 // MIDDLEWARE
 
@@ -82,7 +83,9 @@ app.get(`/${apiVersion}`, authorization, async (req, res) => {
 // log in and sign up pages
 app.use(`/${apiVersion}/auth`, authRouter);
 
-app.use(`/${apiVersion}/trips`, tripRouter);
+app.use(`/${apiVersion}/trips`, authorization, tripRouter);
+
+app.use(`/${apiVersion}/friends`, authorization, friendsRouter);
 
 app.listen(port, () => {
 	console.log(`server listening on port ${port}!`);

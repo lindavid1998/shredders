@@ -33,7 +33,7 @@ router.get('/plan', async (req, res) => {
 		});
 		
 		res.status(200).json(destinationToId)
-	} catch (error) {
+	} catch (err) {
 		if (typeof err === 'object') {
 			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
 		} else {
