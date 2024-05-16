@@ -23,7 +23,7 @@ const Button = ({ text, expand, onClick }) => {
 	return (
 		<button
 			type='button'
-			className='inline-flex w-full max-w-64 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+			className='inline-flex w-full max-w-64 justify-center gap-x-1.5'
 			onClick={onClick}
 		>
 			<div className='text-nowrap'>{text || 'Select an option'}</div>
@@ -41,7 +41,7 @@ const Dropdown = ({ options, selected, onSelect }) => {
 	};
 
 	return (
-		<div className='w-40 relative inline-block text-left'>
+		<div className='input-field w-40 relative inline-block text-left'>
 			<Button
 				text={selected}
 				expand={expand}
@@ -51,7 +51,7 @@ const Dropdown = ({ options, selected, onSelect }) => {
 			<div
 				className={`${
 					expand ? 'absolute' : 'hidden'
-				} left-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+				} w-full left-0 top-7 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
 				tabIndex='-1'
 			>
 				<div className='py-1' role='none'>

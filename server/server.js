@@ -82,7 +82,7 @@ app.get(`/${apiVersion}`, authorization, async (req, res) => {
 // log in and sign up pages
 app.use(`/${apiVersion}/auth`, authRouter);
 
-app.use(`/${apiVersion}/trips`, authorization, tripRouter);
+app.use(`/${apiVersion}/trips`, tripRouter);
 
 app.listen(port, () => {
 	console.log(`server listening on port ${port}!`);

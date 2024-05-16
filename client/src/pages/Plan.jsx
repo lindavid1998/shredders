@@ -11,6 +11,7 @@ const Plan = () => {
 	const [start_date, setStartDate] = useState(null);
 	const [end_date, setEndDate] = useState(null);
 	const [error, setError] = useState('');
+	const [showFriends, setShowFriends] = useState(false);
 	const navigate = useNavigate();
 
 	const { user } = useAuth();
@@ -87,10 +88,16 @@ const Plan = () => {
 		}
 	};
 
+	const friends = ['Alvin', 'Chester', 'David'];
+
 	return (
 		<div className='w-full flex justify-center items-center'>
-			<form className='flex flex-col w-full max-w-lg gap-3 p-4' onSubmit={handleSubmit}>
+			<form
+				className='flex flex-col w-full max-w-lg gap-3 p-4'
+				onSubmit={handleSubmit}
+			>
 				<h2>Plan a trip</h2>
+
 				<div className='input-container'>
 					<label>Destination</label>
 					<Dropdown
@@ -99,6 +106,7 @@ const Plan = () => {
 						onSelect={handleSelect}
 					/>
 				</div>
+
 				<div className='input-container'>
 					<label htmlFor='start_date'>Start</label>
 					<input
@@ -107,8 +115,10 @@ const Plan = () => {
 						name='start_date'
 						required
 						onChange={(e) => setStartDate(e.target.value)}
-					></input>
+						className='input-field'
+					/>
 				</div>
+
 				<div className='input-container'>
 					{/* add client side validation that end date cannot be before start date? */}
 					<label htmlFor='end_date'>End</label>
@@ -118,9 +128,41 @@ const Plan = () => {
 						name='end_date'
 						required
 						onChange={(e) => setEndDate(e.target.value)}
-					></input>
+						className='input-field'
+					/>
 				</div>
+
+				<div className='input-container'>
+					<label htmlFor='end_date'>Invite friends</label>
+
+					<div className='relative w-full max-w-64'>
+						<input
+							type='text'
+							placeholder='Enter name'
+							className='input-field'
+							onFocus={() => setShowFriends(true)}
+							onBlur={() => setShowFriends(false)}
+						/>
+
+						<div
+							className={`absolute left-0 flex flex-col top-10 w-full shadow-lg ${
+								showFriends ? '' : 'hidden'
+							}`}
+						>
+							{friends.map((friend, index) => (
+								<div
+									key={index}
+									className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100'
+								>
+									{friend}
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+
 				<p className='text-red-500 text-center'>{error}</p>
+
 				<Button type='submit' text='Create' />
 			</form>
 		</div>

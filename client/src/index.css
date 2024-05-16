@@ -25,7 +25,7 @@ h4 {
 	@apply min-w-36;
 }
 
-input[type='date'] {
+.input-field {
 	@apply inline-flex;
 	@apply w-full;
 	@apply max-w-64;
@@ -52,7 +52,7 @@ input[type='date'] {
 	flex-direction: column;
 	gap: 12px;
 	align-items: flex-start;
-  max-width: 33%;
+	max-width: 33%;
 }
 
 .landing .hero-img {
@@ -65,7 +65,7 @@ input[type='date'] {
 }
 
 @media (max-width: 600px) {
-  .landing .hero-text {
-    left: 20%;
-  }
+	.landing .hero-text {
+		left: 20%;
+	}
 }
