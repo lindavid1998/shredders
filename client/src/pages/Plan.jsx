@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 const version = import.meta.env.VITE_API_VERSION;
@@ -15,6 +15,7 @@ const Plan = () => {
 	const [showFriends, setShowFriends] = useState(false);
 	const [addedFriends, setAddedFriends] = useState([]);
 	const navigate = useNavigate();
+	const dropdownRef = useRef(null);
 
 	const { user } = useAuth();
 
@@ -95,7 +96,7 @@ const Plan = () => {
 						start_date,
 						end_date,
 						user_id,
-						addedFriends
+						addedFriends,
 					}),
 				}
 			);
@@ -113,6 +114,13 @@ const Plan = () => {
 			navigate(`/${version}/trips/${data.trip_id}`);
 		} catch (error) {
 			setError(error);
+		}
+	};
+
+	const handleBlur = (e) => {
+		// if dropdown does not contain focused element or focused element is null
+		if (!e.relatedTarget || !dropdownRef.current.contains(e.relatedTarget)) {
+			setShowFriends(false);
 		}
 	};
 
@@ -167,22 +175,25 @@ const Plan = () => {
 							placeholder='Enter name'
 							className='input-field'
 							onFocus={() => setShowFriends(true)}
-							// onBlur={() => setShowFriends(false)}
+							onBlur={handleBlur}
 						/>
 
 						<div
+							ref={dropdownRef}
 							className={`absolute left-0 flex flex-col top-10 w-full shadow-lg ${
 								showFriends ? '' : 'hidden'
-							}`}
+								}`}
 						>
 							{friends.map((friend) => (
 								<div
 									key={friend.user_id}
 									id={friend.user_id}
+									tabIndex='0'
 									className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100 cursor-pointer'
 									onClick={() => {
 										setAddedFriends((prevState) => [...prevState, friend]);
 									}}
+									onBlur={handleBlur}
 								>
 									{friend.first_name} {friend.last_name}
 								</div>
