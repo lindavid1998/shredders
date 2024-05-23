@@ -23,16 +23,16 @@ const validateInput = [
 
 router.get('/plan', async (req, res) => {
 	try {
-		const query = 'SELECT * FROM destinations'
+		const query = 'SELECT * FROM destinations';
 		const result = await pool.query(query);
-		const destinations = result.rows
+		const destinations = result.rows;
 		const destinationToId = {};
-		
+
 		destinations.forEach((destination) => {
 			destinationToId[destination.name] = destination.destination_id;
 		});
-		
-		res.status(200).json(destinationToId)
+
+		res.status(200).json(destinationToId);
 	} catch (err) {
 		if (typeof err === 'object') {
 			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
@@ -40,7 +40,7 @@ router.get('/plan', async (req, res) => {
 			res.status(500).json({ errors: [{ msg: err }] });
 		}
 	}
-})
+});
 
 router.post(`/plan`, validateInput, async (req, res) => {
 	// validate input
@@ -49,22 +49,27 @@ router.post(`/plan`, validateInput, async (req, res) => {
 		return res.status(400).json({ errors: errors.array() });
 	}
 
-	const { destination_id, start_date, end_date, user_id } = req.body;
+	const { destination_id, start_date, end_date, user_id, addedFriends } =
+		req.body;
 
 	try {
+		// insert trip into trips table
 		let query = `
 			INSERT INTO trips (destination_id, start_date, end_date, creator)
 			VALUES ($1, $2, $3, $4) RETURNING trip_id
 		`;
-		// insert into db
+
 		let result = await pool.query(query, [
 			destination_id,
 			start_date,
 			end_date,
 			user_id,
 		]);
+
+		// get the id of the trip created
 		const trip_id = result.rows[0].trip_id;
 
+		// add creator to rsvp table
 		query = `
 			INSERT INTO rsvps(user_id, trip_id, status)
 			VALUES ($1, $2, $3)
@@ -72,6 +77,13 @@ router.post(`/plan`, validateInput, async (req, res) => {
 
 		result = await pool.query(query, [user_id, trip_id, 'Going']);
 
+		// add invited friends to rsvp table
+		await Promise.all(
+			addedFriends.map((friend) => {
+				return pool.query(query, [friend.user_id, trip_id, 'Tentative']);
+			})
+		);
+		
 		res.status(200).json({ trip_id });
 	} catch (err) {
 		if (typeof err === 'object') {
