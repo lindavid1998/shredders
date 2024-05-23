@@ -4,6 +4,8 @@ import { useAuth } from '../hooks/useAuth';
 const version = import.meta.env.VITE_API_VERSION;
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const Plan = () => {
 	const [destinationToId, setDestinationToId] = useState({});
@@ -124,6 +126,11 @@ const Plan = () => {
 		}
 	};
 
+	const handleRemove = (friendToRemove) => {
+		let result = addedFriends.filter((friend) => friend !== friendToRemove);
+		setAddedFriends(result)
+	}
+
 	return (
 		<div className='w-full flex justify-center items-center'>
 			<form
@@ -182,7 +189,7 @@ const Plan = () => {
 							ref={dropdownRef}
 							className={`absolute left-0 flex flex-col top-10 w-full shadow-lg ${
 								showFriends ? '' : 'hidden'
-								}`}
+							}`}
 						>
 							{friends.map((friend) => (
 								<div
@@ -206,8 +213,21 @@ const Plan = () => {
 					<div className='w-full border-t flex flex-col pt-2 gap-3 justify-start'>
 						<div className='font-bold'>Invited people</div>
 						{addedFriends.map((friend) => (
-							<div key={friend.user_id} id={friend.user_id}>
-								{friend.first_name} {friend.last_name}
+							<div
+								key={friend.user_id}
+								id={friend.user_id}
+								className='flex content-center justify-between'
+							>
+								<div>
+									{friend.first_name} {friend.last_name}
+								</div>
+								<div>
+									<FontAwesomeIcon
+										icon={faMinus}
+										onClick={() => handleRemove(friend)}
+										className='cursor-pointer'
+									/>
+								</div>
 							</div>
 						))}
 					</div>
