@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-const SearchableDropdown = ({ options, handleAdd }) => {
+const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
 	const [query, setQuery] = useState('');
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [filteredOptions, setFilteredOptions] = useState(options);
@@ -54,18 +54,27 @@ const SearchableDropdown = ({ options, handleAdd }) => {
 				}`}
 			>
 				{/* can do friends.slice(0, n) to only show the first n friends */}
-				{filteredOptions.map((item) => (
-					<div
-						key={item.user_id}
-						id={item.user_id}
-						tabIndex='0'
-						className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100 cursor-pointer'
-						onBlur={handleBlur}
-						onClick={() => handleClick(item)}
-					>
-						{item.first_name} {item.last_name}
-					</div>
-				))}
+				{filteredOptions.map((item) => {
+					const isAdded = addedFriends.some(
+						(friend) => friend.user_id === item.user_id
+					);
+					return (
+						<div
+							key={item.user_id}
+							id={item.user_id}
+							tabIndex='0'
+							className={`w-full px-3 py-2 cursor-pointer ${
+								isAdded
+									? 'bg-gray-200 italic text-gray-500'
+									: 'bg-gray-50 hover:bg-gray-100'
+							}`} 
+							onBlur={handleBlur}
+							onClick={() => handleClick(item)}
+						>
+							{item.first_name} {item.last_name}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

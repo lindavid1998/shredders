@@ -15,10 +15,8 @@ const Plan = () => {
 	const [end_date, setEndDate] = useState(null);
 	const [error, setError] = useState('');
 	const [friends, setFriends] = useState([]);
-	const [showFriends, setShowFriends] = useState(false);
 	const [addedFriends, setAddedFriends] = useState([]);
 	const navigate = useNavigate();
-	const dropdownRef = useRef(null);
 
 	const { user } = useAuth();
 
@@ -173,7 +171,11 @@ const Plan = () => {
 
 				<div className='input-container'>
 					<label htmlFor='end_date'>Invite friends</label>
-					<SearchableDropdown options={friends} handleAdd={handleAdd} />
+					<SearchableDropdown
+						options={friends}
+						handleAdd={handleAdd}
+						addedFriends={addedFriends}
+					/>
 				</div>
 
 				{addedFriends.length > 0 && (
