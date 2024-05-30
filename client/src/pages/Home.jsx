@@ -101,7 +101,15 @@ const Home = () => {
 	}
 
 	if (trips.length == 0) {
-		return <div>You have no trips</div>;
+		return (
+			<div>
+				<div>You have no trips</div>
+				<Button
+					text='Create a trip'
+					onClick={() => navigate(`/${version}/trips/plan`)}
+				/>
+			</div>
+		);
 	}
 
 	return (

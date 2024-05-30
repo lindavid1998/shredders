@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import SearchableDropdown from '../components/SearchableDropdown';
 
 const Plan = () => {
 	const [destinationToId, setDestinationToId] = useState({});
@@ -119,17 +120,14 @@ const Plan = () => {
 		}
 	};
 
-	const handleBlur = (e) => {
-		// if dropdown does not contain focused element or focused element is null
-		if (!e.relatedTarget || !dropdownRef.current.contains(e.relatedTarget)) {
-			setShowFriends(false);
-		}
-	};
-
 	const handleRemove = (friendToRemove) => {
 		let result = addedFriends.filter((friend) => friend !== friendToRemove);
-		setAddedFriends(result)
-	}
+		setAddedFriends(result);
+	};
+
+	const handleAdd = (friend) => {
+		setAddedFriends((prevState) => [...prevState, friend]);
+	};
 
 	return (
 		<div className='w-full flex justify-center items-center'>
@@ -175,38 +173,7 @@ const Plan = () => {
 
 				<div className='input-container'>
 					<label htmlFor='end_date'>Invite friends</label>
-
-					<div className='relative w-full max-w-64'>
-						<input
-							type='text'
-							placeholder='Enter name'
-							className='input-field'
-							onFocus={() => setShowFriends(true)}
-							onBlur={handleBlur}
-						/>
-
-						<div
-							ref={dropdownRef}
-							className={`absolute left-0 flex flex-col top-10 w-full shadow-lg ${
-								showFriends ? '' : 'hidden'
-							}`}
-						>
-							{friends.map((friend) => (
-								<div
-									key={friend.user_id}
-									id={friend.user_id}
-									tabIndex='0'
-									className='bg-gray-50 w-full px-3 py-2 hover:bg-gray-100 cursor-pointer'
-									onClick={() => {
-										setAddedFriends((prevState) => [...prevState, friend]);
-									}}
-									onBlur={handleBlur}
-								>
-									{friend.first_name} {friend.last_name}
-								</div>
-							))}
-						</div>
-					</div>
+					<SearchableDropdown options={friends} handleAdd={handleAdd} />
 				</div>
 
 				{addedFriends.length > 0 && (

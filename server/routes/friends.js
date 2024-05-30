@@ -9,8 +9,7 @@ router.get('/', async (req, res) => {
 			SELECT u.first_name, u.last_name, u.user_id
 			FROM users u
 			JOIN friends f ON u.user_id = f.user1_id OR u.user_id = f.user2_id
-			WHERE (f.user1_id = $1 OR f.user2_id = $1) AND u.user_id <> $1
-			LIMIT 3;
+			WHERE (f.user1_id = $1 OR f.user2_id = $1) AND u.user_id <> $1;
 		`;
 
 		const result = await pool.query(query, [user_id]);
