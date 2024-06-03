@@ -8,6 +8,7 @@ import Dropdown from '../components/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import SearchableDropdown from '../components/SearchableDropdown';
+import HeroImg from '../../public/chairlift.jpg';
 
 const Plan = () => {
 	const [destinationToId, setDestinationToId] = useState({});
@@ -145,9 +146,16 @@ const Plan = () => {
 	}
 
 	return (
-		<div className='w-full flex justify-center items-center'>
+		<div className='w-full md:h-3/4 flex flex-col md:flex-row md:justify-center md:items-start gap-6'>
+			<div className='h-[300px] md:h-full w-full md:w-1/2 flex justify-center items-center'>
+				<img
+					className='h-full object-cover rounded-3xl grow object-left-top'
+					src={HeroImg}
+				/>
+			</div>
+
 			<form
-				className='flex flex-col w-full max-w-lg gap-3 p-4'
+				className='flex flex-col w-full md:max-w-lg gap-3 p-4 h-full'
 				onSubmit={handleSubmit}
 			>
 				<h2>Plan a trip</h2>
