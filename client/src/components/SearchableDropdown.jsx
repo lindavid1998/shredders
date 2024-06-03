@@ -63,13 +63,13 @@ const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
 							key={item.user_id}
 							id={item.user_id}
 							tabIndex='0'
-							className={`w-full px-3 py-2 cursor-pointer ${
+							className={`w-full px-3 py-2 ${
 								isAdded
 									? 'bg-gray-200 italic text-gray-500'
-									: 'bg-gray-50 hover:bg-gray-100'
-							}`} 
+									: 'cursor-pointer bg-gray-50 hover:bg-gray-100'
+							}`}
 							onBlur={handleBlur}
-							onClick={() => handleClick(item)}
+							onClick={() => !isAdded && handleClick(item)}
 						>
 							{item.first_name} {item.last_name}
 						</div>
