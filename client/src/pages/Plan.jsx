@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
+import { useLoad } from '../hooks/useLoad';
 const version = import.meta.env.VITE_API_VERSION;
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
@@ -20,8 +21,8 @@ const Plan = () => {
 
 	const { user } = useAuth();
 
-	useEffect(() => {
-		const fetchFriends = async () => {
+	const fetchFriends = useCallback(async () => {
+		try {
 			const response = await fetch(
 				`http://localhost:3000/${version}/friends?user_id=${user.user_id}`,
 				{
@@ -43,9 +44,14 @@ const Plan = () => {
 
 			setError('');
 			setFriends(data);
-		};
+		} catch (error) {
+			setError('Failed to fetch friends.');
+			console.error(error);
+		}
+	}, [user.user_id, version]);
 
-		const fetchData = async () => {
+	const fetchDestinations = useCallback(async () => {
+		try {
 			const response = await fetch(
 				`http://localhost:3000/${version}/trips/plan`,
 				{
@@ -67,11 +73,18 @@ const Plan = () => {
 
 			setError('');
 			setDestinationToId(data);
-		};
+		} catch (error) {
+			setError('Failed to fetch destinations.');
+			console.error(error);
+		}
+	}, [version]);
 
-		fetchFriends();
-		fetchData();
-	}, []);
+	const fetchData = async () => {
+		await fetchFriends();
+		await fetchDestinations();
+	};
+
+	const isLoading = useLoad(fetchData);
 
 	const options = Object.keys(destinationToId);
 
@@ -126,6 +139,10 @@ const Plan = () => {
 	const handleAdd = (friend) => {
 		setAddedFriends((prevState) => [...prevState, friend]);
 	};
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className='w-full flex justify-center items-center'>
