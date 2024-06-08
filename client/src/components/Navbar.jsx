@@ -28,11 +28,11 @@ const Navbar = () => {
 					) : (
 						<>
 							<Link to={`/${version}/auth/login`}>
-								<Button text='Log in' color='primary' />
+								<Button text='Log in' color='secondary' />
 							</Link>
 
 							<Link to={`/${version}/auth/signup`}>
-								<Button text='Sign up' color='secondary' />
+								<Button text='Sign up' color='tertiary' />
 							</Link>
 						</>
 					)}

@@ -9,11 +9,12 @@ const Landing = () => {
 	return (
 		<div className='landing w-screen'>
 			<div className='hero-text'>
-				<h1>Plan Your Perfect Snow Adventure with your Friends</h1>
+				<h1>Plan Your Perfect Snow Adventure</h1>
 				
 				<Button
-					text='Get started'
+					text='Sign up'
 					onClick={() => navigate(`/${version}/auth/login`)}
+					color='tertiary'
 				/>
 			</div>
 
