@@ -73,7 +73,7 @@ const LoginForm = ({ className }) => {
 
 				{error && <p className='text-red-500 text-center'>{error}</p>}
 
-				<Button type='submit' text='Login' />
+				<Button type='submit' text='Login' color='tertiary' />
 			</form>
 
 			<p className='text-center'>
