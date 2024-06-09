@@ -13,31 +13,33 @@ const Navbar = () => {
 	if (pathname.includes('/auth')) return null;
 
 	return (
-		<div className='w-full max-w-screen-lg min-h-16 h-16 flex items-center grow-0'>
-			<div className='flex items-center w-full'>
-				<Link to={user ? `/${version}` : '/'}>
-					<h1>Shredders</h1>
-				</Link>
+		<div className='flex items-center max-w-screen-xl w-full py-3'>
+			<Link to={user ? `/${version}` : '/'}>
+				<h1 style={{ fontWeight: 'bold' }}>Shredders</h1>
+			</Link>
 
-				<ul className='flex ml-auto gap-4'>
-					{user ? (
-						<>
-							<Button text='Sign out' color='tertiary' onClick={logout} />
-							<Avatar />
-						</>
-					) : (
-						<>
-							<Link to={`/${version}/auth/login`}>
-								<Button text='Log in' color='secondary' />
-							</Link>
+			<ul className='flex ml-auto gap-10 items-center'>
+				<h6 className='navbar-item'>About</h6>
 
-							<Link to={`/${version}/auth/signup`}>
-								<Button text='Sign up' color='tertiary' />
-							</Link>
-						</>
-					)}
-				</ul>
-			</div>
+				<h6 className='navbar-item'>Pricing</h6>
+
+				{user ? (
+					<>
+						<Button text='Sign out' color='tertiary' onClick={logout} />
+						<Avatar />
+					</>
+				) : (
+					<>
+						<Link to={`/${version}/auth/login`}>
+							<Button text='Log in' color='secondary' />
+						</Link>
+
+						<Link to={`/${version}/auth/signup`}>
+							<Button text='Sign up' color='tertiary' />
+						</Link>
+					</>
+				)}
+			</ul>
 		</div>
 	);
 };

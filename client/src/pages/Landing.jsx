@@ -9,8 +9,8 @@ const Landing = () => {
 	return (
 		<div className='landing w-screen'>
 			<div className='hero-text'>
-				<h1>Plan Your Perfect Snow Adventure</h1>
-				
+				<h2 style={{ fontWeight: 'bold' }}>Plan Your Perfect Snow Adventure</h2>
+
 				<Button
 					text='Sign up'
 					onClick={() => navigate(`/${version}/auth/login`)}
