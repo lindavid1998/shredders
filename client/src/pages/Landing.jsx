@@ -3,13 +3,19 @@ const version = import.meta.env.VITE_API_VERSION;
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 
-const Landing = () => {
+const Hero = () => {
 	const navigate = useNavigate();
 
 	return (
-		<div className='landing w-screen'>
-			<div className='hero-text'>
-				<h2 style={{ fontWeight: 'bold' }}>Plan Your Perfect Snow Adventure</h2>
+		<div className='hero relative w-full flex flex-col justify-center items-center'>
+			<div className='hero-img' />
+
+			<div className='hero-text absolute top-14 w-full max-w-screen-xl px-5 mx-auto'>
+				<div className='max-w-md'>
+					<h2 style={{ fontWeight: 'bold' }}>
+						Plan Your Perfect Snow Adventure
+					</h2>
+				</div>
 
 				<Button
 					text='Sign up'
@@ -17,9 +23,15 @@ const Landing = () => {
 					color='tertiary'
 				/>
 			</div>
-
-			<div className='hero-img' />
 		</div>
+	);
+}
+
+const Landing = () => {
+	return (
+		<>
+			<Hero></Hero>
+		</>
 	);
 };
 

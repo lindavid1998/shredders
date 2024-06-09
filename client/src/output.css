@@ -582,6 +582,10 @@ video {
   top: 2.5rem;
 }
 
+.top-14 {
+  top: 3.5rem;
+}
+
 .top-7 {
   top: 1.75rem;
 }
@@ -695,6 +699,10 @@ video {
 
 .max-w-lg {
   max-width: 32rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
 }
 
 .max-w-screen-xl {
@@ -873,11 +881,6 @@ video {
   padding: 1rem;
 }
 
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
-}
-
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -886,6 +889,11 @@ video {
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 
 .py-1 {
@@ -1136,30 +1144,13 @@ h6 {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
-.landing .hero-text {
-  position: absolute;
-  right: 20%;
-  top: 20%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-start;
-  max-width: 33%;
-}
-
-.landing .hero-img {
+.hero-img {
   background-image: url('../public/landing.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
-  height: calc(100vh - 4rem);
+  height: 40rem;
   z-index: -1;
-}
-
-@media (max-width: 600px) {
-  .landing .hero-text {
-    left: 20%;
-  }
 }
 
 .hover\:bg-gray-100:hover {
@@ -1210,8 +1201,8 @@ h6 {
     gap: 2rem;
   }
 
-  .md\:p-4 {
-    padding: 1rem;
+  .md\:p-12 {
+    padding: 3rem;
   }
 }
 
@@ -1221,3 +1212,4 @@ h6 {
     color: rgb(75 85 99 / var(--tw-text-opacity));
   }
 }
+
