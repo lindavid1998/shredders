@@ -25,7 +25,7 @@ const Auth = ({ type }) => {
 				<Form className='grow' />
 			</div>
 
-			<div className='h-full w-1/2 grow overflow-hidden md:p-4 flex justify-center items-center pb-8'>
+			<div className='h-full w-1/2 grow overflow-hidden md:p-12 flex justify-center items-center pb-8'>
 				<img className='h-full object-cover rounded-3xl grow' src={HeroImg} />
 			</div>
 		</div>
