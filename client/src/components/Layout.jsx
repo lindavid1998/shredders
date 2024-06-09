@@ -1,12 +1,23 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const Layout = () => {
+	const location = useLocation();
+	const isLanding = location.pathname === '/';
+
 	return (
-		<div className='flex flex-col items-center w-screen max-w-screen-lg h-screen px-10 mx-auto gap-4'>
-			<Navbar />
-			<Outlet />
+		<div className='flex flex-col items-center w-screen h-screen'>
+			<div className='w-full max-w-screen-xl px-5'>
+				<Navbar />
+			</div>
+			<div
+				className={`w-full flex items-center justify-center ${
+					isLanding ? '' : 'max-w-screen-xl px-5'
+				}`}
+			>
+				<Outlet />
+			</div>
 		</div>
 	);
 };
