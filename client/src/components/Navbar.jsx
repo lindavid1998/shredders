@@ -12,7 +12,7 @@ const Dropdown = ({ className }) => {
 	const { user, logout } = useAuth();
 
 	return (
-		<div className={`${className} w-24`}>
+		<div className={`${className} w-24 drop-shadow-lg z-50`}>
 			<ul className='flex flex-col items-start'>
 				<h6 className='nav-dropdown-item'>About</h6>
 				<h6 className='nav-dropdown-item'>Pricing</h6>
