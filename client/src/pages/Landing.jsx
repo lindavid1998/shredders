@@ -10,9 +10,12 @@ const Hero = () => {
 		<div className='hero relative w-full flex flex-col justify-center items-center md:gap-8'>
 			<div className='hero-img' />
 
-			<div className='hero-text md:absolute top-14 w-full max-w-screen-xl px-5 mx-auto'>
+			<div className='flex flex-col hero-text justify-center items-center md:absolute top-14 w-full max-w-screen-xl px-5 mx-auto'>
 				<div className='max-w-md'>
-					<h2 style={{ fontWeight: 'bold' }}>
+					<h2
+						className='text-center md:text-white text-current'
+						style={{ fontWeight: 'bold' }}
+					>
 						Plan Your Perfect Snow Adventure
 					</h2>
 				</div>
