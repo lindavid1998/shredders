@@ -101,6 +101,18 @@ h6 {
 	border-bottom: 2px solid var(--dark-color);
 }
 
+.nav-dropdown-item {
+	background-color: #ffffff;
+	padding: 12px;
+	width: 100%;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+	z-index: 999;
+}
+
+.nav-dropdown-item:hover {
+	background-color: var(--light-color);
+}
+
 .input-container {
 	@apply flex flex-row items-center justify-between;
 }
@@ -133,7 +145,12 @@ h6 {
 	background-size: cover;
 	background-repeat: no-repeat;
 	width: 100%;
-	height: 40rem;
+	height: 20rem;
 	z-index: -1;
 }
 
+@media (min-width: 768px) {
+	.hero-img {
+		height: 40rem;
+	}
+}
