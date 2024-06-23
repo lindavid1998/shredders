@@ -30,10 +30,10 @@ const validateLogin = [
 	check('password').notEmpty().withMessage('Password cannot be empty'),
 ];
 
-// sign up
-router.get(`/signup`, (req, res) => {
-	res.send('show sign up page');
-});
+// // sign up
+// router.get(`/signup`, (req, res) => {
+// 	res.send('show sign up page');
+// });
 
 router.post(`/signup`, validateSignup, async (req, res) => {
 	const errors = validationResult(req);
@@ -50,7 +50,7 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 
 		if (queryResult.rows.length > 0) {
 			return res
-				.status(500)
+				.status(409)
 				.json({ errors: [{ msg: 'Email already in use' }] });
 		}
 
@@ -79,9 +79,9 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 });
 
 // log in
-router.get(`/login`, (req, res) => {
-	res.send('Show login page');
-});
+// router.get(`/login`, (req, res) => {
+// 	res.send('Show login page');
+// });
 
 router.post(`/login`, validateLogin, async (req, res) => {
 	const errors = validationResult(req);
@@ -128,7 +128,7 @@ router.post(`/login`, validateLogin, async (req, res) => {
 	}
 });
 
-router.get('/verify', authorization, (req, res) => {
+router.get('/user', authorization, (req, res) => {
 	try {
 		const user = req.user;
 		res.status(200).json({ user });

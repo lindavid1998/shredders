@@ -21,7 +21,7 @@ const validateInput = [
 	check('end_date').notEmpty().withMessage('End date cannot be empty'),
 ];
 
-router.get('/plan', async (req, res) => {
+router.get('/create', async (req, res) => {
 	try {
 		const query = 'SELECT * FROM destinations';
 		const result = await pool.query(query);
@@ -42,21 +42,21 @@ router.get('/plan', async (req, res) => {
 	}
 });
 
-router.post(`/plan`, validateInput, async (req, res) => {
+router.post(`/create`, validateInput, async (req, res) => {
 	// validate input
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	}
 
-	const { destination_id, start_date, end_date, user_id, addedFriends } =
+	const { destination_id, start_date, end_date, user_id, added_friends } =
 		req.body;
 
 	try {
 		// insert trip into trips table
 		let query = `
-			INSERT INTO trips (destination_id, start_date, end_date, creator)
-			VALUES ($1, $2, $3, $4) RETURNING trip_id
+			INSERT INTO trips (destination_id, start_date, end_date, creator_id)
+			VALUES ($1, $2, $3, $4) RETURNING id
 		`;
 
 		let result = await pool.query(query, [
@@ -67,7 +67,7 @@ router.post(`/plan`, validateInput, async (req, res) => {
 		]);
 
 		// get the id of the trip created
-		const trip_id = result.rows[0].trip_id;
+		const trip_id = result.rows[0].id;
 
 		// add creator to rsvp table
 		query = `
@@ -78,15 +78,18 @@ router.post(`/plan`, validateInput, async (req, res) => {
 		result = await pool.query(query, [user_id, trip_id, 'Going']);
 
 		// add invited friends to rsvp table
-		await Promise.all(
-			addedFriends.map((friend) => {
-				return pool.query(query, [friend.user_id, trip_id, 'Tentative']);
-			})
-		);
-		
+		if (added_friends) {
+			await Promise.all(
+				added_friends.map((friend) => {
+					return pool.query(query, [friend.id, trip_id, 'Tentative']);
+				})
+			);
+		}
+
 		res.status(200).json({ trip_id });
 	} catch (err) {
 		if (typeof err === 'object') {
+			console.log(err);
 			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
 		} else {
 			res.status(500).json({ errors: [{ msg: err }] });
@@ -99,28 +102,48 @@ router.get('/:id', async (req, res) => {
 	try {
 		const tripId = req.params.id;
 
-		const query = `
+		const tripQuery = `
 			SELECT
 				start_date,
 				end_date,
 				name AS location,
-				creator,
+				creator_id,
 				first_name AS creator_first_name,
 				last_name AS creator_last_name
 			FROM
 				trips
 			INNER JOIN destinations
-				ON trips.destination_id = destinations.destination_id
+				ON trips.destination_id = destinations.id
 			INNER JOIN users
-				ON trips.creator = users.user_id
+				ON trips.creator_id = users.id
 			WHERE
-				trips.trip_id = $1
+				trips.id = $1
 	`;
 
-		const result = await pool.query(query, [tripId]);
-		const data = result.rows[0];
+		const rsvpsQuery = `
+			SELECT
+					r.user_id,
+					r.status,
+					u.first_name,
+					u.last_name,
+					u.avatar_url
+			FROM
+					rsvps r
+			JOIN
+					users u
+			ON
+					r.user_id = u.id
+			WHERE
+					r.trip_id = $1;
+		`;
 
-		res.status(200).json(data);
+		const tripResult = await pool.query(tripQuery, [tripId]);
+		const rsvpResult = await pool.query(rsvpsQuery, [tripId]);
+		// const data = result.rows[0];
+
+		res
+			.status(200)
+			.json({ data: tripResult.rows[0], rsvps: rsvpResult.rows });
 	} catch (err) {
 		res.status(500).json({ errors: [{ msg: err }] });
 	}

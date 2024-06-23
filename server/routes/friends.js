@@ -6,11 +6,11 @@ router.get('/', async (req, res) => {
 		const user_id = req.query.user_id;
 
 		const query = `
-			SELECT u.first_name, u.last_name, u.user_id
-			FROM users u
-			JOIN friends f ON u.user_id = f.user1_id OR u.user_id = f.user2_id
-			WHERE (f.user1_id = $1 OR f.user2_id = $1) AND u.user_id <> $1
-			ORDER BY u.first_name ASC;
+			SELECT users.first_name, users.last_name, users.id
+			FROM users
+			JOIN friends ON users.id = friends.user1_id OR users.id = friends.user2_id
+			WHERE (friends.user1_id = $1 OR friends.user2_id = $1) AND users.id <> $1
+			ORDER BY users.first_name ASC;
 		`;
 
 		const result = await pool.query(query, [user_id]);

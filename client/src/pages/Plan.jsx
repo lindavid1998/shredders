@@ -54,7 +54,7 @@ const Plan = () => {
 	const fetchDestinations = useCallback(async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/plan`,
+				`http://localhost:3000/${version}/trips/create`,
 				{
 					method: 'GET',
 					credentials: 'include',
@@ -99,7 +99,7 @@ const Plan = () => {
 			const user_id = user.user_id;
 
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/plan`,
+				`http://localhost:3000/${version}/trips/create`,
 				{
 					method: 'POST',
 					headers: {

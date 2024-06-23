@@ -44,9 +44,9 @@ app.get(`/${apiVersion}`, authorization, async (req, res) => {
 			FROM
 				rsvps
 			INNER JOIN trips
-				ON rsvps.trip_id = trips.trip_id
+				ON rsvps.trip_id = trips.id
 			INNER JOIN destinations
-				ON trips.destination_id = destinations.destination_id
+				ON trips.destination_id = destinations.id
 			WHERE
 				rsvps.user_id = $1
 			ORDER BY trips.start_date DESC; 
