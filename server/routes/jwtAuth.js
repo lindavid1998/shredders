@@ -66,7 +66,7 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 		const user = newUser.rows[0];
 
 		// generate JWT
-		const token = jwtGenerator(user.user_id, first_name, last_name, email);
+		const token = jwtGenerator(user.id, first_name, last_name, email, user.avatar_url);
 
 		delete user.password;
 
@@ -105,13 +105,13 @@ router.post(`/login`, validateLogin, async (req, res) => {
 		}
 
 		const user = queryResult.rows[0];
-		const { user_id, first_name, last_name } = user;
+		const { id, first_name, last_name, avatar_url } = user;
 
 		// check password
 		const validPw = await bcrypt.compare(password, user.password);
 
 		if (validPw) {
-			const token = jwtGenerator(user_id, first_name, last_name, email);
+			const token = jwtGenerator(id, first_name, last_name, email, avatar_url);
 
 			delete user.password;
 
