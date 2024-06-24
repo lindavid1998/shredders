@@ -176,6 +176,26 @@ router.get(`/overview`, authorization, async (req, res) => {
 // 	}
 // });
 
+// post comment
+router.post('/:id/comments', authorization, async (req, res) => {
+	try {
+		const tripId = req.params.id;
+		const userId = req.user.user_id;
+		const { body } = req.body;
+
+		const query = `
+			INSERT INTO comments(body, user_id, trip_id)
+			VALUES($1, $2, $3)
+			RETURNING * 
+		`;
+
+		const result = await pool.query(query, [body, userId, tripId]);
+
+		res.status(200).json(result.rows[0]);
+	} catch (err) {
+		res.status(500).json({ errors: [{ msg: err }] });
+	}
+});
 
 // view trip
 router.get('/:id', authorization, async (req, res) => {
@@ -225,6 +245,7 @@ router.get('/:id', authorization, async (req, res) => {
 						c.id,
 						c.body,
 						c.user_id,
+						c.created_at,
 						u.first_name,
 						u.last_name,
 						u.avatar_url
@@ -241,7 +262,7 @@ router.get('/:id', authorization, async (req, res) => {
 		const tripResult = await pool.query(tripQuery, [tripId]);
 		const rsvpResult = await pool.query(rsvpsQuery, [tripId]);
 		const commentsResult = await pool.query(commentsQuery, [tripId]);
-		
+
 		res.status(200).json({
 			...tripResult.rows[0],
 			rsvps: rsvpResult.rows,
