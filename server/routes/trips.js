@@ -97,8 +97,88 @@ router.post(`/create`, validateInput, async (req, res) => {
 	}
 });
 
-router.get('/:id', async (req, res) => {
-	// view trip
+router.get(`/overview`, authorization, async (req, res) => {
+	const user = req.user;
+	const userId = user.user_id;
+
+	try {
+		const query = `
+			SELECT
+					trips.id,
+					trips.start_date,
+					trips.end_date,
+					destinations.name,
+					destinations.image_large_url,
+					destinations.image_small_url,
+					COALESCE(
+							json_agg(
+									json_build_object(
+											'user_id', rsvps.user_id,
+											'avatar_url', users.avatar_url,
+											'status', rsvps.status
+									)
+							) FILTER (WHERE rsvps.status != 'Declined'), 
+							'[]'
+					) AS rsvps
+			FROM
+					trips
+			JOIN
+					rsvps ON trips.id = rsvps.trip_id
+			JOIN
+					destinations ON destinations.id = trips.destination_id 
+			JOIN
+					users ON users.id = rsvps.user_id
+			WHERE
+					trips.id IN (
+							SELECT trip_id
+							FROM rsvps
+							WHERE user_id = $1
+					)
+			GROUP BY
+					trips.id, destinations.name, destinations.image_large_url, destinations.image_small_url;
+		`;
+
+		const result = await pool.query(query, [userId]);
+
+		res.status(200).json(result.rows);
+	} catch (err) {
+		if (typeof err === 'object') {
+			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
+		} else {
+			res.status(500).json({ errors: [{ msg: err }] });
+		}
+	}
+});
+
+// get rsvps
+// router.get('/rsvps/:id', authorization, async (req, res) => {
+// 	try {
+// 		const tripId = req.params.id;
+
+// 		const query = `
+// 			SELECT
+// 				users.id AS user_id,
+// 				users.avatar_url,
+// 				rsvps.status
+// 			FROM
+// 				users
+// 			JOIN rsvps
+// 				ON users.id = rsvps.user_id
+// 			WHERE
+// 				rsvps.trip_id = $1
+// 		`;
+
+// 		const result = await pool.query(query, [tripId]);
+
+// 		res.status(200).json(result.rows);
+// 	} catch (err) {
+// 		res.status(500).json({ errors: [{ msg: err }] });
+// 	}
+// });
+
+
+// view trip
+router.get('/:id', authorization, async (req, res) => {
 	try {
 		const tripId = req.params.id;
 
@@ -109,7 +189,9 @@ router.get('/:id', async (req, res) => {
 				name AS location,
 				creator_id,
 				first_name AS creator_first_name,
-				last_name AS creator_last_name
+				last_name AS creator_last_name,
+				destinations.image_large_url,
+				destinations.image_small_url
 			FROM
 				trips
 			INNER JOIN destinations
@@ -118,10 +200,11 @@ router.get('/:id', async (req, res) => {
 				ON trips.creator_id = users.id
 			WHERE
 				trips.id = $1
-	`;
+		`;
 
 		const rsvpsQuery = `
 			SELECT
+					r.id,
 					r.user_id,
 					r.status,
 					u.first_name,
@@ -137,13 +220,33 @@ router.get('/:id', async (req, res) => {
 					r.trip_id = $1;
 		`;
 
+		const commentsQuery = `
+			SELECT
+						c.id,
+						c.body,
+						c.user_id,
+						u.first_name,
+						u.last_name,
+						u.avatar_url
+				FROM
+						comments c
+				JOIN
+						users u
+				ON
+						c.user_id = u.id
+				WHERE
+						c.trip_id = $1;
+		`;
+
 		const tripResult = await pool.query(tripQuery, [tripId]);
 		const rsvpResult = await pool.query(rsvpsQuery, [tripId]);
-		// const data = result.rows[0];
-
-		res
-			.status(200)
-			.json({ data: tripResult.rows[0], rsvps: rsvpResult.rows });
+		const commentsResult = await pool.query(commentsQuery, [tripId]);
+		
+		res.status(200).json({
+			...tripResult.rows[0],
+			rsvps: rsvpResult.rows,
+			comments: commentsResult.rows,
+		});
 	} catch (err) {
 		res.status(500).json({ errors: [{ msg: err }] });
 	}
