@@ -49,8 +49,10 @@ router.post(`/create`, validateInput, async (req, res) => {
 		return res.status(400).json({ errors: errors.array() });
 	}
 
-	const { destination_id, start_date, end_date, user_id, added_friends } =
+	const { destination_id, start_date, end_date, added_friends } =
 		req.body;
+	
+	const user_id = req.user.user_id;
 
 	try {
 		// insert trip into trips table
@@ -268,6 +270,43 @@ router.get('/:id', authorization, async (req, res) => {
 			rsvps: rsvpResult.rows,
 			comments: commentsResult.rows,
 		});
+	} catch (err) {
+		res.status(500).json({ errors: [{ msg: err }] });
+	}
+});
+
+router.delete('/:id', authorization, async (req, res) => {
+	try {
+		const tripId = req.params.id;
+		
+		let query = `SELECT creator_id FROM trips WHERE id = $1;`
+		let result = await pool.query(query, [tripId]);
+		
+		// throw error if trip doesn't exist
+		if (result.rows.length == 0) {
+			return res
+			.status(400)
+			.json({ errors: [{ msg: 'trip does not exist' }] });
+		}
+
+		const creatorId = result.rows[0]['creator_id'];
+		const userId = req.user.user_id;
+
+		// throw error if current user doesn't match creator 
+		if (userId != creatorId) {
+			return res
+				.status(400)
+				.json({ errors: [{ msg: 'only the owner of the trip can delete' }] });
+		}
+
+		// delete the trip
+		query = `
+			DELETE FROM trips
+			WHERE id = $1
+		`;
+
+		result = await pool.query(query, [tripId]);
+		res.status(200).json('successfully removed trip')
 	} catch (err) {
 		res.status(500).json({ errors: [{ msg: err }] });
 	}
