@@ -1,14 +1,13 @@
 import React from 'react';
-import Icon from '../../public/avatar.svg';
-import { useAuth } from '../hooks/useAuth';
 
-const Avatar = () => {
-	const { user } = useAuth();
-	// get avatar image from user object
-
+const Avatar = ({ avatar_url, size = 'md' }) => {
 	return (
-		<div className='rounded-full size-10 border-2 border-black'>
-			<img src={Icon}></img>
+		<div
+			className={`rounded-full ${
+				size === 'sm' ? 'size-10' : 'size-14'
+			} overflow-hidden`}
+		>
+			<img src={avatar_url}></img>
 		</div>
 	);
 };

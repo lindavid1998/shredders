@@ -13,7 +13,7 @@ const Layout = () => {
 				<Navbar />
 			</div>
 			<div
-				className={`w-full flex items-center justify-center ${
+				className={`grow w-full flex justify-center ${
 					isLanding ? '' : 'max-w-screen-xl px-5'
 				}`}
 			>

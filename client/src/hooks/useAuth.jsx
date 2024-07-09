@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 		const checkAuth = async () => {
 			try {
 				const response = await fetch(
-					`http://localhost:3000/${version}/auth/verify`,
+					`http://localhost:3000/${version}/auth/user`,
 					{
 						method: 'GET',
 						credentials: 'include',
@@ -40,10 +40,10 @@ export const AuthProvider = ({ children }) => {
 						},
 					}
 				);
-
-				const { user } = await response.json();
-
-				if (response.ok) setUser(user);
+				if (response.ok) {
+					const { user } = await response.json();
+					setUser(user)
+				}
 			} catch (error) {
 				console.log(error);
 			}

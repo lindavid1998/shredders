@@ -64,7 +64,7 @@ const Home = () => {
 		// fetch data
 		const fetchData = async () => {
 			const response = await fetch(
-				`http://localhost:3000/${version}?userId=${user.user_id}`,
+				`http://localhost:3000/${version}/trips/overview`,
 				{
 					method: 'GET',
 					credentials: 'include',
@@ -113,8 +113,8 @@ const Home = () => {
 	}
 
 	return (
-		<div className='flex flex-col gap-6 w-full'>
-			<div>
+		<div className='home flex flex-col gap-10 w-full items-center md:items-start'>
+			<div className='section'>
 				<h2>Welcome, {user.first_name}</h2>
 
 				<Button
@@ -123,22 +123,22 @@ const Home = () => {
 				/>
 			</div>
 
-			<div>
+			<div className='section'>
 				<h2>Upcoming trips</h2>
 
-				<div className='flex flex-col gap-2'>
+				<div className='trips'>
 					{upcomingTrips.map((trip, index) => (
 						<TripCard key={index} data={trip} />
 					))}
 				</div>
 			</div>
 
-			<div>
+			<div className='section'>
 				<h2>Past trips</h2>
 
-				<div className='flex flex-wrap gap-2'>
+				<div className='trips'>
 					{pastTrips.map((trip, index) => (
-						<TripCardMini key={index} data={trip} />
+						<TripCard key={index} data={trip} />
 					))}
 				</div>
 			</div>

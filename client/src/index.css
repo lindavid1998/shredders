@@ -7,6 +7,9 @@
   --dark-color: #191a23;
 	--accent-color: #2187FF;
 	--darker-accent-color: #005FCE;
+	--bg-going: #16a34a; 
+	--bg-declined: #dc2626; 
+	--bg-tentative: #191a23; 
 }
 
 body {
@@ -152,4 +155,72 @@ h6 {
 	.hero-img {
 		height: 40rem;
 	}
+}
+
+.trip-card {
+	display: flex;
+	width: 350px;
+	height: 125px;
+	gap: 16px;
+	border-radius: 20px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
+	cursor: pointer;
+}
+
+.trip-card:hover {
+	transform: translateY(-5px);
+	/* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); */
+}
+
+.trip-card-info {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	flex-grow: 1;
+	padding: 10px 0;
+}
+
+.trip-image-container {
+	width: 125px;
+	height: 125px;
+	overflow: hidden;
+	border-radius: 20px;
+}
+
+.trip-image-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; 
+	display: block;
+}
+
+.invited-users-container div {
+	border: 2px solid var(--light-color);
+}
+
+.invited-users-container div:not(:nth-child(1)) {
+	@apply -ml-3;
+}
+
+.home .section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	@apply md:items-start
+}
+
+.section .trips {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	@apply md:flex-row;
+	@apply md:flex-wrap;
+}
+
+.trip .section {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }

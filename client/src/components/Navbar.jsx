@@ -69,7 +69,7 @@ const Navbar = () => {
 				{user ? (
 					<>
 						<Button text='Sign out' color='tertiary' onClick={logout} />
-						<Avatar />
+						<Avatar avatar_url={user.avatar_url} />
 					</>
 				) : (
 					<>
