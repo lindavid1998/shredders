@@ -29,7 +29,7 @@ router.get('/create', async (req, res) => {
 		const destinationToId = {};
 
 		destinations.forEach((destination) => {
-			destinationToId[destination.name] = destination.destination_id;
+			destinationToId[destination.name] = destination.id;
 		});
 
 		res.status(200).json(destinationToId);
