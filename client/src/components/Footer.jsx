@@ -43,7 +43,7 @@ const GitHubSVG = () => {
 
 const Footer = () => {
 	return (
-		<div className='flex justify-center w-full bg-dark mt-10 p-4'>
+		<div className='flex justify-center w-full bg-dark mt-auto p-4'>
 			<div className='flex items-center max-w-screen-xl h-full w-full px-5'>
 				<div className='text-light mr-auto'>David Lin 2024</div>
 				<Logos></Logos>

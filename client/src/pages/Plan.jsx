@@ -146,7 +146,7 @@ const Plan = () => {
 	}
 
 	return (
-		<div className='w-full md:h-3/4 flex flex-col md:flex-row md:justify-center md:items-start gap-6'>
+		<div className='w-full md:h-3/4 flex flex-col md:flex-row md:justify-between md:items-start gap-6'>
 			<div className='h-[300px] md:h-full w-full md:w-1/2 flex justify-center items-center'>
 				<img
 					className='h-full object-cover rounded-3xl grow object-left-top'
@@ -155,7 +155,7 @@ const Plan = () => {
 			</div>
 
 			<form
-				className='flex flex-col w-full md:max-w-lg gap-3 p-4 h-full'
+				className='flex flex-col w-full md:max-w-lg gap-3 h-full'
 				onSubmit={handleSubmit}
 			>
 				<h2>Plan a trip</h2>
@@ -196,11 +196,14 @@ const Plan = () => {
 
 				<div className='input-container'>
 					<label htmlFor='end_date'>Invite friends</label>
-					<SearchableDropdown
-						options={friends}
-						handleAdd={handleAdd}
-						addedFriends={addedFriends}
-					/>
+					{friends.length > 0 && (
+						<SearchableDropdown
+							options={friends}
+							handleAdd={handleAdd}
+							addedFriends={addedFriends}
+						/>
+					)}
+					<p>You don't have any friends yet!</p>
 				</div>
 
 				{addedFriends.length > 0 && (
