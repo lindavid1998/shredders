@@ -8,6 +8,14 @@ import Avatar from '../components/Avatar';
 import { faCheck, faX, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+const sortRsvps = (rsvps) => {
+	let result = [];
+	for (const status of ['Going', 'Tentative', 'Declined']) {
+		result = result.concat(rsvps.filter((rsvp) => rsvp.status == status));
+	}
+	return result;
+};
+
 const RSVPCount = ({ rsvps }) => {
 	let result = {
 		Going: 0,
@@ -110,8 +118,10 @@ const Trip = () => {
 		return <Spinner />;
 	}
 
-	const { location, start_date, end_date, image_large_url, rsvps, comments } =
+	const { location, start_date, end_date, image_large_url, comments } =
 		data;
+	
+	let rsvps = sortRsvps(data.rsvps)
 
 	// {
 	// 		"start_date": "2025-01-03T08:00:00.000Z",

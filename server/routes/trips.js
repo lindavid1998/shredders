@@ -177,7 +177,7 @@ router.get(`/overview`, authorization, async (req, res) => {
 // 	}
 // });
 
-// post comment
+// delete comment
 router.delete('/:id/comments/:comment_id', authorization, async (req, res) => {
 	try {
 		const commentId = req.params.comment_id;
