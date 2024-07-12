@@ -118,7 +118,7 @@ router.get(`/overview`, authorization, async (req, res) => {
 											'avatar_url', users.avatar_url,
 											'status', rsvps.status
 									)
-							) FILTER (WHERE rsvps.status != 'Declined'), 
+							), 
 							'[]'
 					) AS rsvps
 			FROM
