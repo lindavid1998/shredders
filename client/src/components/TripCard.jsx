@@ -12,7 +12,7 @@ const TripCard = ({ data }) => {
 
 	return (
 		<Link to={`/${version}/trips/${id}`}>
-			<div className='trip-card'>
+			<div className='trip-card shadow'>
 				<div className='trip-image-container'>
 					<img src={image_small_url} />
 				</div>

@@ -9,3 +9,9 @@ export const getFormattedDate = (date) => {
 
 	return month + '/' + day + '/' + year;
 }
+
+export const getDaysSinceToday = () => {
+	// TODO
+	
+	return 0
+}

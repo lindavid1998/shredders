@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Avatar from '../components/Avatar';
 import { faCheck, faX, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Comment from '../components/Comment';
 
 const sortRsvps = (rsvps) => {
 	let result = [];
@@ -118,10 +119,9 @@ const Trip = () => {
 		return <Spinner />;
 	}
 
-	const { location, start_date, end_date, image_large_url, comments } =
-		data;
-	
-	let rsvps = sortRsvps(data.rsvps)
+	const { location, start_date, end_date, image_large_url, comments } = data;
+
+	let rsvps = sortRsvps(data.rsvps);
 
 	// {
 	// 		"start_date": "2025-01-03T08:00:00.000Z",
@@ -176,6 +176,18 @@ const Trip = () => {
 
 			<div className='section comments'>
 				<h3>Comments</h3>
+
+				{comments.length > 0 ? (
+					<div className='flex flex-col gap-5'>
+						{comments.map((comment, index) => (
+							<Comment key={index} data={comment} />
+						))}
+					</div>
+				) : (
+					<div className='italic' style={{ color: 'var(--caption-color)' }}>
+						Be the first one to comment!
+					</div>
+				)}
 			</div>
 		</div>
 	);
