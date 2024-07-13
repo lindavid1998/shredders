@@ -1,3 +1,5 @@
+import { StrictMode } from 'react';
+
 export const getFormattedDate = (date) => {
 	if (typeof date == 'string') {
 		date = new Date(date);
@@ -10,8 +12,12 @@ export const getFormattedDate = (date) => {
 	return month + '/' + day + '/' + year;
 }
 
-export const getDaysSinceToday = () => {
-	// TODO
+export const getDaysSince = (timestamp) => {
+	const givenDate = new Date(timestamp);
+	const currentDate = new Date();
+
+	const timeDifference = currentDate - givenDate;
+	const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 	
-	return 0
+	return daysDifference;
 }

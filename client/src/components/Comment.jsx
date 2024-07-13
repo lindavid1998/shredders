@@ -1,6 +1,6 @@
 import React from 'react';
 import Avatar from './Avatar';
-import { getDaysSinceToday } from '../utils/utils';
+import { getDaysSince } from '../utils/utils';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../hooks/useAuth';
@@ -19,7 +19,7 @@ const Comment = ({ data }) => {
 				</p>
 
 				<p style={{ color: 'var(--caption-color)' }}>
-					{getDaysSinceToday()}d ago
+					{getDaysSince(created_at)}d ago
 				</p>
 
 				{user.user_id == user_id && (
