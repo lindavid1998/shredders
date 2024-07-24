@@ -58,15 +58,28 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 		const bcryptPw = await bcrypt.hash(password, saltRounds);
 
 		// add user to db
-		const newUser = await pool.query(
-			'INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *',
-			[email, bcryptPw, first_name, last_name]
-		);
+		const newUserQuery = `
+			INSERT INTO users (email, password, first_name, last_name)
+			VALUES ($1, $2, $3, $4)
+			RETURNING id AS user_id, email, first_name, last_name, avatar_url
+		`;
+		const newUser = await pool.query(newUserQuery, [
+			email,
+			bcryptPw,
+			first_name,
+			last_name,
+		]);
 
 		const user = newUser.rows[0];
 
 		// generate JWT
-		const token = jwtGenerator(user.id, first_name, last_name, email, user.avatar_url);
+		const token = jwtGenerator(
+			user.user_id,
+			first_name,
+			last_name,
+			email,
+			user.avatar_url
+		);
 
 		delete user.password;
 
@@ -77,11 +90,6 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 		res.status(500).json({ errors: [{ msg: err }] });
 	}
 });
-
-// log in
-// router.get(`/login`, (req, res) => {
-// 	res.send('Show login page');
-// });
 
 router.post(`/login`, validateLogin, async (req, res) => {
 	const errors = validationResult(req);
@@ -94,7 +102,9 @@ router.post(`/login`, validateLogin, async (req, res) => {
 
 	try {
 		// look up user in db
-		const query = 'SELECT * FROM users WHERE email = $1';
+		const query = `
+			SELECT password, email, first_name, last_name, avatar_url, id AS user_id
+			FROM users WHERE email = $1`;
 		const queryResult = await pool.query(query, [email]);
 
 		// if no result
@@ -105,13 +115,19 @@ router.post(`/login`, validateLogin, async (req, res) => {
 		}
 
 		const user = queryResult.rows[0];
-		const { id, first_name, last_name, avatar_url } = user;
+		const { user_id, first_name, last_name, avatar_url } = user;
 
 		// check password
 		const validPw = await bcrypt.compare(password, user.password);
 
 		if (validPw) {
-			const token = jwtGenerator(id, first_name, last_name, email, avatar_url);
+			const token = jwtGenerator(
+				user_id,
+				first_name,
+				last_name,
+				email,
+				avatar_url
+			);
 
 			delete user.password;
 
@@ -140,10 +156,10 @@ router.get('/user', authorization, (req, res) => {
 router.post('/logout', authorization, (req, res) => {
 	try {
 		res.clearCookie('token', { maxAge: 900000, httpOnly: true });
-		res.status(200).json('successfully logged out')
+		res.status(200).json('successfully logged out');
 	} catch (err) {
 		res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
 	}
-})
+});
 
 module.exports = router;
