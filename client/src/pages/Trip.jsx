@@ -9,6 +9,7 @@ import { faCheck, faX, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Comment from '../components/Comment';
 import PostComment from '../components/PostComment';
+import { useAuth } from '../hooks/useAuth';
 
 const sortRsvps = (rsvps) => {
 	let result = [];
@@ -84,9 +85,16 @@ const User = ({ user }) => {
 };
 
 const Trip = () => {
+	const { user } = useAuth();
 	const { id } = useParams();
-	const [data, setData] = useState(null);
 	const [error, setError] = useState('');
+	const [location, setLocation] = useState('');
+	const [startDate, setStartDate] = useState('');
+	const [endDate, setEndDate] = useState('');
+	const [imageLargeUrl, setImageLargeUrl] = useState('');
+	const [comments, setComments] = useState([]);
+	const [rsvps, setRsvps] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// make API call to fetch trip details
 	useEffect(() => {
@@ -110,42 +118,36 @@ const Trip = () => {
 			}
 
 			const data = await response.json();
-			setData(data);
+			const {
+				location,
+				start_date,
+				end_date,
+				image_large_url,
+				comments,
+				rsvps,
+			} = data;
+
+			setLocation(location);
+			setStartDate(start_date);
+			setEndDate(end_date);
+			setImageLargeUrl(image_large_url);
+			setComments(comments);
+			setRsvps(sortRsvps(rsvps));
+			setIsLoading(false);
 		};
 
 		fetchData();
 	}, [id]);
 
-	if (!data && !error) {
+	if (isLoading && !error) {
 		return <Spinner />;
 	}
 
-	const { location, start_date, end_date, image_large_url, comments } = data;
-
-	let rsvps = sortRsvps(data.rsvps);
-
-	// {
-	// 		"start_date": "2025-01-03T08:00:00.000Z",
-	// 		"end_date": "2025-01-05T08:00:00.000Z",
-	// 		"location": "Brighton",
-	// 		"creator_id": 5,
-	// 		"creator_first_name": "foo",
-	// 		"creator_last_name": "bar",
-	// 		"image_large_url": "https://i.imgur.com/hPrgv2A.jpeg",
-	// 		"image_small_url": "https://i.imgur.com/hPrgv2A.jpeg",
-	// 		"rsvps": [
-	// 				{
-	// 						"id": 19,
-	// 						"user_id": 5,
-	// 						"status": "Tentative",
-	// 						"first_name": "foo",
-	// 						"last_name": "bar",
-	// 						"avatar_url": "https://i.imgur.com/OhjeZxR.jpg"
-	// 				}
-	// 		],
-	// 		"comments": []
-	// }
-
+	const handleAddComment = (comment) => {
+		// concatenate user info to comment before appending to comments array
+		setComments([...comments, { ...comment, ...user }]);
+	}
+	
 	return (
 		<div className='trip flex flex-col items-center gap-10'>
 			{/* <div className='hero-img'>
@@ -158,7 +160,7 @@ const Trip = () => {
 				</h3>
 
 				<div className='dates text-center'>
-					{`${getFormattedDate(start_date)} - ${getFormattedDate(end_date)}`}
+					{`${getFormattedDate(startDate)} - ${getFormattedDate(endDate)}`}
 				</div>
 			</div>
 
@@ -185,12 +187,18 @@ const Trip = () => {
 						))}
 					</div>
 				) : (
-					<div className='italic text-center' style={{ color: 'var(--caption-color)' }}>
+					<div
+						className='italic text-center'
+						style={{ color: 'var(--caption-color)' }}
+					>
 						Be the first one to comment!
 					</div>
 				)}
 
-				<PostComment></PostComment>
+				<PostComment
+					tripId={id}
+					handleAddComment={handleAddComment}
+				/>
 			</div>
 		</div>
 	);
