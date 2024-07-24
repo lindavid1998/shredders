@@ -243,3 +243,8 @@ h6 {
 	@apply p-3;
 	@apply rounded;
 }
+
+.error {
+	@apply text-red-500;
+	@apply text-center;
+}
