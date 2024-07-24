@@ -55,11 +55,13 @@ h6 {
 
 .btn {
 	padding: 20px 35px;
-	display: inline-block;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 14px;
 	transition: all 0.3s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .btn-primary {
@@ -230,4 +232,14 @@ h6 {
 
 .trip .section h3 {
 	text-align: center;
+}
+
+.btn-small {
+	@apply h-11;
+}
+
+.comment-textbox {
+  border: 1px solid rgba(176, 176, 176, 0.57); 
+	@apply p-3;
+	@apply rounded;
 }

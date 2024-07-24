@@ -8,6 +8,7 @@ import Avatar from '../components/Avatar';
 import { faCheck, faX, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Comment from '../components/Comment';
+import PostComment from '../components/PostComment';
 
 const sortRsvps = (rsvps) => {
 	let result = [];
@@ -184,10 +185,12 @@ const Trip = () => {
 						))}
 					</div>
 				) : (
-					<div className='italic' style={{ color: 'var(--caption-color)' }}>
+					<div className='italic text-center' style={{ color: 'var(--caption-color)' }}>
 						Be the first one to comment!
 					</div>
 				)}
+
+				<PostComment></PostComment>
 			</div>
 		</div>
 	);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({ type = 'button', text, onClick, color = 'primary' }) => {
+const Button = ({ type = 'button', text, onClick, color = 'primary', size }) => {
 	let className = 'btn';
 
 	switch (color) {
@@ -13,6 +13,11 @@ const Button = ({ type = 'button', text, onClick, color = 'primary' }) => {
 		case 'tertiary':
 			className += ' btn-tertiary';
 			break;
+	}
+
+	switch (size) {
+		case 'sm':
+			className += ' btn-small'
 	}
 
 	return (
