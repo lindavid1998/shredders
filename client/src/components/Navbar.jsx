@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 const version = import.meta.env.VITE_API_VERSION;
 import { useAuth } from '../hooks/useAuth';
@@ -8,11 +8,11 @@ import Avatar from './Avatar';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Dropdown = ({ className }) => {
+const Dropdown = forwardRef(({ className }, ref) => {
 	const { user, logout } = useAuth();
 
 	return (
-		<div className={`${className} w-24 drop-shadow-lg z-50`}>
+		<div className={`${className} w-24 drop-shadow-lg z-50`} ref={ref}>
 			<ul className='flex flex-col items-start'>
 				<h6 className='nav-dropdown-item'>About</h6>
 				<h6 className='nav-dropdown-item'>Pricing</h6>
@@ -37,18 +37,28 @@ const Dropdown = ({ className }) => {
 			</ul>
 		</div>
 	);
-}
+})
 
 const Navbar = () => {
 	const { user, logout } = useAuth();
 	const { pathname } = useLocation();
 	const [showDropdown, setShowDropdown] = useState(false)
-
-	const toggleDropdown = () => {
-		setShowDropdown(prevState => !prevState)
-	}
+	const dropdownRef = useRef(null)
 
 	if (pathname.includes('/auth')) return null;
+
+	const handleOutsideClick = (event) => {
+		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			setShowDropdown(false)
+		}
+	}
+
+	useEffect(() => {
+		document.addEventListener('mousedown', handleOutsideClick);
+		return () => {
+			document.removeEventListener('mousedown', handleOutsideClick);
+		};
+	}, []);
 
 	return (
 		<div className='flex items-center max-w-screen-xl w-full py-3'>
@@ -57,8 +67,8 @@ const Navbar = () => {
 			</Link>
 
 			<div className='md:hidden ml-auto cursor-pointer relative'>
-				<FontAwesomeIcon size='lg' icon={faBars} onClick={toggleDropdown} />
-				{showDropdown && <Dropdown className='absolute right-0' />}
+				<FontAwesomeIcon size='lg' icon={faBars} onClick={() => setShowDropdown(true)} />
+				{showDropdown && <Dropdown className='absolute right-0' ref={dropdownRef} />}
 			</div>
 
 			<ul className='hidden md:flex ml-auto gap-10 items-center'>
