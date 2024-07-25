@@ -1,14 +1,42 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import Avatar from './Avatar';
 import { getDaysSince } from '../utils/utils';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../hooks/useAuth';
 
+const Dropdown = forwardRef(({ className }, ref) => {
+	// should i consolidate this with the dropdown from Navbar?
+	return (
+		<div className={`${className} w-24 drop-shadow-lg z-50 cursor-pointer`} ref={ref}>
+			<ul className='flex flex-col items-start'>
+				<h6 className='nav-dropdown-item'>Edit</h6>
+				<h6 className='nav-dropdown-item'>Delete</h6>
+			</ul>
+		</div>
+	);
+});
+
 const Comment = ({ data }) => {
-  const { user } = useAuth();
-  const { body, user_id, created_at, first_name, last_name, avatar_url } = data;
-  
+	const { user } = useAuth();
+	const { body, user_id, created_at, first_name, last_name, avatar_url } = data;
+	const [showDropdown, setShowDropdown] = useState(false);
+	const dropdownRef = useRef(null);
+
+	const handleOutsideClick = (event) => {
+		// if dropdown exists and dropdown does not contain the clicked target
+		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			setShowDropdown(false);
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('mousedown', handleOutsideClick);
+		return () => {
+			document.removeEventListener('mousedown', handleOutsideClick);
+		};
+	}, []);
+
 	return (
 		<div className='flex flex-col gap-2.5 p-4 shadow rounded-2xl w-[340px]'>
 			<div className='flex items-center gap-2.5'>
@@ -23,8 +51,15 @@ const Comment = ({ data }) => {
 				</p>
 
 				{user.user_id == user_id && (
-					<div className='ml-auto'>
+					<div
+						className='ml-auto cursor-pointer relative'
+						onClick={() => setShowDropdown(true)}
+					>
 						<FontAwesomeIcon icon={faEllipsisVertical} />
+
+						{showDropdown && (
+							<Dropdown className='absolute right-0' ref={dropdownRef} />
+						)}
 					</div>
 				)}
 			</div>
@@ -35,15 +70,3 @@ const Comment = ({ data }) => {
 };
 
 export default Comment;
-
-//  "comments": [
-//         {
-//             "id": 3,
-//             "body": "this is a test comment too",
-//             "user_id": 6,
-//             "created_at": "2024-06-24T01:19:14.756Z",
-//             "first_name": "Eric",
-//             "last_name": "Liu",
-//             "avatar_url": "https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100259.jpg?t=st%3D1720497064~exp%3D1720500664~hmac%3D7b9e19f219df2e53ad93003d6111238a1e75a7e71bd30be860413f49fede102a&w=826"
-//         }
-//     ]
