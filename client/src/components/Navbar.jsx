@@ -45,8 +45,6 @@ const Navbar = () => {
 	const [showDropdown, setShowDropdown] = useState(false)
 	const dropdownRef = useRef(null)
 
-	if (pathname.includes('/auth')) return null;
-
 	const handleOutsideClick = (event) => {
 		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
 			setShowDropdown(false)
@@ -59,6 +57,8 @@ const Navbar = () => {
 			document.removeEventListener('mousedown', handleOutsideClick);
 		};
 	}, []);
+
+	if (pathname.includes('/auth')) return null;
 
 	return (
 		<div className='flex items-center max-w-screen-xl w-full py-3'>
