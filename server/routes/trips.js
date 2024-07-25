@@ -151,32 +151,6 @@ router.get(`/overview`, authorization, async (req, res) => {
 	}
 });
 
-// get rsvps
-// router.get('/rsvps/:id', authorization, async (req, res) => {
-// 	try {
-// 		const tripId = req.params.id;
-
-// 		const query = `
-// 			SELECT
-// 				users.id AS user_id,
-// 				users.avatar_url,
-// 				rsvps.status
-// 			FROM
-// 				users
-// 			JOIN rsvps
-// 				ON users.id = rsvps.user_id
-// 			WHERE
-// 				rsvps.trip_id = $1
-// 		`;
-
-// 		const result = await pool.query(query, [tripId]);
-
-// 		res.status(200).json(result.rows);
-// 	} catch (err) {
-// 		res.status(500).json({ errors: [{ msg: err }] });
-// 	}
-// });
-
 // delete comment
 router.delete('/:id/comments/:comment_id', authorization, async (req, res) => {
 	try {
@@ -261,39 +235,40 @@ router.get('/:id', authorization, async (req, res) => {
 
 		const rsvpsQuery = `
 			SELECT
-					r.id,
-					r.user_id,
-					r.status,
-					u.first_name,
-					u.last_name,
-					u.avatar_url
+				r.id,
+				r.user_id,
+				r.status,
+				u.first_name,
+				u.last_name,
+				u.avatar_url
 			FROM
-					rsvps r
+				rsvps r
 			JOIN
-					users u
+				users u
 			ON
-					r.user_id = u.id
+				r.user_id = u.id
 			WHERE
-					r.trip_id = $1;
+				r.trip_id = $1;
 		`;
 
 		const commentsQuery = `
 			SELECT
-						c.id,
-						c.body,
-						c.user_id,
-						c.created_at,
-						u.first_name,
-						u.last_name,
-						u.avatar_url
-				FROM
-						comments c
-				JOIN
-						users u
-				ON
-						c.user_id = u.id
-				WHERE
-						c.trip_id = $1;
+				c.id,
+				c.body,
+				c.user_id,
+				c.created_at,
+				u.first_name,
+				u.last_name,
+				u.avatar_url
+			FROM
+				comments c
+			JOIN
+				users u
+			ON
+				c.user_id = u.id
+			WHERE
+				c.trip_id = $1
+			ORDER BY c.created_at;
 		`;
 
 		const tripResult = await pool.query(tripQuery, [tripId]);
