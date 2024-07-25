@@ -5,21 +5,27 @@ import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../hooks/useAuth';
 
-const Dropdown = forwardRef(({ className }, ref) => {
+const Dropdown = forwardRef(({ className, handleDelete }, ref) => {
 	// should i consolidate this with the dropdown from Navbar?
 	return (
-		<div className={`${className} w-24 drop-shadow-lg z-50 cursor-pointer`} ref={ref}>
+		<div
+			className={`${className} w-24 drop-shadow-lg z-50 cursor-pointer`}
+			ref={ref}
+		>
 			<ul className='flex flex-col items-start'>
 				<h6 className='nav-dropdown-item'>Edit</h6>
-				<h6 className='nav-dropdown-item'>Delete</h6>
+				<h6 className='nav-dropdown-item' onClick={handleDelete}>
+					Delete
+				</h6>
 			</ul>
 		</div>
 	);
 });
 
-const Comment = ({ data }) => {
+const Comment = ({ data, removeComment }) => {
 	const { user } = useAuth();
-	const { body, user_id, created_at, first_name, last_name, avatar_url } = data;
+	const { id, body, user_id, created_at, first_name, last_name, avatar_url } =
+		data;
 	const [showDropdown, setShowDropdown] = useState(false);
 	const dropdownRef = useRef(null);
 
@@ -28,6 +34,11 @@ const Comment = ({ data }) => {
 		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
 			setShowDropdown(false);
 		}
+	};
+
+	const handleDelete = () => {
+		setShowDropdown(false);
+		removeComment(id);
 	};
 
 	useEffect(() => {
@@ -51,14 +62,18 @@ const Comment = ({ data }) => {
 				</p>
 
 				{user.user_id == user_id && (
-					<div
-						className='ml-auto cursor-pointer relative'
-						onClick={() => setShowDropdown(true)}
-					>
-						<FontAwesomeIcon icon={faEllipsisVertical} />
+					<div className='ml-auto cursor-pointer relative'>
+						<FontAwesomeIcon
+							icon={faEllipsisVertical}
+							onClick={() => setShowDropdown(true)}
+						/>
 
 						{showDropdown && (
-							<Dropdown className='absolute right-0' ref={dropdownRef} />
+							<Dropdown
+								className='absolute right-0'
+								ref={dropdownRef}
+								handleDelete={handleDelete}
+							/>
 						)}
 					</div>
 				)}

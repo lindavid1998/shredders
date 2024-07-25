@@ -11,14 +11,6 @@ import Comment from '../components/Comment';
 import PostComment from '../components/PostComment';
 import { useAuth } from '../hooks/useAuth';
 
-const sortRsvps = (rsvps) => {
-	let result = [];
-	for (const status of ['Going', 'Tentative', 'Declined']) {
-		result = result.concat(rsvps.filter((rsvp) => rsvp.status == status));
-	}
-	return result;
-};
-
 const RSVPCount = ({ rsvps }) => {
 	let result = {
 		Going: 0,
@@ -96,6 +88,49 @@ const Trip = () => {
 	const [rsvps, setRsvps] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const sortRsvps = (rsvps) => {
+		let result = [];
+		for (const status of ['Going', 'Tentative', 'Declined']) {
+			result = result.concat(rsvps.filter((rsvp) => rsvp.status == status));
+		}
+		return result;
+	};
+
+	const removeComment = async (commentId) => {
+		try {
+			// remove comment from database
+			const response = await fetch(
+				`http://localhost:3000/${version}/trips/${id}/comments/${commentId}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include',
+				}
+			);
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				const error = data.errors[0].msg;
+				console.log(error);
+				return;
+			}
+
+			// remove comment from state to re-render comments
+			const result = comments.filter((comment) => comment.id != commentId);
+			setComments(result);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleAddComment = (comment) => {
+		// concatenate user info to comment before appending to comments array
+		setComments([...comments, { ...comment, ...user }]);
+	};
+
 	// make API call to fetch trip details
 	useEffect(() => {
 		const fetchData = async () => {
@@ -143,11 +178,6 @@ const Trip = () => {
 		return <Spinner />;
 	}
 
-	const handleAddComment = (comment) => {
-		// concatenate user info to comment before appending to comments array
-		setComments([...comments, { ...comment, ...user }]);
-	}
-	
 	return (
 		<div className='trip flex flex-col items-center gap-10'>
 			{/* <div className='hero-img'>
@@ -183,7 +213,12 @@ const Trip = () => {
 				{comments.length > 0 ? (
 					<div className='flex flex-col gap-5'>
 						{comments.map((comment, index) => (
-							<Comment key={index} data={comment} />
+							<Comment
+								key={index}
+								data={comment}
+								tripId={id}
+								removeComment={removeComment}
+							/>
 						))}
 					</div>
 				) : (
@@ -195,10 +230,7 @@ const Trip = () => {
 					</div>
 				)}
 
-				<PostComment
-					tripId={id}
-					handleAddComment={handleAddComment}
-				/>
+				<PostComment tripId={id} handleAddComment={handleAddComment} />
 			</div>
 		</div>
 	);
