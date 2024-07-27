@@ -261,3 +261,14 @@ h6 {
 .comment-edit-delete:hover {
 	transform: translateY(-5px) translateX(0);
 }
+
+.rsvp-column {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.rsvp-columns {
+	display: flex;
+	gap: 30px;
+}
