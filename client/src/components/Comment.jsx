@@ -71,7 +71,7 @@ const Comment = ({ data, removeComment }) => {
 							<FontAwesomeIcon icon={faPenToSquare} />
 							<p>Edit</p>
 						</div>
-						<div className='comment-edit-delete'>
+						<div className='comment-edit-delete' onClick={handleDelete}>
 							<FontAwesomeIcon icon={faTrash} />
 							<p>Delete</p>
 						</div>

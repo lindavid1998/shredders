@@ -230,10 +230,6 @@ h6 {
 	gap: 20px;
 }
 
-.trip .section h3 {
-	text-align: center;
-}
-
 .btn-small {
 	@apply h-11;
 }
