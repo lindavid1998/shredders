@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Button from './Button';
+import Avatar from './Avatar';
 const version = import.meta.env.VITE_API_VERSION;
+import { useAuth } from '../hooks/useAuth';
 
 const PostComment = ({ tripId, handleAddComment }) => {
+	const { user } = useAuth();
 	const [error, setError] = useState('');
 	const [body, setBody] = useState('');
 
@@ -30,7 +33,7 @@ const PostComment = ({ tripId, handleAddComment }) => {
 				return;
 			}
 
-      handleAddComment(data);
+			handleAddComment(data);
 			setError('');
 			setBody('');
 		} catch (error) {
@@ -40,17 +43,24 @@ const PostComment = ({ tripId, handleAddComment }) => {
 
 	return (
 		<form onSubmit={handleSubmit} className='flex flex-col gap-2.5'>
-			<div className='flex gap-2.5 h-11 relative'>
-				<input
-					type='textarea'
+			<div className='flex gap-2.5 min-h-11 relative'>
+				<div className='hidden md:block'>
+					<Avatar avatar_url={user.avatar_url} size='sm' />
+				</div>
+
+				<textarea
 					placeholder='Add a comment...'
-					className='comment-textbox'
-					name='body'
+					required
 					value={body}
 					onChange={(e) => setBody(e.target.value)}
+					className='grow h-11 comment-textbox md:h-20'
 				/>
-				<Button type='submit' text='Post' color='tertiary' size='sm' />
+
+				<div className='ml-auto'>
+					<Button type='submit' text='Post' color='tertiary' size='sm' />
+				</div>
 			</div>
+
 			{error && <span className='error'>{error}</span>}
 		</form>
 	);
