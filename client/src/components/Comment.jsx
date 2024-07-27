@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import Avatar from './Avatar';
 import { getDaysSince } from '../utils/utils';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import {
+	faEllipsisVertical,
+	faPenToSquare,
+	faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../hooks/useAuth';
 
@@ -49,7 +53,7 @@ const Comment = ({ data, removeComment }) => {
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-2.5 p-4 shadow rounded-2xl w-[340px]'>
+		<div className='flex flex-col gap-2.5 p-4 shadow rounded-2xl min-w-[340px] max-w-[650px] w-full'>
 			<div className='flex items-center gap-2.5'>
 				<Avatar avatar_url={avatar_url} size='sm' />
 
@@ -62,7 +66,20 @@ const Comment = ({ data, removeComment }) => {
 				</p>
 
 				{user.user_id == user_id && (
-					<div className='ml-auto cursor-pointer relative'>
+					<div className='hidden md:flex ml-auto items-center justify-center gap-5'>
+						<div className='comment-edit-delete'>
+							<FontAwesomeIcon icon={faPenToSquare} />
+							<p>Edit</p>
+						</div>
+						<div className='comment-edit-delete'>
+							<FontAwesomeIcon icon={faTrash} />
+							<p>Delete</p>
+						</div>
+					</div>
+				)}
+
+				{user.user_id == user_id && (
+					<div className='md:hidden ml-auto cursor-pointer relative'>
 						<FontAwesomeIcon
 							icon={faEllipsisVertical}
 							onClick={() => setShowDropdown(true)}

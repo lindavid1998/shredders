@@ -179,7 +179,7 @@ const Trip = () => {
 	}
 
 	return (
-		<div className='trip flex flex-col items-center gap-10'>
+		<div className='trip flex flex-col items-center gap-10 w-full'>
 			{/* <div className='hero-img'>
 				<img src={image_large_url}></img>
 			</div> */}
