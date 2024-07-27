@@ -112,7 +112,7 @@ const Trip = () => {
 	}
 
 	return (
-		<div className='trip flex flex-col items-center md:items-start gap-10 w-full'>
+		<div className='trip flex flex-col items-center md:items-start gap-10 w-full md:relative'>
 			{/* <div className='hero-img'>
 				<img src={image_large_url}></img>
 			</div> */}
@@ -127,9 +127,9 @@ const Trip = () => {
 				</div>
 			</div>
 
-			<div className='section buttons flex gap-5 md:flex-row'>
-				<Button text='Edit trip' color='primary'></Button>
-				<Button text='Invite friends' color='secondary'></Button>
+			<div className='flex flex-col gap-5 md:absolute md:flex-row md:right-0 md:top-0'>
+				<Button text='Edit trip' color='primary' />
+				<Button text='Invite friends' color='secondary' />
 			</div>
 
 			<RSVPs responses={rsvps} />
