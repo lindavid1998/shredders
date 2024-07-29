@@ -80,6 +80,29 @@ router.post('/accept/:id', async (req, res) => {
 	}
 })
 
+router.post('/reject/:id', async (req, res) => {
+	try {
+		const fromUserId = req.user.user_id;
+		const toUserId = Number(req.params.id);
+
+		const delQuery = `
+			DELETE FROM friend_requests
+			WHERE
+				(from_user_id = $1 AND to_user_id = $2)
+				OR (from_user_id = $2 AND to_user_id = $1)
+			RETURNING *;
+		`;
+		const result = await pool.query(delQuery, [fromUserId, toUserId]);
+		if (result.rowCount == 0) {
+			throw new Error('friend request does not exist');
+		}
+
+		res.sendStatus(200);
+	} catch (error) {
+		handleError(error, res)
+	}
+})
+
 router.post('/add/:id', async (req, res) => {
 	try {
 		const fromUserId = req.user.user_id;
