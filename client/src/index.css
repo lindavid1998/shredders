@@ -295,3 +295,15 @@ textarea:focus {
 	outline: none;
 	border: 1px solid red;
 }
+
+.trip-hero-img {
+	max-height: 416px;
+	width: 100%;
+}
+
+.trip-hero-img img {
+	border-radius: 14px;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}

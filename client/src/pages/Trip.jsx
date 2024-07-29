@@ -86,6 +86,7 @@ const Trip = () => {
 			}
 
 			const data = await response.json();
+
 			const {
 				location,
 				start_date,
@@ -113,11 +114,11 @@ const Trip = () => {
 
 	return (
 		<div className='trip flex flex-col items-center md:items-start gap-10 w-full md:relative'>
-			{/* <div className='hero-img'>
-				<img src={image_large_url}></img>
-			</div> */}
+			<div className='trip-hero-img'>
+				<img src={imageLargeUrl}></img>
+			</div>
 
-			<div className='section header relative'>
+			<div className='section header relative md:w-full'>
 				<h3 className='text-center md:text-left'>
 					Trip to <span className='font-bold'>{location}</span>
 				</h3>
@@ -125,11 +126,11 @@ const Trip = () => {
 				<div className='dates text-center md:text-left'>
 					{`${getFormattedDate(startDate)} - ${getFormattedDate(endDate)}`}
 				</div>
-			</div>
 
-			<div className='flex flex-col gap-5 md:absolute md:flex-row md:right-0 md:top-0'>
-				<Button text='Edit trip' color='primary' />
-				<Button text='Invite friends' color='secondary' />
+				<div className='flex flex-col gap-5 md:absolute md:flex-row md:right-0 md:top-0'>
+					<Button text='Edit trip' color='primary' />
+					<Button text='Invite friends' color='secondary' />
+				</div>
 			</div>
 
 			<RSVPs responses={rsvps} />
@@ -150,7 +151,7 @@ const Trip = () => {
 					</div>
 				) : (
 					<div
-						className='italic text-center'
+						className='italic text-center md:text-left'
 						style={{ color: 'var(--caption-color)' }}
 					>
 						Be the first one to comment!
