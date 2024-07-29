@@ -132,6 +132,24 @@ router.post('/add/:id', async (req, res) => {
 	}
 })
 
+router.get('/requests', async (req, res) => {
+	try {
+		// get all incoming friend requests
+		const userId = req.user.user_id;
+		const query = `
+			SELECT friend_requests.from_user_id, users.first_name, users.last_name, users.avatar_url
+			FROM friend_requests
+			INNER JOIN users
+				ON friend_requests.from_user_id = users.id
+			WHERE friend_requests.to_user_id = $1;
+		`;
+		const result = await pool.query(query, [userId])
+		res.status(200).json(result.rows);
+	} catch (error) {
+		handleError(error, res)
+	}
+})
+
 router.get('/', async (req, res) => {
 	try {
 		const user_id = req.query.user_id;
