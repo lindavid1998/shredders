@@ -196,14 +196,15 @@ const Plan = () => {
 
 				<div className='input-container'>
 					<label htmlFor='end_date'>Invite friends</label>
-					{friends.length > 0 && (
+					{friends.length > 0 ? (
 						<SearchableDropdown
 							options={friends}
 							handleAdd={handleAdd}
 							addedFriends={addedFriends}
 						/>
+					) : (
+						<p>You don't have any friends yet!</p>
 					)}
-					<p>You don't have any friends yet!</p>
 				</div>
 
 				{addedFriends.length > 0 && (
