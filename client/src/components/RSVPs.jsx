@@ -121,30 +121,32 @@ const RSVPs = ({ responses }) => {
 			<h3 className='text-center md:text-left'>Who's Coming</h3>
 
 			<div className='rsvp-columns'>
-				<div className='rsvp-column'>
+				{numGoing > 0 && <div className='rsvp-column'>
 					<div>
 						<span className='font-bold'>{numGoing}</span> accepted
 					</div>
 					{splitResponses['Going'].map((user, index) => (
 						<User key={index} user={user} />
 					))}
-				</div>
-				<div className='rsvp-column'>
+        </div>}
+        
+				{numTentative > 0 && <div className='rsvp-column'>
 					<div>
 						<span className='font-bold'>{numTentative}</span> tentative
 					</div>
 					{splitResponses['Tentative'].map((user, index) => (
 						<User key={index} user={user} />
 					))}
-				</div>
-				<div className='rsvp-column'>
+        </div>}
+        
+				{numDeclined > 0 && <div className='rsvp-column'>
 					<div>
 						<span className='font-bold'>{numDeclined}</span> declined
 					</div>
 					{splitResponses['Declined'].map((user, index) => (
 						<User key={index} user={user} />
 					))}
-				</div>
+				</div>}
 			</div>
 		</div>
 	);
