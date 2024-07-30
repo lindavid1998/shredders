@@ -12,26 +12,26 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Dropdown = forwardRef(({ className }, ref) => {
+const Dropdown = forwardRef(({ className, handleOpenRequests }, ref) => {
 	const { user, logout } = useAuth();
 
 	return (
-		<div className={`${className} w-24 drop-shadow-lg z-50`} ref={ref}>
+		<div className={`${className} min-w-24 drop-shadow-lg z-50`} ref={ref}>
 			<ul className='flex flex-col items-start'>
 				<h6 className='nav-dropdown-item'>About</h6>
 				<h6 className='nav-dropdown-item'>Pricing</h6>
 
+				{user && <h6 className='nav-dropdown-item' onClick={handleOpenRequests}>Friend requests</h6>}
+
 				{user && (
 					<h6 className='nav-dropdown-item' onClick={logout}>
-						Logout
+						Sign out
 					</h6>
 				)}
 
-				{user && <h6 className='nav-dropdown-item'>Friend Requests</h6>}
-
 				{!user && (
 					<h6 className='nav-dropdown-item'>
-						<Link to={`/${version}/auth/login`}>Login</Link>
+						<Link to={`/${version}/auth/login`}>Log in</Link>
 					</h6>
 				)}
 
@@ -163,7 +163,7 @@ const Navbar = () => {
 					onClick={() => setShowDropdown(true)}
 				/>
 				{showDropdown && (
-					<Dropdown className='absolute right-0' ref={dropdownRef} />
+					<Dropdown className='absolute right-0' ref={dropdownRef} handleOpenRequests={() => setIsSidebarOpen(true)} />
 				)}
 			</div>
 

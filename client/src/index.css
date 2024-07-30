@@ -112,6 +112,7 @@ h6 {
 	background-color: #ffffff;
 	padding: 12px;
 	width: 100%;
+	text-wrap: nowrap;
 }
 
 .nav-dropdown-item:hover {
