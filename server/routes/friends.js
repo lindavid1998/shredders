@@ -51,30 +51,28 @@ const handleError = (err, res) => {
 
 router.post('/accept/:id', async (req, res) => {
 	try {
-		const fromUserId = req.user.user_id;
-		const toUserId = Number(req.params.id);
+		const id = req.params.id;
 
 		// DELETE REQUEST FROM friend_requests
 		const delQuery = `
 			DELETE FROM friend_requests
-			WHERE
-				(from_user_id = $1 AND to_user_id = $2)
-				OR (from_user_id = $2 AND to_user_id = $1)
+			WHERE id = $1
 			RETURNING *;
 		`;
-		const result = await pool.query(delQuery, [fromUserId, toUserId])
+		const result = await pool.query(delQuery, [id])
 		if (result.rowCount == 0) {
 			throw new Error('friend request does not exist')
 		}
+		const data = result.rows[0]
 
 		// INSERT new row INTO friends
 		const addQuery = `
 			INSERT INTO friends(user1_id, user2_id)
 			VALUES ($1, $2)
 		`
-		await pool.query(addQuery, [fromUserId, toUserId])
+		await pool.query(addQuery, [data.from_user_id, data.to_user_id])
 		
-		res.send(200).json('friend request accepted')
+		res.sendStatus(200)
 	} catch (error) {
 		handleError(error, res);
 	}
@@ -82,17 +80,14 @@ router.post('/accept/:id', async (req, res) => {
 
 router.post('/reject/:id', async (req, res) => {
 	try {
-		const fromUserId = req.user.user_id;
-		const toUserId = Number(req.params.id);
+		const id = req.params.id;
 
 		const delQuery = `
 			DELETE FROM friend_requests
-			WHERE
-				(from_user_id = $1 AND to_user_id = $2)
-				OR (from_user_id = $2 AND to_user_id = $1)
+			WHERE id = $1
 			RETURNING *;
 		`;
-		const result = await pool.query(delQuery, [fromUserId, toUserId]);
+		const result = await pool.query(delQuery, [id]);
 		if (result.rowCount == 0) {
 			throw new Error('friend request does not exist');
 		}
@@ -137,7 +132,7 @@ router.get('/requests', async (req, res) => {
 		// get all incoming friend requests
 		const userId = req.user.user_id;
 		const query = `
-			SELECT friend_requests.from_user_id, users.first_name, users.last_name, users.avatar_url
+			SELECT friend_requests.id, friend_requests.from_user_id, users.first_name, users.last_name, users.avatar_url
 			FROM friend_requests
 			INNER JOIN users
 				ON friend_requests.from_user_id = users.id

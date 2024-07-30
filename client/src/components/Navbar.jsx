@@ -21,7 +21,11 @@ const Dropdown = forwardRef(({ className, handleOpenRequests }, ref) => {
 				<h6 className='nav-dropdown-item'>About</h6>
 				<h6 className='nav-dropdown-item'>Pricing</h6>
 
-				{user && <h6 className='nav-dropdown-item' onClick={handleOpenRequests}>Friend requests</h6>}
+				{user && (
+					<h6 className='nav-dropdown-item' onClick={handleOpenRequests}>
+						Friend requests
+					</h6>
+				)}
 
 				{user && (
 					<h6 className='nav-dropdown-item' onClick={logout}>
@@ -45,23 +49,37 @@ const Dropdown = forwardRef(({ className, handleOpenRequests }, ref) => {
 	);
 });
 
-const FriendRequest = ({ name, avatar_url }) => {
+const FriendRequest = ({ id, name, avatarUrl, handleClick }) => {
 	return (
-		<div className='flex gap-2 items-center'>
-			<Avatar avatar_url={avatar_url} />
+		<div className='flex gap-2 items-center' id={id}>
+			<Avatar avatar_url={avatarUrl} />
 
 			<div className='flex flex-col fit-content'>
 				<div>{name}</div>
 				<div className='flex gap-2'>
-					<Button size='sm' text='Confirm' color='tertiary' />
-					<Button size='sm' text='Delete' />
+					<Button
+						size='sm'
+						text='Accept'
+						color='tertiary'
+						onClick={() => handleClick(id, 'accept')}
+					/>
+					<Button
+						size='sm'
+						text='Reject'
+						onClick={() => handleClick(id, 'reject')}
+					/>
 				</div>
 			</div>
 		</div>
 	);
 };
 
-const Sidebar = ({ friendRequests, isOpen, handleClose }) => {
+const Sidebar = ({
+	friendRequests,
+	isOpen,
+	handleClose,
+	handleClickFriendRequest,
+}) => {
 	return (
 		<div className={`sidebar-container ${isOpen ? 'open' : 'closed'}`}>
 			<div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
@@ -79,8 +97,10 @@ const Sidebar = ({ friendRequests, isOpen, handleClose }) => {
 					friendRequests.map((request, index) => (
 						<FriendRequest
 							name={`${request.first_name} ${request.last_name}`}
-							avatar_url={request.avatar_url}
+							avatarUrl={request.avatar_url}
 							key={index}
+							handleClick={handleClickFriendRequest}
+							id={request.id}
 						/>
 					))
 				) : (
@@ -107,44 +127,69 @@ const Navbar = () => {
 		}
 	};
 
+	const fetchFriendRequests = async () => {
+		try {
+			const response = await fetch(
+				`http://localhost:3000/${version}/friends/requests`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include',
+				}
+			);
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				const error = data.errors[0].msg;
+				console.log(error);
+				return;
+			}
+
+			setFriendRequests(data);
+			setFriendRequestCount(data.length);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleClickFriendRequest = async (requestId, action) => {
+		// action can be reject or accept
+		try {
+			const response = await fetch(
+				`http://localhost:3000/${version}/friends/${action}/${requestId}`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include',
+				}
+			);
+			
+			if (!response.ok) {
+				const data = await response.json();
+				const error = data.errors[0].msg;
+				console.log(error);
+				return;
+			}
+
+			fetchFriendRequests(); // update friend requests array state variable
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	useEffect(() => {
+		fetchFriendRequests();
+		setIsLoading(false);
 		document.addEventListener('mousedown', handleOutsideClick);
 		return () => {
 			document.removeEventListener('mousedown', handleOutsideClick);
 		};
-	}, []);
-
-	useEffect(() => {
-		const fetchFriendRequests = async () => {
-			try {
-				const response = await fetch(
-					`http://localhost:3000/${version}/friends/requests`,
-					{
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						credentials: 'include',
-					}
-				);
-
-				const data = await response.json();
-
-				if (!response.ok) {
-					const error = data.errors[0].msg;
-					console.log(error);
-					return;
-				}
-
-				setFriendRequests(data);
-				setFriendRequestCount(data.length);
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		fetchFriendRequests();
-		setIsLoading(false);
-	}, []);
+	}, [pathname]);
 
 	if (pathname.includes('/auth')) return null;
 
@@ -163,7 +208,11 @@ const Navbar = () => {
 					onClick={() => setShowDropdown(true)}
 				/>
 				{showDropdown && (
-					<Dropdown className='absolute right-0' ref={dropdownRef} handleOpenRequests={() => setIsSidebarOpen(true)} />
+					<Dropdown
+						className='absolute right-0'
+						ref={dropdownRef}
+						handleOpenRequests={() => setIsSidebarOpen(true)}
+					/>
 				)}
 			</div>
 
@@ -206,6 +255,7 @@ const Navbar = () => {
 				friendRequests={friendRequests}
 				isOpen={isSidebarOpen}
 				handleClose={() => setIsSidebarOpen(false)}
+				handleClickFriendRequest={handleClickFriendRequest}
 			/>
 		</div>
 	);
