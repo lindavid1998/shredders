@@ -18,6 +18,8 @@ const Button = ({ type = 'button', text, onClick, color = 'primary', size }) => 
 	switch (size) {
 		case 'sm':
 			className += ' btn-small'
+		case 'xs':
+			className += ' btn-xsmall'
 	}
 
 	return (
