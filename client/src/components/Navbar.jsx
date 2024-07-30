@@ -75,13 +75,17 @@ const Sidebar = ({ friendRequests, isOpen, handleClose }) => {
 					/>
 				</div>
 
-				{friendRequests.length > 0 ? friendRequests.map((request, index) => (
-					<FriendRequest
-						name={`${request.first_name} ${request.last_name}`}
-						avatar_url={request.avatar_url}
-						key={index}
-					/>
-				)) : (<div>No incoming friend requests</div>)}
+				{friendRequests.length > 0 ? (
+					friendRequests.map((request, index) => (
+						<FriendRequest
+							name={`${request.first_name} ${request.last_name}`}
+							avatar_url={request.avatar_url}
+							key={index}
+						/>
+					))
+				) : (
+					<div>No incoming friend requests</div>
+				)}
 			</div>
 		</div>
 	);
@@ -94,6 +98,7 @@ const Navbar = () => {
 	const [friendRequests, setFriendRequests] = useState([]);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [friendRequestCount, setFriendRequestCount] = useState(0);
 	const dropdownRef = useRef(null);
 
 	const handleOutsideClick = (event) => {
@@ -132,6 +137,7 @@ const Navbar = () => {
 				}
 
 				setFriendRequests(data);
+				setFriendRequestCount(data.length);
 			} catch (error) {
 				console.log(error);
 			}
@@ -168,12 +174,18 @@ const Navbar = () => {
 
 				{user ? (
 					<>
-						<FontAwesomeIcon
-							size='lg'
-							icon={faUserGroup}
-							className='cursor-pointer'
-							onClick={() => setIsSidebarOpen(true)}
-						/>
+						<div className='relative' onClick={() => setIsSidebarOpen(true)}>
+							<FontAwesomeIcon
+								size='lg'
+								icon={faUserGroup}
+								className='cursor-pointer'
+							/>
+							{friendRequestCount > 0 && (
+								<span className='absolute -right-2 -top-2 w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center cursor-pointer'>
+									{friendRequestCount}
+								</span>
+							)}
+						</div>
 						<Button text='Sign out' color='tertiary' onClick={logout} />
 						<Avatar avatar_url={user.avatar_url} />
 					</>
