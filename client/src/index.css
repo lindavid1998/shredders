@@ -234,6 +234,11 @@ h6 {
 	@apply h-11;
 }
 
+.btn-xsmall {
+	@apply h-10;
+	padding: 10px 17px;
+}
+
 .comment-textbox {
   border: 1px solid rgba(176, 176, 176, 0.57); 
 	@apply p-2;
@@ -306,4 +311,41 @@ textarea:focus {
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
+}
+
+.sidebar-container {
+	@apply w-screen;
+	@apply h-screen;
+	@apply absolute;
+	@apply top-0;
+	@apply left-0;
+	@apply bg-gray-800/30;
+	z-index: 999;
+}
+
+.sidebar-container.open {
+	display: block;
+}
+
+.sidebar-container.closed {
+	display: none;
+}
+
+.sidebar {
+	@apply flex flex-col h-screen bg-white py-5 px-8 gap-4;
+	transition: transform 0.3s ease;
+  transform: translateX(-100%);
+	position: fixed;
+  top: 0;
+  right: 0;
+  width: 390px;
+	transform: translateX(-100%);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar.closed {
+	transform: translateX(-100%);
 }
