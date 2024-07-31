@@ -5,10 +5,10 @@ import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/Button';
 import Avatar from './Avatar';
+import Sidebar from './Sidebar';
 import {
 	faBars,
 	faUserGroup,
-	faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -74,39 +74,20 @@ const FriendRequest = ({ id, name, avatarUrl, handleClick }) => {
 	);
 };
 
-const Sidebar = ({
-	friendRequests,
-	isOpen,
-	handleClose,
-	handleClickFriendRequest,
-}) => {
+const FriendRequests = ({ friendRequests, handleClickFriendRequest }) => {
+	if (friendRequests.length == 0) return <div>No incoming friend requests</div>;
+
 	return (
-		<div className={`sidebar-container ${isOpen ? 'open' : 'closed'}`}>
-			<div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-				<div className='flex items-center'>
-					<h4>Friend Requests</h4>
-
-					<FontAwesomeIcon
-						className='ml-auto cursor-pointer'
-						icon={faArrowRight}
-						onClick={handleClose}
-					/>
-				</div>
-
-				{friendRequests.length > 0 ? (
-					friendRequests.map((request, index) => (
-						<FriendRequest
-							name={`${request.first_name} ${request.last_name}`}
-							avatarUrl={request.avatar_url}
-							key={index}
-							handleClick={handleClickFriendRequest}
-							id={request.id}
-						/>
-					))
-				) : (
-					<div>No incoming friend requests</div>
-				)}
-			</div>
+		<div className='flex flex-col gap-4'>
+			{friendRequests.map((request, index) => (
+				<FriendRequest
+					name={`${request.first_name} ${request.last_name}`}
+					avatarUrl={request.avatar_url}
+					key={index}
+					handleClick={handleClickFriendRequest}
+					id={request.id}
+				/>
+			))}
 		</div>
 	);
 };
@@ -168,7 +149,7 @@ const Navbar = () => {
 					credentials: 'include',
 				}
 			);
-			
+
 			if (!response.ok) {
 				const data = await response.json();
 				const error = data.errors[0].msg;
@@ -252,11 +233,15 @@ const Navbar = () => {
 			</ul>
 
 			<Sidebar
-				friendRequests={friendRequests}
 				isOpen={isSidebarOpen}
 				handleClose={() => setIsSidebarOpen(false)}
-				handleClickFriendRequest={handleClickFriendRequest}
-			/>
+				header='Add friends'
+			>
+				<FriendRequests
+					handleClickFriendRequest={handleClickFriendRequest}
+					friendRequests={friendRequests}
+				/>
+			</Sidebar>
 		</div>
 	);
 };

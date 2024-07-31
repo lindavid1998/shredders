@@ -350,3 +350,7 @@ textarea:focus {
 .sidebar.closed {
 	transform: translateX(-100%);
 }
+
+.sidebar-header {
+	@apply flex items-center;
+}
