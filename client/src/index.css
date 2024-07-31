@@ -317,11 +317,11 @@ textarea:focus {
 .sidebar-container {
 	@apply w-screen;
 	@apply h-screen;
-	@apply absolute;
 	@apply top-0;
 	@apply left-0;
 	@apply bg-gray-800/30;
 	z-index: 999;
+	position: fixed;
 }
 
 .sidebar-container.open {
