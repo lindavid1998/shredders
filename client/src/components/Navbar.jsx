@@ -216,7 +216,7 @@ const Navbar = () => {
 								</span>
 							)}
 						</div>
-						<Button text='Sign out' color='tertiary' onClick={logout} />
+						<Button text='Sign out' color='secondary' onClick={logout} size='sm'/>
 						<Avatar avatar_url={user.avatar_url} />
 					</>
 				) : (
