@@ -150,7 +150,7 @@ router.get('/', async (req, res) => {
 		const user_id = req.user.user_id;
 
 		const query = `
-			SELECT users.first_name, users.last_name, users.id
+			SELECT users.first_name, users.last_name, users.id, CONCAT(users.first_name, ' ', users.last_name) AS full_name
 			FROM users
 			JOIN friends ON users.id = friends.user1_id OR users.id = friends.user2_id
 			WHERE (friends.user1_id = $1 OR friends.user2_id = $1) AND users.id <> $1
