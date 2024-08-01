@@ -147,7 +147,7 @@ router.get('/requests', async (req, res) => {
 
 router.get('/', async (req, res) => {
 	try {
-		const user_id = req.query.user_id;
+		const user_id = req.user.user_id;
 
 		const query = `
 			SELECT users.first_name, users.last_name, users.id
