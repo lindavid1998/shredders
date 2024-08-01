@@ -2,43 +2,95 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import Spinner from '../components/Spinner';
 const version = import.meta.env.VITE_API_VERSION;
-import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import TripCard from '../components/TripCard';
-import TripCardMini from '../components/TripCardMini';
+import Sidebar from '../components/Sidebar';
+import Avatar from '../components/Avatar';
+import TextInput from '../components/TextInput';
+
+const User = ({ id, name, avatarUrl }) => {
+	return (
+		<div className='flex items-center gap-2'>
+			<Avatar avatar_url={avatarUrl} />
+			{name}
+			<div className='ml-auto'>
+				<Button text='Add' />
+			</div>
+		</div>
+	);
+};
+
+const AddFriends = () => {
+	const [users, setUsers] = useState([]);
+	const [filteredUsers, setFilteredUsers] = useState([]);
+	const [query, setQuery] = useState('');
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			try {
+				const response = await fetch(
+					`http://localhost:3000/${version}/friends`,
+					{
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						credentials: 'include',
+					}
+				);
+
+				const data = await response.json()
+
+				if (!response.ok) {
+					const error = data.errors[0].msg;
+					console.log(error);
+					return;
+				}
+
+				setUsers(data)
+				setFilteredUsers(data)
+			} catch (error) {
+				console.log(error)
+			}
+		}
+		
+		fetchUsers()
+	}, [])
+	
+	useEffect(() => {
+		const result = users.filter((user) => user.full_name.toLowerCase().includes(query));
+		setFilteredUsers(result);
+	}, [query])
+
+	return (
+		<div className='flex flex-col'>
+			<TextInput
+				placeholder='Enter a name'
+				value={query}
+				onChange={(e) => setQuery(e.target.value.toLowerCase())}
+			/>
+
+			<div>
+				{filteredUsers.map((user, index) => (
+					<User
+						id={user.id}
+						name={`${user.first_name} ${user.last_name}`}
+						key={index}
+					></User>
+				))}
+			</div>
+		</div>
+	);
+};
 
 const Home = () => {
 	const { user } = useAuth();
 	const [trips, setTrips] = useState(null);
 	const [pastTrips, setPastTrips] = useState(null);
 	const [upcomingTrips, setUpcomingTrips] = useState(null);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
-
-	// const isLoading = useLoad(fetchData);
-	// email: 'test@email.com';
-	// exp: 1714752337;
-	// first_name: 'Foo';
-	// iat: 1714748737;
-	// last_name: 'Bar';
-	// user_id: 29;
-
-	// [
-	// 	{
-	// 		trip_id: 51,
-	// 		status: 'Going',
-	// 		start_date: '2024-05-01T07:00:00.000Z',
-	// 		end_date: '2024-05-04T07:00:00.000Z',
-	// 		location: 'Mammoth',
-	// 	},
-	// 	{
-	// 		trip_id: 52,
-	// 		status: 'Not going',
-	// 		start_date: '2024-05-02T07:00:00.000Z',
-	// 		end_date: '2024-05-03T07:00:00.000Z',
-	// 		location: 'Bear Mountain',
-	// 	},
-	// ];
 
 	const splitTrips = (trips) => {
 		const currentDate = new Date();
@@ -117,10 +169,15 @@ const Home = () => {
 			<div className='section'>
 				<h2>Welcome, {user.first_name}</h2>
 
-				<Button
-					text='Create a trip'
-					onClick={() => navigate(`/${version}/trips/plan`)}
-				/>
+				<div className='flex flex-col md:flex-row gap-2'>
+					<Button
+						text='Create a trip'
+						onClick={() => navigate(`/${version}/trips/plan`)}
+						color='tertiary'
+					/>
+
+					<Button text='Add friends' onClick={() => setIsSidebarOpen(true)} />
+				</div>
 			</div>
 
 			<div className='section'>
@@ -142,6 +199,14 @@ const Home = () => {
 					))}
 				</div>
 			</div>
+
+			<Sidebar
+				header='Add friends'
+				isOpen={isSidebarOpen}
+				handleClose={() => setIsSidebarOpen(false)}
+			>
+				<AddFriends></AddFriends>
+			</Sidebar>
 		</div>
 	);
 };

@@ -10,7 +10,7 @@ const TextInput = ({
 }) => {
 	return (
 		<div className='flex flex-col gap-1'>
-			<label>{label}</label>
+			{label && <label>{label}</label>}
 			<input
 				type={type}
 				placeholder={placeholder}
