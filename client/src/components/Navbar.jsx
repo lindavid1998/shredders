@@ -240,7 +240,7 @@ const Navbar = () => {
 			<Sidebar
 				isOpen={isSidebarOpen}
 				handleClose={() => setIsSidebarOpen(false)}
-				header='Add friends'
+				header='Friend requests'
 			>
 				<FriendRequests
 					handleClickFriendRequest={handleClickFriendRequest}
