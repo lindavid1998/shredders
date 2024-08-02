@@ -25,7 +25,7 @@ const Plan = () => {
 	const fetchFriends = useCallback(async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/friends?user_id=${user.user_id}`,
+				`http://localhost:3000/${version}/friends`,
 				{
 					method: 'GET',
 					credentials: 'include',
@@ -54,7 +54,7 @@ const Plan = () => {
 	const fetchDestinations = useCallback(async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/create`,
+				`http://localhost:3000/${version}/trips/destinations`,
 				{
 					method: 'GET',
 					credentials: 'include',
@@ -117,7 +117,6 @@ const Plan = () => {
 			);
 
 			const data = await response.json();
-			console.log(data);
 
 			if (!response.ok) {
 				const error = data.errors[0].msg;
@@ -170,11 +169,10 @@ const Plan = () => {
 				</div>
 
 				<div className='input-container'>
-					<label htmlFor='start_date'>Start</label>
+					<label>Start</label>
 					<input
 						type='date'
 						id='start_date'
-						name='start_date'
 						required
 						onChange={(e) => setStartDate(e.target.value)}
 						className='input-field max-w-64'
@@ -183,11 +181,10 @@ const Plan = () => {
 
 				<div className='input-container'>
 					{/* add client side validation that end date cannot be before start date? */}
-					<label htmlFor='end_date'>End</label>
+					<label>End</label>
 					<input
 						type='date'
 						id='end_date'
-						name='end_date'
 						required
 						onChange={(e) => setEndDate(e.target.value)}
 						className='input-field max-w-64'
@@ -195,10 +192,10 @@ const Plan = () => {
 				</div>
 
 				<div className='input-container'>
-					<label htmlFor='end_date'>Invite friends</label>
+					<label>Invite friends</label>
 					{friends.length > 0 ? (
 						<SearchableDropdown
-							options={friends}
+							friends={friends}
 							handleAdd={handleAdd}
 							addedFriends={addedFriends}
 						/>
@@ -212,12 +209,12 @@ const Plan = () => {
 						<div className='font-bold'>Invited people</div>
 						{addedFriends.map((friend) => (
 							<div
-								key={friend.user_id}
-								id={friend.user_id}
+								key={friend.id}
+								id={friend.id}
 								className='flex content-center justify-between'
 							>
 								<div>
-									{friend.first_name} {friend.last_name}
+									{friend.full_name}
 								</div>
 								<div>
 									<FontAwesomeIcon

@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 
-const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
+const SearchableDropdown = ({ friends, handleAdd, addedFriends }) => {
 	const [query, setQuery] = useState('');
 	const [isExpanded, setIsExpanded] = useState(false);
-	const [filteredOptions, setFilteredOptions] = useState(options);
+	const [filteredFriends, setFilteredFriends] = useState(friends);
 	const dropdownRef = useRef(null);
 
 	const handleSearch = (e) => {
@@ -11,14 +11,12 @@ const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
 		setQuery(input);
 
 		if (input === '') {
-			setFilteredOptions(options);
+			setFilteredFriends(friends);
 		} else {
-			const filtered = options.filter(
-				(item) =>
-					item.first_name.toLowerCase().includes(input) ||
-					item.last_name.toLowerCase().includes(input)
+			const filtered = friends.filter((friend) =>
+				friend.full_name.toLowerCase().includes(input)
 			);
-			setFilteredOptions(filtered);
+			setFilteredFriends(filtered);
 		}
 	};
 
@@ -31,8 +29,10 @@ const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
 
 	const handleClick = (friend) => {
 		handleAdd(friend);
+
+		// reset search
 		setQuery('');
-		setFilteredOptions(options);
+		setFilteredFriends(friends);
 	};
 
 	return (
@@ -54,14 +54,13 @@ const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
 				}`}
 			>
 				{/* can do friends.slice(0, n) to only show the first n friends */}
-				{filteredOptions.map((item) => {
-					const isAdded = addedFriends.some(
-						(friend) => friend.user_id === item.user_id
-					);
+				{filteredFriends.map((item) => {
+					const isAdded = addedFriends.includes(item)
+					
 					return (
 						<div
-							key={item.user_id}
-							id={item.user_id}
+							key={item.id}
+							id={item.id}
 							tabIndex='0'
 							className={`w-full px-3 py-2 ${
 								isAdded
@@ -71,7 +70,7 @@ const SearchableDropdown = ({ options, handleAdd, addedFriends }) => {
 							onBlur={handleBlur}
 							onClick={() => !isAdded && handleClick(item)}
 						>
-							{item.first_name} {item.last_name}
+							{item.full_name}
 						</div>
 					);
 				})}
