@@ -11,11 +11,11 @@ import TextInput from '../components/TextInput';
 
 const User = ({ id, name, avatarUrl }) => {
 	return (
-		<div className='flex items-center gap-2'>
+		<div className='flex items-center gap-2 py-2'>
 			<Avatar avatar_url={avatarUrl} />
 			{name}
 			<div className='ml-auto'>
-				<Button text='Add' />
+				<Button text='Add' size='xs' />
 			</div>
 		</div>
 	);
@@ -40,7 +40,7 @@ const AddFriends = () => {
 					}
 				);
 
-				const data = await response.json()
+				const data = await response.json();
 
 				if (!response.ok) {
 					const error = data.errors[0].msg;
@@ -48,20 +48,22 @@ const AddFriends = () => {
 					return;
 				}
 
-				setUsers(data)
-				setFilteredUsers(data)
+				setUsers(data);
+				setFilteredUsers(data);
 			} catch (error) {
-				console.log(error)
+				console.log(error);
 			}
-		}
-		
-		fetchUsers()
-	}, [])
-	
+		};
+
+		fetchUsers();
+	}, []);
+
 	useEffect(() => {
-		const result = users.filter((user) => user.full_name.toLowerCase().includes(query));
+		const result = users.filter((user) =>
+			user.full_name.toLowerCase().includes(query)
+		);
 		setFilteredUsers(result);
-	}, [query])
+	}, [query]);
 
 	return (
 		<div className='flex flex-col'>
@@ -71,15 +73,20 @@ const AddFriends = () => {
 				onChange={(e) => setQuery(e.target.value.toLowerCase())}
 			/>
 
-			<div>
-				{filteredUsers.map((user, index) => (
-					<User
-						id={user.id}
-						name={`${user.first_name} ${user.last_name}`}
-						key={index}
-					></User>
-				))}
-			</div>
+			{filteredUsers.length == 0 ? (
+				<div className='mt-4'>No results!</div>
+			) : (
+				<div className='flex flex-col mt-4 gap-2'>
+					{filteredUsers.map((user, index) => (
+						<User
+							id={user.id}
+							name={user.full_name}
+							avatarUrl={user.avatar_url}
+							key={index}
+						></User>
+					))}
+				</div>
+			)}
 		</div>
 	);
 };

@@ -41,7 +41,7 @@ const Dropdown = ({ options, selected, onSelect }) => {
 	};
 
 	return (
-		<div className='input-field w-40 relative inline-block text-left'>
+		<div className='input-field max-w-64 relative inline-block text-left'>
 			<Button
 				text={selected}
 				expand={expand}

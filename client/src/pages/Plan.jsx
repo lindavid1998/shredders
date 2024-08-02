@@ -177,7 +177,7 @@ const Plan = () => {
 						name='start_date'
 						required
 						onChange={(e) => setStartDate(e.target.value)}
-						className='input-field'
+						className='input-field max-w-64'
 					/>
 				</div>
 
@@ -190,7 +190,7 @@ const Plan = () => {
 						name='end_date'
 						required
 						onChange={(e) => setEndDate(e.target.value)}
-						className='input-field'
+						className='input-field max-w-64'
 					/>
 				</div>
 

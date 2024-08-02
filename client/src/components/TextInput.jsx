@@ -17,7 +17,7 @@ const TextInput = ({
 				value={value}
 				onChange={onChange}
 				required={required}
-				className='w-full p-2 bg-slate-200'
+				className='input-field'
 			/>
 		</div>
 	);
