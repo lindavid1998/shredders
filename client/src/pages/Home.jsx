@@ -9,61 +9,106 @@ import Sidebar from '../components/Sidebar';
 import Avatar from '../components/Avatar';
 import TextInput from '../components/TextInput';
 
-const User = ({ id, name, avatarUrl }) => {
+const User = ({ id, name, avatarUrl, status, fetchUsers }) => {
+	let buttonText;
+	let buttonColor = 'disabled';
+	switch (status) {
+		case 0:
+			buttonText = 'Add';
+			buttonColor = 'tertiary';
+			break;
+		case 1:
+			buttonText = 'Pending';
+			break;
+		default:
+			buttonText = 'Added';
+	}
+
+	const handleAdd = async () => {
+		// make POST request to send friend request
+		try {
+			const response = await fetch(
+				`http://localhost:3000/${version}/friends/add/${id}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include',
+				}
+			);
+
+			const users = await response.json();
+
+			if (!response.ok) {
+				const error = users.errors[0].msg;
+				console.log(error);
+				return;
+			}
+
+			// call fetchUsers to update state
+			fetchUsers();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className='flex items-center gap-2 py-2'>
 			<Avatar avatar_url={avatarUrl} />
 			{name}
 			<div className='ml-auto'>
-				<Button text='Add' size='xs' />
+				<Button
+					text={buttonText}
+					size='xs'
+					onClick={handleAdd}
+					color={buttonColor}
+					className='w-24'
+				/>
 			</div>
 		</div>
 	);
 };
 
 const AddFriends = () => {
-	const [users, setUsers] = useState([]);
-	const [filteredUsers, setFilteredUsers] = useState([]);
+	const [users, setUsers] = useState(null);
 	const [query, setQuery] = useState('');
 
-	useEffect(() => {
-		const fetchUsers = async () => {
-			try {
-				const response = await fetch(
-					`http://localhost:3000/${version}/friends`,
-					{
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						credentials: 'include',
-					}
-				);
+	const fetchUsers = async () => {
+		try {
+			const response = await fetch(`http://localhost:3000/${version}/users`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+			});
 
-				const data = await response.json();
+			const users = await response.json();
 
-				if (!response.ok) {
-					const error = data.errors[0].msg;
-					console.log(error);
-					return;
-				}
-
-				setUsers(data);
-				setFilteredUsers(data);
-			} catch (error) {
+			if (!response.ok) {
+				const error = users.errors[0].msg;
 				console.log(error);
+				return;
 			}
-		};
 
-		fetchUsers();
-	}, []);
+			const result = users.filter((user) =>
+				user.full_name.toLowerCase().includes(query)
+			);
+
+			setUsers(result);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	useEffect(() => {
-		const result = users.filter((user) =>
-			user.full_name.toLowerCase().includes(query)
-		);
-		setFilteredUsers(result);
+		fetchUsers();
 	}, [query]);
+
+	if (users == null) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className='flex flex-col'>
@@ -73,17 +118,19 @@ const AddFriends = () => {
 				onChange={(e) => setQuery(e.target.value.toLowerCase())}
 			/>
 
-			{filteredUsers.length == 0 ? (
+			{users?.length == 0 ? (
 				<div className='mt-4'>No results!</div>
 			) : (
 				<div className='flex flex-col mt-4 gap-2'>
-					{filteredUsers.map((user, index) => (
+					{users.map((user, index) => (
 						<User
-							id={user.id}
+							id={user.user_id}
 							name={user.full_name}
 							avatarUrl={user.avatar_url}
+							status={user.status}
 							key={index}
-						></User>
+							fetchUsers={fetchUsers}
+						/>
 					))}
 				</div>
 			)}
