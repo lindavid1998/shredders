@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const pool = require('../db');
+const { handleError } = require('../utils');
 
 const doesFriendRequestExist = async (userId1, userId2) => {
 	try {
@@ -36,16 +37,6 @@ const areFriends = async (userId1, userId2) => {
 	} catch (error) {
 		console.log(error);
 		return False;
-	}
-};
-
-const handleError = (err, res) => {
-	if (typeof err === 'object' && err.message) {
-		res.status(500).json({ errors: [{ msg: err.message }] });
-	} else if (typeof err === 'object') {
-		res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
-	} else {
-		res.status(500).json({ errors: [{ msg: err }] });
 	}
 };
 

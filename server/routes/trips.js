@@ -2,6 +2,7 @@ const router = require('express').Router();
 const pool = require('../db');
 const authorization = require('../middleware/authorization');
 const { check, validationResult } = require('express-validator');
+const { handleError } = require('../utils');
 
 const validateInput = [
 	check('destination_id').exists().withMessage('Destination cannot be empty'),
@@ -34,11 +35,7 @@ router.get('/create', async (req, res) => {
 
 		res.status(200).json(destinationToId);
 	} catch (err) {
-		if (typeof err === 'object') {
-			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
-		} else {
-			res.status(500).json({ errors: [{ msg: err }] });
-		}
+		handleError(err)
 	}
 });
 
@@ -89,12 +86,7 @@ router.post(`/create`, validateInput, async (req, res) => {
 
 		res.status(200).json({ trip_id });
 	} catch (err) {
-		if (typeof err === 'object') {
-			console.log(err);
-			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
-		} else {
-			res.status(500).json({ errors: [{ msg: err }] });
-		}
+		handleError(err)
 	}
 });
 
@@ -143,11 +135,7 @@ router.get(`/overview`, authorization, async (req, res) => {
 
 		res.status(200).json(result.rows);
 	} catch (err) {
-		if (typeof err === 'object') {
-			res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
-		} else {
-			res.status(500).json({ errors: [{ msg: err }] });
-		}
+		handleError(err)
 	}
 });
 
