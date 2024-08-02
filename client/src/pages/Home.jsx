@@ -30,7 +30,7 @@ const User = ({ id, name, avatarUrl, status, fetchUsers }) => {
 			const response = await fetch(
 				`http://localhost:3000/${version}/friends/add/${id}`,
 				{
-					method: 'GET',
+					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 					},
@@ -38,10 +38,9 @@ const User = ({ id, name, avatarUrl, status, fetchUsers }) => {
 				}
 			);
 
-			const users = await response.json();
-
 			if (!response.ok) {
-				const error = users.errors[0].msg;
+				const data = await response.json()
+				const error = data.errors[0].msg;
 				console.log(error);
 				return;
 			}
