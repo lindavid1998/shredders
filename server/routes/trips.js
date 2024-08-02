@@ -22,7 +22,7 @@ const validateInput = [
 	check('end_date').notEmpty().withMessage('End date cannot be empty'),
 ];
 
-router.get('/create', async (req, res) => {
+router.get('/destinations', async (req, res) => {
 	try {
 		const query = 'SELECT * FROM destinations';
 		const result = await pool.query(query);
@@ -46,7 +46,7 @@ router.post(`/create`, validateInput, async (req, res) => {
 		return res.status(400).json({ errors: errors.array() });
 	}
 
-	const { destination_id, start_date, end_date, added_friends } = req.body;
+	const { destination_id, start_date, end_date, addedFriends } = req.body;
 
 	const user_id = req.user.user_id;
 
@@ -76,9 +76,9 @@ router.post(`/create`, validateInput, async (req, res) => {
 		result = await pool.query(query, [user_id, trip_id, 'Going']);
 
 		// add invited friends to rsvp table
-		if (added_friends) {
+		if (addedFriends) {
 			await Promise.all(
-				added_friends.map((friend) => {
+				addedFriends.map((friend) => {
 					return pool.query(query, [friend.id, trip_id, 'Tentative']);
 				})
 			);
