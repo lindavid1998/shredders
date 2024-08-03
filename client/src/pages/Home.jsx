@@ -207,8 +207,8 @@ const Home = () => {
 
 	if (trips.length == 0) {
 		return (
-			<div>
-				<div>You have no trips</div>
+			<div className='flex flex-col items-center gap-4'>
+				<h3 className='text-center'>You have no trips</h3>
 				<Button
 					text='Create a trip'
 					onClick={() => navigate(`/${version}/trips/plan`)}
