@@ -370,3 +370,16 @@ textarea:focus {
 .sidebar-header {
 	@apply flex items-center;
 }
+
+.avatar-edit-overlay {
+	@apply bg-black w-full h-full flex items-center justify-center;
+	opacity: 0;
+	transition: opacity 0.3s;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.avatar-edit-overlay:hover {
+	opacity: 0.8;
+}

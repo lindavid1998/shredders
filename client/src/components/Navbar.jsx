@@ -222,7 +222,7 @@ const Navbar = () => {
 							onClick={logout}
 							size='sm'
 						/>
-						<Avatar avatar_url={user.avatar_url} />
+						<Avatar avatar_url={user.avatar_url} allowEdit={true} />
 					</>
 				) : (
 					<>
