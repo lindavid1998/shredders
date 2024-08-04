@@ -39,7 +39,7 @@ const User = ({ id, name, avatarUrl, status, fetchUsers }) => {
 			);
 
 			if (!response.ok) {
-				const data = await response.json()
+				const data = await response.json();
 				const error = data.errors[0].msg;
 				console.log(error);
 				return;
@@ -194,8 +194,6 @@ const Home = () => {
 			const { upcoming, past } = splitTrips(data);
 			setUpcomingTrips(upcoming);
 			setPastTrips(past);
-			// console.log(upcoming)
-			// console.log(past)
 		};
 
 		fetchData();
@@ -237,9 +235,13 @@ const Home = () => {
 				<h2>Upcoming trips</h2>
 
 				<div className='trips'>
-					{upcomingTrips.map((trip, index) => (
-						<TripCard key={index} data={trip} />
-					))}
+					{upcomingTrips.length == 0 ? (
+						<div>You don't have any upcoming trips yet</div>
+					) : (
+						upcomingTrips.map((trip, index) => (
+							<TripCard key={index} data={trip} />
+						))
+					)}
 				</div>
 			</div>
 
@@ -247,9 +249,11 @@ const Home = () => {
 				<h2>Past trips</h2>
 
 				<div className='trips'>
-					{pastTrips.map((trip, index) => (
-						<TripCard key={index} data={trip} />
-					))}
+					{pastTrips.length == 0 ? (
+						<div>You don't have any past trips yet</div>
+					) : (
+						pastTrips.map((trip, index) => <TripCard key={index} data={trip} />)
+					)}
 				</div>
 			</div>
 
