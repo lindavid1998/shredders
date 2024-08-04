@@ -6,7 +6,6 @@ module.exports = async (req, res, next) => {
 	// modify req object to include payload if JWT is valid
 
 	try {
-		// const token = req.header('token');
 		const token = req.cookies.token;
 
 		if (!token) {

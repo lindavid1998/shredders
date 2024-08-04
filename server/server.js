@@ -13,7 +13,8 @@ const pool = require('./db');
 const authRouter = require('./routes/jwtAuth');
 const tripRouter = require('./routes/trips');
 const friendsRouter = require('./routes/friends');
-const usersRouter = require('./routes/users')
+const usersRouter = require('./routes/users');
+const avatarRouter = require('./routes/avatar');
 
 // MIDDLEWARE
 
@@ -38,6 +39,8 @@ app.use(`/${apiVersion}/trips`, authorization, tripRouter);
 app.use(`/${apiVersion}/friends`, authorization, friendsRouter);
 
 app.use(`/${apiVersion}/users`, authorization, usersRouter);
+
+app.use(`/${apiVersion}/avatar`, authorization, avatarRouter);
 
 app.listen(port, () => {
 	console.log(`server listening on port ${port}!`);
