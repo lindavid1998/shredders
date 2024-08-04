@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer();
 const { createClient } = require('@supabase/supabase-js');
 const { decode } = require('base64-arraybuffer');
+const jwtGenerator = require('../jwtGenerator');
 
 const supabase = createClient(
 	process.env.SUPABASE_PROJECT_URL,
@@ -12,7 +13,8 @@ const supabase = createClient(
 
 router.post('/upload', upload.single('avatar'), async (req, res) => {
 	try {
-		const user_id = req.user.user_id;
+		const user = req.user;
+		const user_id = user.user_id;
 
 		// get file from req object
 		const file = req.file;
@@ -39,9 +41,19 @@ router.post('/upload', upload.single('avatar'), async (req, res) => {
 			.from('users')
 			.update({ avatar_url: url })
 			.eq('id', user_id)
-      .select();
-    
-		res.sendStatus(200);
+			.select();
+
+		// update JWT token payload with new avatar url
+		token = jwtGenerator(
+			user_id,
+			user.first_name,
+			user.last_name,
+			user.email,
+			url
+		);
+		res.cookie('token', token, { maxAge: 900000, httpOnly: true });
+
+    res.sendStatus(200);
 	} catch (error) {
 		handleError(error, res);
 	}
