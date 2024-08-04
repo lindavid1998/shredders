@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const pool = require('../db');
-const authorization = require('../middleware/authorization');
 const { check, validationResult } = require('express-validator');
 const { handleError } = require('../utils');
 
@@ -90,7 +89,7 @@ router.post(`/create`, validateInput, async (req, res) => {
 	}
 });
 
-router.get(`/overview`, authorization, async (req, res) => {
+router.get(`/overview`, async (req, res) => {
 	const user = req.user;
 	const userId = user.user_id;
 
@@ -140,7 +139,7 @@ router.get(`/overview`, authorization, async (req, res) => {
 });
 
 // delete comment
-router.delete('/:id/comments/:comment_id', authorization, async (req, res) => {
+router.delete('/:id/comments/:comment_id', async (req, res) => {
 	try {
 		const commentId = req.params.comment_id;
 
@@ -176,7 +175,7 @@ router.delete('/:id/comments/:comment_id', authorization, async (req, res) => {
 });
 
 // post comment
-router.post('/:id/comments', authorization, async (req, res) => {
+router.post('/:id/comments', async (req, res) => {
 	try {
 		const tripId = req.params.id;
 		const userId = req.user.user_id;
@@ -197,7 +196,7 @@ router.post('/:id/comments', authorization, async (req, res) => {
 });
 
 // view trip
-router.get('/:id', authorization, async (req, res) => {
+router.get('/:id', async (req, res) => {
 	try {
 		const tripId = req.params.id;
 
@@ -273,7 +272,7 @@ router.get('/:id', authorization, async (req, res) => {
 	}
 });
 
-router.delete('/:id', authorization, async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	try {
 		const tripId = req.params.id;
 
