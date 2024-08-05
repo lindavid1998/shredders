@@ -8,6 +8,7 @@ import Comment from '../components/Comment';
 import PostComment from '../components/PostComment';
 import { useAuth } from '../hooks/useAuth';
 import RSVPs from '../components/RSVPs';
+import Sidebar from '../components/Sidebar';
 
 const Trip = () => {
 	const { user } = useAuth();
@@ -20,6 +21,7 @@ const Trip = () => {
 	const [comments, setComments] = useState([]);
 	const [rsvps, setRsvps] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 	const sortRsvps = (rsvps) => {
 		let result = [];
@@ -62,6 +64,10 @@ const Trip = () => {
 	const handleAddComment = (comment) => {
 		// concatenate user info to comment before appending to comments array
 		setComments([...comments, { ...comment, ...user }]);
+	};
+
+	const handleCloseSidebar = () => {
+		setIsSidebarOpen(false);
 	};
 
 	// make API call to fetch trip details
@@ -114,6 +120,12 @@ const Trip = () => {
 
 	return (
 		<div className='trip flex flex-col items-center md:items-start gap-10 w-full md:relative'>
+			<Sidebar
+				isOpen={isSidebarOpen}
+				handleClose={handleCloseSidebar}
+				header='Invite friends'
+			></Sidebar>
+
 			<div className='trip-hero-img'>
 				<img src={imageLargeUrl}></img>
 			</div>
@@ -129,7 +141,11 @@ const Trip = () => {
 
 				<div className='flex flex-col gap-5 md:absolute md:flex-row md:right-0 md:top-0'>
 					<Button text='Edit trip' color='primary' />
-					<Button text='Invite friends' color='secondary' />
+					<Button
+						text='Invite friends'
+						color='secondary'
+						onClick={() => setIsSidebarOpen(true)}
+					/>
 				</div>
 			</div>
 
