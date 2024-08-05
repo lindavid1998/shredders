@@ -34,7 +34,7 @@ router.get('/destinations', async (req, res) => {
 
 		res.status(200).json(destinationToId);
 	} catch (err) {
-		handleError(err)
+		handleError(err, res);
 	}
 });
 
@@ -85,7 +85,7 @@ router.post(`/create`, validateInput, async (req, res) => {
 
 		res.status(200).json({ trip_id });
 	} catch (err) {
-		handleError(err)
+		handleError(err, res);
 	}
 });
 
@@ -134,7 +134,49 @@ router.get(`/overview`, async (req, res) => {
 
 		res.status(200).json(result.rows);
 	} catch (err) {
-		handleError(err)
+		handleError(err, res);
+	}
+});
+
+router.post('/:id/invite', async (req, res) => {
+	const tripId = req.params.id;
+	const invitedUserIds = req.body.invited_users;
+
+	try {
+		await Promise.all(
+			invitedUserIds.map((userId) => {
+				return pool.query(
+					'INSERT INTO rsvps (user_id, trip_id) VALUES ($1, $2)',
+					[userId, tripId]
+				);
+			})
+		);
+
+		const rsvpQuery = `
+			SELECT
+				r.id,
+				r.user_id,
+				r.status,
+				u.first_name,
+				u.last_name,
+				u.avatar_url
+			FROM
+				rsvps r
+			JOIN
+				users u
+			ON
+				r.user_id = u.id
+			WHERE
+				r.trip_id = $1;
+		`;
+
+		const updatedRsvps = await pool.query(rsvpQuery, [tripId]);
+
+		res.status(200).json({
+			rsvps: updatedRsvps.rows,
+		});
+	} catch (error) {
+		handleError(error, res);
 	}
 });
 
@@ -150,10 +192,12 @@ router.delete('/:id/comments/:comment_id', async (req, res) => {
 
 		// throw error if comment doesn't exist
 		if (result.rows.length == 0) {
-			return res.status(400).json({ errors: [{ msg: 'comment does not exist' }] });
+			return res
+				.status(400)
+				.json({ errors: [{ msg: 'comment does not exist' }] });
 		}
 
-		// throw error if user doesn't match 
+		// throw error if user doesn't match
 		const userId = result.rows[0]['user_id'];
 		if (userId != req.user.user_id) {
 			return res.status(400).json({
