@@ -143,6 +143,15 @@ router.post('/:id/invite/:user_id', async (req, res) => {
 	const userId = req.params.user_id;
 
 	try {
+		// throw error if user is already invited
+		const result = await pool.query(
+			'SELECT * FROM rsvps WHERE user_id = $1 AND trip_id = $2',
+			[userId, tripId]
+		);
+		if (result.rowCount > 0) {
+			res.status(500).json('user is already invited to trip');
+		}
+
 		await pool.query('INSERT INTO rsvps (user_id, trip_id) VALUES ($1, $2)', [
 			userId,
 			tripId,
@@ -178,22 +187,26 @@ router.post('/:id/invite/:user_id', async (req, res) => {
 
 router.get('/:id/invite/status', async (req, res) => {
 	const tripId = req.params.id;
-	const userId = req.user.user_id
+	const userId = req.user.user_id;
 	try {
 		const query = `
 			WITH friends AS (
-				SELECT users.id, CONCAT(users.first_name, ' ', users.last_name) AS full_name
+				SELECT
+					users.id,
+					CONCAT(users.first_name, ' ', users.last_name) AS full_name,
+					users.avatar_url
 				FROM users
 				JOIN friends ON users.id = friends.user1_id OR users.id = friends.user2_id
 				WHERE (friends.user1_id = $1 OR friends.user2_id = $1) AND users.id <> $1
 			)
-			SELECT friends.id AS user_id, friends.full_name,
+			SELECT friends.id AS user_id, friends.full_name, friends.avatar_url,
 				CASE 
 					WHEN rsvps.status IS NOT NULL THEN True
 					ELSE False
 				END AS is_invited
 			FROM friends
-			LEFT JOIN rsvps ON friends.id = rsvps.user_id AND rsvps.trip_id = $2;
+			LEFT JOIN rsvps ON friends.id = rsvps.user_id AND rsvps.trip_id = $2
+			ORDER BY friends.full_name;
 		`;
 
 		const result = await pool.query(query, [userId, tripId]);

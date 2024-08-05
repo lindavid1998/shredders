@@ -9,6 +9,7 @@ import PostComment from '../components/PostComment';
 import { useAuth } from '../hooks/useAuth';
 import RSVPs from '../components/RSVPs';
 import Sidebar from '../components/Sidebar';
+import InviteFriends from '../components/InviteFriends';
 
 const Trip = () => {
 	const { user } = useAuth();
@@ -68,6 +69,38 @@ const Trip = () => {
 
 	const handleCloseSidebar = () => {
 		setIsSidebarOpen(false);
+		window.location.reload();
+	};
+
+	const handleInviteUser = async (userId) => {
+		// returns true if the api call is successful
+		try {
+			const response = await fetch(
+				`http://localhost:3000/${version}/trips/${id}/invite/${userId}`,
+				{
+					method: 'POST',
+					credentials: 'include',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				const error = data.errors[0].msg;
+				setError(error);
+				console.log(error);
+				return false;
+			}
+
+			setRsvps(data);
+			return true
+		} catch (error) {
+			console.log(error);
+			return false
+		}
 	};
 
 	// make API call to fetch trip details
@@ -124,7 +157,9 @@ const Trip = () => {
 				isOpen={isSidebarOpen}
 				handleClose={handleCloseSidebar}
 				header='Invite friends'
-			></Sidebar>
+			>
+				<InviteFriends tripId={id} handleInvite={handleInviteUser} />
+			</Sidebar>
 
 			<div className='trip-hero-img'>
 				<img src={imageLargeUrl}></img>
