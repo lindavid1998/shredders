@@ -23,7 +23,7 @@ app.use(express.json()); // enables req.body
 app.use(cookieParser());
 
 const corsOptions = {
-	origin: 'http://localhost:5100', // client's origin
+	origin: process.env.CORS_ORIGIN,
 	credentials: true, // Allow credentials
 };
 
