@@ -277,75 +277,101 @@ router.post('/:id/comments', async (req, res) => {
 
 // view trip
 router.get('/:id', async (req, res) => {
+	const tripId = req.params.id;
+	const userId = req.user.user_id;
+
+	const tripQuery = `
+		SELECT
+			start_date,
+			end_date,
+			name AS location,
+			creator_id,
+			first_name AS creator_first_name,
+			last_name AS creator_last_name,
+			destinations.image_large_url,
+			destinations.image_small_url
+		FROM
+			trips
+		INNER JOIN destinations
+			ON trips.destination_id = destinations.id
+		INNER JOIN users
+			ON trips.creator_id = users.id
+		WHERE
+			trips.id = $1
+	`;
+
+	const rsvpsQuery = `
+		SELECT
+			r.id,
+			r.user_id,
+			r.status,
+			u.first_name,
+			u.last_name,
+			u.avatar_url
+		FROM
+			rsvps r
+		JOIN
+			users u
+		ON
+			r.user_id = u.id
+		WHERE
+			r.trip_id = $1;
+	`;
+
+	const commentsQuery = `
+		SELECT
+			c.id,
+			c.body,
+			c.user_id,
+			c.created_at,
+			u.first_name,
+			u.last_name,
+			u.avatar_url
+		FROM
+			comments c
+		JOIN
+			users u
+		ON
+			c.user_id = u.id
+		WHERE
+			c.trip_id = $1
+		ORDER BY c.created_at;
+	`;
+
+	const overlapFriendsQuery = `
+		SELECT DISTINCT u.id AS user_id, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.avatar_url
+		FROM rsvps r
+		JOIN friends f
+			ON (r.user_id = f.user1_id AND f.user2_id = $1)
+			OR (r.user_id = f.user2_id AND f.user1_id = $1)
+		JOIN users u
+			ON r.user_id = u.id
+		WHERE r.trip_id IN (
+			SELECT t2.id
+			FROM trips t1
+			JOIN trips t2
+				ON t1.destination_id = t2.destination_id
+				AND t1.id <> t2.id
+				AND t1.start_date <= t2.end_date
+				AND t1.end_date >= t2.start_date
+			WHERE t1.id = $2
+		)
+	`;
+
 	try {
-		const tripId = req.params.id;
-
-		const tripQuery = `
-			SELECT
-				start_date,
-				end_date,
-				name AS location,
-				creator_id,
-				first_name AS creator_first_name,
-				last_name AS creator_last_name,
-				destinations.image_large_url,
-				destinations.image_small_url
-			FROM
-				trips
-			INNER JOIN destinations
-				ON trips.destination_id = destinations.id
-			INNER JOIN users
-				ON trips.creator_id = users.id
-			WHERE
-				trips.id = $1
-		`;
-
-		const rsvpsQuery = `
-			SELECT
-				r.id,
-				r.user_id,
-				r.status,
-				u.first_name,
-				u.last_name,
-				u.avatar_url
-			FROM
-				rsvps r
-			JOIN
-				users u
-			ON
-				r.user_id = u.id
-			WHERE
-				r.trip_id = $1;
-		`;
-
-		const commentsQuery = `
-			SELECT
-				c.id,
-				c.body,
-				c.user_id,
-				c.created_at,
-				u.first_name,
-				u.last_name,
-				u.avatar_url
-			FROM
-				comments c
-			JOIN
-				users u
-			ON
-				c.user_id = u.id
-			WHERE
-				c.trip_id = $1
-			ORDER BY c.created_at;
-		`;
-
 		const tripResult = await pool.query(tripQuery, [tripId]);
 		const rsvpResult = await pool.query(rsvpsQuery, [tripId]);
 		const commentsResult = await pool.query(commentsQuery, [tripId]);
+		const overlapFriendsResult = await pool.query(overlapFriendsQuery, [
+			userId,
+			tripId,
+		]);
 
 		res.status(200).json({
 			...tripResult.rows[0],
 			rsvps: rsvpResult.rows,
 			comments: commentsResult.rows,
+			friends_on_overlapping_trips: overlapFriendsResult.rows,
 		});
 	} catch (err) {
 		res.status(500).json({ errors: [{ msg: err }] });
