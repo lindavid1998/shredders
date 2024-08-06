@@ -23,6 +23,7 @@ const Trip = () => {
 	const [rsvps, setRsvps] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+	const [overlapFriends, setOverlapFriends] = useState(null);
 
 	const sortRsvps = (rsvps) => {
 		let result = [];
@@ -68,7 +69,7 @@ const Trip = () => {
 	};
 
 	const handleCloseSidebar = () => {
-		setIsSidebarOpen(false);
+		setIsSidebarOpen(false); // why doesn't handleInviteUser update state and trigger re-render?
 		window.location.reload();
 	};
 
@@ -133,6 +134,7 @@ const Trip = () => {
 				image_large_url,
 				comments,
 				rsvps,
+				friends_on_overlapping_trips,
 			} = data;
 
 			setLocation(location);
@@ -141,6 +143,7 @@ const Trip = () => {
 			setImageLargeUrl(image_large_url);
 			setComments(comments);
 			setRsvps(sortRsvps(rsvps));
+			setOverlapFriends(friends_on_overlapping_trips);
 			setIsLoading(false);
 		};
 
@@ -184,7 +187,7 @@ const Trip = () => {
 				</div>
 			</div>
 
-			<RSVPs responses={rsvps} />
+			<RSVPs responses={rsvps} overlapFriends={overlapFriends} />
 
 			<div className='section comments'>
 				<h3 className='text-center md:text-left'>Comments</h3>

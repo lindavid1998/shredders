@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Avatar from './Avatar';
-import { faCheck, faX, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import {
+	faCheck,
+	faX,
+	faQuestion,
+	faChevronDown,
+	faChevronUp,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const RSVPCount = ({ numGoing, numTentative, numDeclined }) => {
@@ -13,7 +19,7 @@ const RSVPCount = ({ numGoing, numTentative, numDeclined }) => {
 	);
 };
 
-const User = ({ user }) => {
+const User = ({ user, showStatus = true }) => {
 	let className =
 		'absolute right-0 bottom-0 w-5 h-5  rounded-full flex items-center justify-center';
 	let bgColor = '';
@@ -34,12 +40,14 @@ const User = ({ user }) => {
 	}
 
 	return (
-		<div className='flex items-center gap-4'>
+		<div className='flex items-center gap-4 self-start'>
 			<div className='relative w-fit h-fit'>
 				<Avatar avatar_url={user.avatar_url}></Avatar>
-				<div className={className} style={{ backgroundColor: bgColor }}>
-					<FontAwesomeIcon size='sm' icon={icon} fill='white' inverse />
-				</div>
+				{showStatus && (
+					<div className={className} style={{ backgroundColor: bgColor }}>
+						<FontAwesomeIcon size='sm' icon={icon} fill='white' inverse />
+					</div>
+				)}
 			</div>
 
 			<div>
@@ -49,7 +57,41 @@ const User = ({ user }) => {
 	);
 };
 
-const RSVPs = ({ responses }) => {
+const FriendsOnOverlappingTrips = ({ friends }) => {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggleDropdown = () => {
+		setIsOpen((prevIsOpen) => !prevIsOpen);
+	};
+
+	return (
+		<div className='rounded max-w-[420px] px-6 py-4 border flex flex-col gap-4'>
+			<div className='flex justify-center items-start'>
+				<div>
+					<span className='font-bold'>{friends.length}</span> {friends.length > 1 ? 'friends' : 'friend'}{' '}
+					will be here the same time as you!
+				</div>
+				<div onClick={toggleDropdown} className='ml-4'>
+					{isOpen ? (
+						<FontAwesomeIcon size='sm' icon={faChevronUp} />
+					) : (
+						<FontAwesomeIcon size='sm' icon={faChevronDown} />
+					)}
+				</div>
+			</div>
+
+			{isOpen && (
+				<div className='flex gap-2 flex-col'>
+					{friends.map((user, index) => (
+						<User key={index} user={user} showStatus={false} />
+					))}
+				</div>
+			)}
+		</div>
+	);
+};
+
+const RSVPs = ({ responses, overlapFriends }) => {
 	const [isSmallScreen, setIsSmallScreen] = useState(false);
 	const [splitResponses, setSplitResponses] = useState({});
 	const [numGoing, setNumGoing] = useState(0);
@@ -60,7 +102,7 @@ const RSVPs = ({ responses }) => {
 	useEffect(() => {
 		const widthThreshold = 768; // md screen is 768 px
 		const handleResize = () => {
-			setIsSmallScreen(window.innerWidth < 768); // Adjust the breakpoint as needed
+			setIsSmallScreen(window.innerWidth < widthThreshold); // Adjust the breakpoint as needed
 		};
 
 		handleResize(); // Check on initial render
@@ -99,7 +141,7 @@ const RSVPs = ({ responses }) => {
 	// on small screen
 	if (isSmallScreen) {
 		return (
-			<div className='section rsvps'>
+			<div className='section rsvps items-center'>
 				<h3 className='text-center md:text-left'>Who's Coming</h3>
 
 				<RSVPCount
@@ -111,6 +153,11 @@ const RSVPs = ({ responses }) => {
 				{responses.map((user, index) => (
 					<User key={index} user={user} />
 				))}
+
+				<FriendsOnOverlappingTrips
+					friends={overlapFriends}
+					location={location}
+				/>
 			</div>
 		);
 	}
@@ -121,33 +168,41 @@ const RSVPs = ({ responses }) => {
 			<h3 className='text-center md:text-left'>Who's Coming</h3>
 
 			<div className='rsvp-columns'>
-				{numGoing > 0 && <div className='rsvp-column'>
-					<div>
-						<span className='font-bold'>{numGoing}</span> accepted
+				{numGoing > 0 && (
+					<div className='rsvp-column'>
+						<div>
+							<span className='font-bold'>{numGoing}</span> accepted
+						</div>
+						{splitResponses['Going'].map((user, index) => (
+							<User key={index} user={user} />
+						))}
 					</div>
-					{splitResponses['Going'].map((user, index) => (
-						<User key={index} user={user} />
-					))}
-        </div>}
-        
-				{numTentative > 0 && <div className='rsvp-column'>
-					<div>
-						<span className='font-bold'>{numTentative}</span> tentative
+				)}
+
+				{numTentative > 0 && (
+					<div className='rsvp-column'>
+						<div>
+							<span className='font-bold'>{numTentative}</span> tentative
+						</div>
+						{splitResponses['Tentative'].map((user, index) => (
+							<User key={index} user={user} />
+						))}
 					</div>
-					{splitResponses['Tentative'].map((user, index) => (
-						<User key={index} user={user} />
-					))}
-        </div>}
-        
-				{numDeclined > 0 && <div className='rsvp-column'>
-					<div>
-						<span className='font-bold'>{numDeclined}</span> declined
+				)}
+
+				{numDeclined > 0 && (
+					<div className='rsvp-column'>
+						<div>
+							<span className='font-bold'>{numDeclined}</span> declined
+						</div>
+						{splitResponses['Declined'].map((user, index) => (
+							<User key={index} user={user} />
+						))}
 					</div>
-					{splitResponses['Declined'].map((user, index) => (
-						<User key={index} user={user} />
-					))}
-				</div>}
+				)}
 			</div>
+
+			{overlapFriends?.length > 0 && <FriendsOnOverlappingTrips friends={overlapFriends} />}
 		</div>
 	);
 };

@@ -339,7 +339,7 @@ router.get('/:id', async (req, res) => {
 	`;
 
 	const overlapFriendsQuery = `
-		SELECT DISTINCT u.id AS user_id, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.avatar_url
+		SELECT DISTINCT u.id AS user_id, u.first_name, u.last_name, u.avatar_url
 		FROM rsvps r
 		JOIN friends f
 			ON (r.user_id = f.user1_id AND f.user2_id = $1)
