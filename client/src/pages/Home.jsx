@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import Spinner from '../components/Spinner';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import TripCard from '../components/TripCard';
@@ -28,7 +29,7 @@ const User = ({ id, name, avatarUrl, status, fetchUsers }) => {
 		// make POST request to send friend request
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/friends/add/${id}`,
+				`${BACKEND_BASE_URL}/${version}/friends/add/${id}`,
 				{
 					method: 'POST',
 					headers: {
@@ -75,7 +76,7 @@ const AddFriends = () => {
 
 	const fetchUsers = async () => {
 		try {
-			const response = await fetch(`http://localhost:3000/${version}/users`, {
+			const response = await fetch(`${BACKEND_BASE_URL}/${version}/users`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -169,7 +170,7 @@ const Home = () => {
 		// fetch data
 		const fetchData = async () => {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/overview`,
+				`${BACKEND_BASE_URL}/${version}/trips/overview`,
 				{
 					method: 'GET',
 					credentials: 'include',

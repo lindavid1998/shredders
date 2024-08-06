@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/Button';
@@ -110,7 +111,7 @@ const Navbar = () => {
 	const fetchFriendRequests = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/friends/requests`,
+				`${BACKEND_BASE_URL}/${version}/friends/requests`,
 				{
 					method: 'GET',
 					headers: {
@@ -139,7 +140,7 @@ const Navbar = () => {
 		// action can be reject or accept
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/friends/${action}/${requestId}`,
+				`${BACKEND_BASE_URL}/${version}/friends/${action}/${requestId}`,
 				{
 					method: 'POST',
 					headers: {

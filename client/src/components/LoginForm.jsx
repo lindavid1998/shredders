@@ -4,7 +4,7 @@ import Button from './Button';
 import TextInput from './TextInput';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 const version = import.meta.env.VITE_API_VERSION;
 
 const LoginForm = ({ className }) => {
@@ -20,7 +20,7 @@ const LoginForm = ({ className }) => {
 		try {
 			setIsLoading(true);
 			const response = await fetch(
-				`http://localhost:3000/${version}/auth/login`,
+				`${BACKEND_BASE_URL}/${version}/auth/login`,
 				{
 					method: 'POST',
 					headers: {

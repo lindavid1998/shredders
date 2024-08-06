@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import { getFormattedDate } from '../utils/utils';
 import Button from '../components/Button';
 import Comment from '../components/Comment';
@@ -37,7 +38,7 @@ const Trip = () => {
 		try {
 			// remove comment from database
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/${id}/comments/${commentId}`,
+				`${BACKEND_BASE_URL}/${version}/trips/${id}/comments/${commentId}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -77,7 +78,7 @@ const Trip = () => {
 		// returns true if the api call is successful
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/${id}/invite/${userId}`,
+				`${BACKEND_BASE_URL}/${version}/trips/${id}/invite/${userId}`,
 				{
 					method: 'POST',
 					credentials: 'include',
@@ -97,10 +98,10 @@ const Trip = () => {
 			}
 
 			setRsvps(data);
-			return true
+			return true;
 		} catch (error) {
 			console.log(error);
-			return false
+			return false;
 		}
 	};
 
@@ -108,7 +109,7 @@ const Trip = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/${id}`,
+				`${BACKEND_BASE_URL}/${version}/trips/${id}`,
 				{
 					method: 'GET',
 					credentials: 'include',

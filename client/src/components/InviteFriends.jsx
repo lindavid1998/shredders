@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import TextInput from './TextInput';
 import Avatar from './Avatar';
 import Button from './Button';
@@ -54,7 +55,7 @@ const InviteFriends = ({ tripId, handleInvite }) => {
 	const fetchFriendsStatuses = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/${tripId}/invite/status`,
+				`${BACKEND_BASE_URL}/${version}/trips/${tripId}/invite/status`,
 				{
 					method: 'GET',
 					headers: {

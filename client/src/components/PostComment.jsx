@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from './Button';
 import Avatar from './Avatar';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import { useAuth } from '../hooks/useAuth';
 
 const PostComment = ({ tripId, handleAddComment }) => {
@@ -14,7 +15,7 @@ const PostComment = ({ tripId, handleAddComment }) => {
 
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/${tripId}/comments`,
+				`${BACKEND_BASE_URL}/${version}/trips/${tripId}/comments`,
 				{
 					method: 'POST',
 					headers: {

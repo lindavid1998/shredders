@@ -4,7 +4,7 @@ import Button from './Button';
 import TextInput from './TextInput';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 const version = import.meta.env.VITE_API_VERSION;
 
 const SignupForm = ({ className }) => {
@@ -22,7 +22,7 @@ const SignupForm = ({ className }) => {
 
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/auth/signup`,
+				`${BACKEND_BASE_URL}/${version}/auth/signup`,
 				{
 					method: 'POST',
 					headers: {
@@ -91,7 +91,7 @@ const SignupForm = ({ className }) => {
 
 				{error && <p className='error'>{error}</p>}
 
-				<Button type='submit' text='Sign up' color='tertiary'/>
+				<Button type='submit' text='Sign up' color='tertiary' />
 			</form>
 
 			<p className='text-center'>

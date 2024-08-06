@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 import { useLoad } from '../hooks/useLoad';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,16 +25,13 @@ const Plan = () => {
 
 	const fetchFriends = useCallback(async () => {
 		try {
-			const response = await fetch(
-				`http://localhost:3000/${version}/friends`,
-				{
-					method: 'GET',
-					credentials: 'include',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
+			const response = await fetch(`${BACKEND_BASE_URL}/${version}/friends`, {
+				method: 'GET',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
 
 			const data = await response.json();
 
@@ -54,7 +52,7 @@ const Plan = () => {
 	const fetchDestinations = useCallback(async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/destinations`,
+				`${BACKEND_BASE_URL}/${version}/trips/destinations`,
 				{
 					method: 'GET',
 					credentials: 'include',
@@ -99,7 +97,7 @@ const Plan = () => {
 			const user_id = user.user_id;
 
 			const response = await fetch(
-				`http://localhost:3000/${version}/trips/create`,
+				`${BACKEND_BASE_URL}/${version}/trips/create`,
 				{
 					method: 'POST',
 					headers: {
@@ -213,9 +211,7 @@ const Plan = () => {
 								id={friend.id}
 								className='flex content-center justify-between'
 							>
-								<div>
-									{friend.full_name}
-								</div>
+								<div>{friend.full_name}</div>
 								<div>
 									<FontAwesomeIcon
 										icon={faMinus}

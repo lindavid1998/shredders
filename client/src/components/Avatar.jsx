@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 const version = import.meta.env.VITE_API_VERSION;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import Button from './Button';
 
-const UploadAvatarForm = ({
-	handleClose,
-	handleSubmit,
-	handleSelectFile,
-}) => {
+const UploadAvatarForm = ({ handleClose, handleSubmit, handleSelectFile }) => {
 	return (
 		<div className='w-screen h-screen fixed top-0 right-0 flex items-start justify-center bg-black/40 shadow z-50'>
 			<form
@@ -53,25 +50,25 @@ const Avatar = ({ avatar_url, size = 'md', allowEdit = false }) => {
 	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault()
+		e.preventDefault();
 
 		// create formData object with file
 		const formData = new FormData();
 		formData.append('avatar', file);
-		
+
 		try {
 			const response = await fetch(
-				`http://localhost:3000/${version}/avatar/upload`,
+				`${BACKEND_BASE_URL}/${version}/avatar/upload`,
 				{
 					method: 'POST',
 					body: formData,
-					credentials: 'include', 
+					credentials: 'include',
 				}
 			);
-			
+
 			if (!response.ok) {
 				const data = await response.json();
-				console.log(data.errors[0].msg)
+				console.log(data.errors[0].msg);
 				console.log('File upload error');
 			}
 
