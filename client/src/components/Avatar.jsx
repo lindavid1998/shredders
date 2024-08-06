@@ -8,7 +8,7 @@ const UploadAvatarForm = ({
 	handleSelectFile,
 }) => {
 	return (
-		<div className='w-screen h-screen fixed top-0 right-0 flex items-start justify-center bg-black/40 shadow'>
+		<div className='w-screen h-screen fixed top-0 right-0 flex items-start justify-center bg-black/40 shadow z-50'>
 			<form
 				onSubmit={handleSubmit}
 				className='flex flex-col w-1/3 bg-white p-8 rounded gap-2 mt-24'
