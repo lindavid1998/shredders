@@ -1,8 +1,8 @@
 import React from 'react';
 import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
-import LoginImg from '../../public/snowboard-login-hero.jpg';
-import SignupImg from '../../public/snowboard-signup-hero.jpg';
+import LoginImg from '/snowboard-login-hero.jpg';
+import SignupImg from '/snowboard-signup-hero.jpg';
 import { useAuth } from '../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 const version = import.meta.env.VITE_API_VERSION;

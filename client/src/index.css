@@ -143,7 +143,6 @@ h6 {
 .input-field {
 	@apply inline-flex;
 	@apply w-full;
-	/* @apply max-w-64; */
 	@apply justify-center;
 	@apply gap-x-1.5;
 	@apply rounded-md;
@@ -164,7 +163,7 @@ h6 {
 }
 
 .hero-img {
-	background-image: url('../public/landing.jpg');
+	background-image: url('/landing.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 	width: 100%;

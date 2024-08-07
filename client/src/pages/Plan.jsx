@@ -9,7 +9,7 @@ import Dropdown from '../components/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import SearchableDropdown from '../components/SearchableDropdown';
-import HeroImg from '../../public/chairlift.jpg';
+import HeroImg from '/chairlift.jpg';
 
 const Plan = () => {
 	const [destinationToId, setDestinationToId] = useState({});
