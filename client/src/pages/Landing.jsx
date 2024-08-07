@@ -3,13 +3,15 @@ const version = import.meta.env.VITE_API_VERSION;
 import Button from '../components/Button';
 import Testimonial from '../components/Testimonial';
 import { useNavigate } from 'react-router-dom';
+import HeroImg from '/landing.jpg';
 
 const Hero = () => {
 	const navigate = useNavigate();
 
 	return (
 		<div className='hero relative w-full flex flex-col justify-center items-center gap-10 md:gap-8'>
-			<div className='hero-img' />
+			{/* <div className='hero-img' /> */}
+			<img className='hero-img' src={HeroImg}></img>
 
 			<div className='flex flex-col hero-text justify-center items-center md:absolute top-14 w-full max-w-screen-xl px-5 mx-auto'>
 				<div className='max-w-md'>
