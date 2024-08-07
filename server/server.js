@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const authorization = require('./middleware/authorization');
 const cookieParser = require('cookie-parser');
 const pool = require('./db');
+const path = require('path');
 
 // import routers
 const authRouter = require('./routes/jwtAuth');
@@ -29,6 +30,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
 // ROUTES
 
 // log in and sign up pages
@@ -41,6 +45,11 @@ app.use(`/${apiVersion}/friends`, authorization, friendsRouter);
 app.use(`/${apiVersion}/users`, authorization, usersRouter);
 
 app.use(`/${apiVersion}/avatar`, authorization, avatarRouter);
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+});
 
 app.listen(port, () => {
 	console.log(`server listening on port ${port}!`);
