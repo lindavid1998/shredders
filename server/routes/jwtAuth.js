@@ -134,7 +134,7 @@ router.post(`/login`, validateLogin, async (req, res) => {
 			res.cookie('token', token, {
 				maxAge: 900000,
 				httpOnly: true,
-				secure: true, 
+				secure: true,
 				sameSite: 'None',
 			});
 
@@ -160,7 +160,12 @@ router.get('/user', authorization, (req, res) => {
 
 router.post('/logout', authorization, (req, res) => {
 	try {
-		res.clearCookie('token', { maxAge: 900000, httpOnly: true });
+		res.clearCookie('token', {
+			maxAge: 900000,
+			httpOnly: true,
+			secure: true,
+			sameSite: 'None',
+		});
 		res.status(200).json('successfully logged out');
 	} catch (err) {
 		res.status(500).json({ errors: [{ msg: 'Internal server error' }] });
