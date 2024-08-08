@@ -30,69 +30,69 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 
 ### Landing page
 
-![](./shredders-demo/login/landing.png?raw=true)
+<img src="./shredders-demo/login/landing.png?raw=true" alt="Landing page" width="400">
 
 ### Login and signup pages
 
-![](./shredders-demo/login/login.png?raw=true)
+<img src="./shredders-demo/login/login.png?raw=true" alt="Login page" width="400">
 
-![](./shredders-demo/login/create_account.png?raw=true)
+<img src="./shredders-demo/login/create_account.png?raw=true" alt="Create account page" width="400">
 
 ### Home page for authenticated user where they can view all their upcoming and past trips
 
-![](./shredders-demo/home/no_trips.png?raw=true)
+<img src="./shredders-demo/home/no_trips.png?raw=true" alt="Home page with no trips" width="400">
 
-![](./shredders-demo/home/with_trips.png?raw=true)
+<img src="./shredders-demo/home/with_trips.png?raw=true" alt="Home page with trips" width="400">
 
 ### Search users and add friends
 
-![](./shredders-demo/add-friends/add_1.png?raw=true)
+<img src="./shredders-demo/add-friends/add_1.png?raw=true" alt="Add friends step 1" width="400">
 
-![](./shredders-demo/add-friends/add_2.png?raw=true)
+<img src="./shredders-demo/add-friends/search.png?raw=true" alt="Search users" width="400">
 
-![](./shredders-demo/add-friends/search.png?raw=true)
+<img src="./shredders-demo/add-friends/add_2.png?raw=true" alt="Add friends step 2" width="400">
 
 ### Incoming friend requests will show a badge notification in the navbar 
 
-![](./shredders-demo/add-friends/notification.png?raw=true)
+<img src="./shredders-demo/add-friends/notification.png?raw=true" alt="Friend request notification" width="400">
 
-![](./shredders-demo/add-friends/friend_request.png?raw=true)
+<img src="./shredders-demo/add-friends/friend_request.png?raw=true" alt="Friend request" width="400">
 
 ### Creating a trip
 
-![](./shredders-demo/create/create_1.png?raw=true)
+<img src="./shredders-demo/create/create_1.png?raw=true" alt="Creating a trip step 1" width="400">
 
-![](./shredders-demo/create/create_2.png?raw=true)
+<img src="./shredders-demo/create/create_2.png?raw=true" alt="Creating a trip step 2" width="400">
 
-![](./shredders-demo/create/create_4.png?raw=true)
+<img src="./shredders-demo/create/create_4.png?raw=true" alt="Creating a trip step 3" width="400">
 
-![](./shredders-demo/create/create_3.png?raw=true)
+<img src="./shredders-demo/create/create_3.png?raw=true" alt="Creating a trip step 4" width="400">
 
 ### Inviting friends to an existing trip
 
-![](./shredders-demo/invite/invite.png?raw=true)
+<img src="./shredders-demo/invite/invite.png?raw=true" alt="Inviting friends to a trip" width="400">
 
 ### View RSVPs
 
-![](./shredders-demo/overlap/overlap_1.png?raw=true)
+<img src="./shredders-demo/overlap/overlap_1.png?raw=true" alt="Viewing RSVPs" width="400">
 
 ### See which friends have overlapping trips with you
 
-![](./shredders-demo/overlap/overlap_2.png?raw=true)
- 
+<img src="./shredders-demo/overlap/overlap_2.png?raw=true" alt="Overlapping trips" width="400">
+
 ### Comment and discuss trip plans
 
-![](./shredders-demo/comment/comment.png?raw=true)
+<img src="./shredders-demo/comment/comment.png?raw=true" alt="Commenting on trip plans" width="400">
 
 ### Upload avatar
 
-![](./shredders-demo/avatar/edit_1.png?raw=true)
+<img src="./shredders-demo/avatar/edit_1.png?raw=true" alt="Editing avatar step 1" width="400">
 
-![](./shredders-demo/avatar/edit_2.png?raw=true)
+<img src="./shredders-demo/avatar/edit_2.png?raw=true" alt="Editing avatar step 2" width="400">
 
 ### Responsive design for mobile and desktop screens
 
-![](./shredders-demo/mobile-design/mobile_design.png?raw=true)
+<img src="./shredders-demo/mobile-design/mobile_design.png?raw=true" alt="Responsive design" width="400">
 
 ## Tech Stack
 
