@@ -1,15 +1,11 @@
-import { StrictMode } from 'react';
-
 export const getFormattedDate = (date) => {
-	if (typeof date == 'string') {
-		date = new Date(date);
+	if (typeof date != 'string') {
+		return 'Error, date must be type string'
 	}
-
-	let year = date.getFullYear();
-	let month = (1 + date.getMonth()).toString();
-	let day = date.getDate().toString();
-
-	return month + '/' + day + '/' + year;
+	
+	// String format: YYYY-MM-DD
+	const [year, month, day] = date.split('-');
+	return `${month}/${day}/${year}`;
 }
 
 export const getDaysSince = (timestamp) => {

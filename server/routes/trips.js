@@ -132,7 +132,15 @@ router.get(`/overview`, async (req, res) => {
 
 		const result = await pool.query(query, [userId]);
 
-		res.status(200).json(result.rows);
+		// ensure dates are YYYY-MM-DD format
+		const data = result.rows
+		for (const trip of data) {
+			for (const field of ['start_date', 'end_date']) {
+				trip[field] = trip[field].toISOString().split('T')[0];
+			}
+		}
+
+		res.status(200).json(data);
 	} catch (err) {
 		handleError(err, res);
 	}
@@ -367,8 +375,14 @@ router.get('/:id', async (req, res) => {
 			tripId,
 		]);
 
+		// ensure YYYY-MM-DD formatting of dates
+		let tripDetails = tripResult.rows[0];
+		for (const field of ['start_date', 'end_date']) {
+			tripDetails[field] = tripDetails[field].toISOString().split('T')[0]
+		}
+
 		res.status(200).json({
-			...tripResult.rows[0],
+			...tripDetails,
 			rsvps: rsvpResult.rows,
 			comments: commentsResult.rows,
 			friends_on_overlapping_trips: overlapFriendsResult.rows,

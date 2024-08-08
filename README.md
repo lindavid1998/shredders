@@ -175,11 +175,6 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 - Easy to use interface and good free tier option for storage and database
 - Database can be easily configured with their table/SQL editor
 
-
-## Known Issues 
-- **When creating a trip, the dates entered in the form are not consistent with the dates once the trip is created.** This issue was not present on local app so probably has to do with how timezones are being handled
-- **When adding friends, there are duplicate users showing up.** Could have to do with how the SQL query was written
-
 ## Features to Add
 
 - Add button to edit RSVP to trip
@@ -210,6 +205,9 @@ Coming soon: Backend API reference
 - **Dropdown Options not Populating**
   - **Problem:** The invite friends dropdown on the plan trip page didn't show options at first because the component rendered before fetching data.
   - **Solution:** Used a custom `useLoad` hook, passing in the API call to ensure the component didn't render until the API call returned a response.
+- **Date Inconsistency:**
+  - **Problem:** The dates entered in the form were consistent with what was uploaded to the database but displayed off by 1 day on the client. This issue was not present on the local app. It was determined that while the trip dates were being stored as a date type in the SQL database, running `pool.query` on the server converts them to a JavaScript date object with a UTC timezone like `2024-04-07T00:00:00.000Z`. However, when formatting this date on the client using the `Date.getDate()` method, the day of the local timezone was returned. For example, the date `2024-04-07` would be returned from the query as `2024-04-07T00:00:00.000Z`, and `getDate()` would return 6 in local PDT time instead of 7.
+  - **Solution:** Converted the query result back to a string with the `YYYY-MM-DD` date format instead of using the Date methods.
 
 ### Database Queries
 - **Combining User and Friend Data:**
