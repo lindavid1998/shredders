@@ -4,13 +4,15 @@ import Button from '../components/Button';
 import Testimonial from '../components/Testimonial';
 import { useNavigate } from 'react-router-dom';
 import HeroImg from '/landing.jpg';
+import { useAuth } from '../hooks/useAuth';
+import Spinner from '../components/Spinner';
+import { Navigate } from 'react-router-dom';
 
 const Hero = () => {
 	const navigate = useNavigate();
 
 	return (
 		<div className='hero relative w-full flex flex-col justify-center items-center gap-10 md:gap-8'>
-			{/* <div className='hero-img' /> */}
 			<img className='hero-img' src={HeroImg}></img>
 
 			<div className='flex flex-col hero-text justify-center items-center md:absolute top-14 w-full max-w-screen-xl px-5 mx-auto'>
@@ -65,14 +67,22 @@ const Reviews = () => {
 					`}
 					author='Zeb Powell'
 				/>
-
 			</div>
-
 		</div>
 	);
 };
 
 const Landing = () => {
+	const { user, isLoading } = useAuth();
+
+	if (isLoading) {
+		return <Spinner />;
+	}
+
+	if (user) {
+		return <Navigate to={`/${version}`} />;
+	}
+
 	return (
 		<div className='flex flex-col w-full gap-10'>
 			<Hero></Hero>
