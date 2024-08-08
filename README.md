@@ -4,6 +4,35 @@ Shredders is a **PERN** web application designed to help snowboarders plan trips
 
 The idea came about last snowboard season when I ran into some friends by chance on the mountain and thought it'd be nice if there was a way to know ahead of time which friends had overlapping trips with you!
 
+## Table of Contents
+1. [Features](#features)
+2. [Demo](#demo)
+3. [Usage/Examples](#usageexamples)
+   - [Landing page](#landing-page)
+   - [Login and signup pages](#login-and-signup-pages)
+   - [Home page for authenticated user](#home-page-for-authenticated-user)
+   - [Search users and add friends](#search-users-and-add-friends)
+   - [Incoming friend requests](#incoming-friend-requests)
+   - [Creating a trip](#creating-a-trip)
+   - [Inviting friends to an existing trip](#inviting-friends-to-an-existing-trip)
+   - [View RSVPs](#view-rsvps)
+   - [See which friends have overlapping trips with you](#see-which-friends-have-overlapping-trips-with-you)
+   - [Comment and discuss trip plans](#comment-and-discuss-trip-plans)
+   - [Upload avatar](#upload-avatar)
+   - [Responsive design](#responsive-design)
+4. [Tech Stack](#tech-stack)
+5. [Known Issues](#known-issues)
+6. [Features to Add](#features-to-add)
+7. [Documentation](#documentation)
+8. [Obstacles](#obstacles)
+   - [Issues with Deployment](#issues-with-deployment)
+   - [Backend and Frontend Integration](#backend-and-frontend-integration)
+   - [Database Queries](#database-queries)
+   - [Frontend Behavior](#frontend-behavior)
+   - [Authentication and Authorization](#authentication-and-authorization)
+9. [FAQ](#faq)
+10. [Acknowledgements](#acknowledgements)
+
 ## Features
 
 - User authentication (login and sign up)
@@ -97,40 +126,58 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 ## Tech Stack
 
 **Frontend:**
-React, Vite, Tailwind CSS, React Router
+- React
+- Vite
+- Tailwind CSS
+- React Router
 
 **Backend:**
-Node.js, Express, PostgreSQL, JWT (JSON Web Token)
+- Node.js
+- Express
+- PostgreSQL
+- JWT (JSON Web Token)
 
 **Web app hosting:**
-Render
+- Render
 
 **File storage and DB hosting:** 
-Supabase
+- Supabase
 
 ### Why These Technologies?
 
-**React:** Standard library for reusable UI components
+**React:** 
+- Standard library for reusable UI components
 
-**Vite:** Build tool optimized for React with minimal configuration needed
+**Vite:** 
+- Build tool optimized for React with minimal configuration needed
 
-**Tailwind:** Allows applying styles directly in the React components, reducing the need for custom classes
+**Tailwind:** 
+- Allows applying styles directly in the React components, reducing the need for custom classes
 
-**React Router**: Client side routing to reduce server load and seamless transitions between pages
+**React Router:**
+- Client side routing to reduce server load and seamless transitions between pages
 
-**Node/Express:** Keeps coding language consistent between frontend and backend
+**Node/Express:** 
+- Keeps coding language consistent between frontend and backend
 
-**PostgreSQL:** Supports complex queries that were needed to fetch structured, related data
+**PostgreSQL:**
+- Supports complex queries that were needed to fetch structured, related data
 
-**JWT:** Compact and efficient way to send authentication data between client and server. Contains all relevant info in payload about authenticated user.
+**JWT:** 
+- Compact and efficient way to send authentication data between client and server
+- Contains all relevant info in payload about authenticated user
 
-**Render:** Good free tier for hosting both client and server. Quick to spin up applications.
+**Render:** 
+- Good free tier for hosting both client and server
+- Quick to spin up applications
 
-**Supabase:** Easy to use interface and good free tier option for storage and database. Database can be easily configured with their table/SQL editor.
+**Supabase:** 
+- Easy to use interface and good free tier option for storage and database
+- Database can be easily configured with their table/SQL editor
+
 
 ## Known Issues 
 - **When creating a trip, the dates entered in the form are not consistent with the dates once the trip is created.** This issue was not present on local app so probably has to do with how timezones are being handled
-- **Uploading avatar does not update the picture in the navbar.** Likely has to do with how the authentication state (which contains URL for user avatar) is not being updated
 - **When adding friends, there are duplicate users showing up.** Could have to do with how the SQL query was written
 
 ## Features to Add
@@ -145,16 +192,13 @@ Supabase
 Coming soon: Backend API reference
 
 ## Obstacles
-
 ### Issues with Deployment
 - **CORS Configuration:**
   - **Problem:** Requests from the deployed frontend weren't going through, despite working in Postman and local testing.
   - **Solution:** The CORS origin on the server was not set to allow the deployed client. Updated the server to set the origin based on an environment variable.
-
 - **Client-Side Routing:**
   - **Problem:** Receiving 404 errors when the client was routed to any subroutes.
   - **Solution:** Redirect all routes to the `index.html` build file. Render has a feature to handle this: [Using Client-Side Routing](https://docs.render.com/deploy-create-react-app#using-client-side-routing).
-
 - **Hero Image Not Displaying:**
   - **Problem:** Hero image was not showing up; it received an inline style of `background-image: none`.
   - **Solution:** Could not find any CSS or inline styles causing this. Got around the issue by using an `img` element instead of a `div`. Unsure about root cause.
@@ -163,7 +207,6 @@ Coming soon: Backend API reference
 - **Form Submission Issue:**
   - **Problem:** Getting a `TypeError: Failed to fetch` due to page refreshing before the response could be sent back.
   - **Solution:** Disabled the default form submission behavior to prevent the page from refreshing.
-
 - **Dropdown Options not Populating**
   - **Problem:** The invite friends dropdown on the plan trip page didn't show options at first because the component rendered before fetching data.
   - **Solution:** Used a custom `useLoad` hook, passing in the API call to ensure the component didn't render until the API call returned a response.
@@ -177,11 +220,9 @@ Coming soon: Backend API reference
 - **Comment Deletion:**
   - **Problem:** Deleting a comment other than the last one expanded the adjacent comment’s dropdown menu. The dropdown for any specific comment should only expand when clicked. 
   - **Solution:** This behavior was due to event propogation, where clicking a dropdown menu item triggered the dropdown icon's click handler. Fixed by disabling propogation.
-
 - **Comment Edit Icon Not Shown:**
   - **Problem:** Edit icon for comments was not showing up after user initially logged in 
   - **Solution:** The user object keys between login response and `useAuth` hook were inconsistent. Login response would return `id` key while `useAuth` hook returned `user_id` key. Updated the backend logic for the login response to return `user_id` instead of `id`.
-
 - **Dropdown Menu for Inviting Friends:**
   - **Problem:** Wanted the dropdown to persist while clicking the options but hide when clicking outside the dropdown. Using the `onblur` handler wouldn't work because clicking on the options counted as a blur and would hide the menu.
   - **Solution:** Created a reference to the dropdown container and a `handleBlur` callback that hides the dropdown only if the newly focused element is either `null` (non-focusable) or not a child of the dropdown container. This seems to be a common design pattern in React.
@@ -190,7 +231,6 @@ Coming soon: Backend API reference
 - **useAuth Hook and JWT:**
   - **Problem:** Server was sending JWT token as a cookie, but cookie would not persist on the client
   - **Solution:** Modified CORS config to specify the client domain and included credentials with requests.
-
 - **Private Routes and Refresh:**
   - **Problem:** Refreshing a private route always redirected to the login page.
   - **Solution:** This was because the `user` state variable in the `useAuth` hook was reset to null upon refresh, and it takes time for the client to call the backend and update it. Fixed by adding a `loading` state variable and used it to only render the private route once the fetch call completed.
@@ -198,14 +238,11 @@ Coming soon: Backend API reference
 ## FAQ
 
 #### What is the purpose of the `useAuth` hook in the client?
-
 Provides a modular way to protect routes in the application. By wrapping the application with an authentication context, it allows us to check if the user is authenticated anywhere in the React app. If the user is not authenticated, the protected route can redirect them to the login page; otherwise, it will render the child components. The hook also returns data about the authenticated user, such as the user's name and avatar URL.
 
 #### What is the purpose of the `useLoad` hook?
-
 Accepts a callback and manages the `isLoading` state of asynchronous data fetching. Initializes `isLoading` to true and sets it to false once the callback completes. The state variable can then be used to display a loading spinner.
 
 ## Acknowledgements
-
  - Images downloaded from Unsplash
  - Icons from Font Awesome
