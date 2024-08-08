@@ -51,7 +51,13 @@ router.post('/upload', upload.single('avatar'), async (req, res) => {
 			user.email,
 			url
 		);
-		res.cookie('token', token, { maxAge: 900000, httpOnly: true });
+		
+		res.cookie('token', token, {
+			maxAge: 900000,
+			httpOnly: true,
+			secure: true,
+			sameSite: 'None',
+		});
 
     res.sendStatus(200);
 	} catch (error) {

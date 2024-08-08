@@ -83,7 +83,12 @@ router.post(`/signup`, validateSignup, async (req, res) => {
 
 		delete user.password;
 
-		res.cookie('token', token, { maxAge: 900000, httpOnly: true });
+		res.cookie('token', token, {
+			maxAge: 900000,
+			httpOnly: true,
+			secure: true,
+			sameSite: 'None',
+		});
 
 		res.json({ user });
 	} catch (err) {
