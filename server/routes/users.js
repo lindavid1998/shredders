@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
 		const user_id = req.user.user_id;
 
 		const query = `
-      SELECT 
+      SELECT DISTINCT
         u.id AS user_id,
         u.avatar_url,
         CONCAT(u.first_name, ' ', u.last_name) AS full_name,
