@@ -21,17 +21,16 @@ The idea came about last snowboard season when I ran into some friends by chance
    - [Upload avatar](#upload-avatar)
    - [Responsive design](#responsive-design)
 4. [Tech Stack](#tech-stack)
-5. [Known Issues](#known-issues)
-6. [Features to Add](#features-to-add)
-7. [Documentation](#documentation)
-8. [Obstacles](#obstacles)
+5. [Features to Add](#features-to-add)
+6. [Documentation](#documentation)
+7. [Obstacles](#obstacles)
    - [Issues with Deployment](#issues-with-deployment)
    - [Backend and Frontend Integration](#backend-and-frontend-integration)
    - [Database Queries](#database-queries)
    - [Frontend Behavior](#frontend-behavior)
    - [Authentication and Authorization](#authentication-and-authorization)
-9. [FAQ](#faq)
-10. [Acknowledgements](#acknowledgements)
+8. [FAQ](#faq)
+9. [Acknowledgements](#acknowledgements)
 
 ## Features
 
