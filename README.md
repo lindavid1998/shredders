@@ -183,7 +183,7 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 
 ## Documentation
 
-Coming soon: Backend API reference
+[Backend API Reference](./server/README.md)
 
 ## Obstacles
 ### Issues with Deployment
