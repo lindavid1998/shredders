@@ -35,6 +35,12 @@ This endpoint is used to sign up a new user.
 
 **Status: 200 OK**
 
+Returns JWT as a cookie under the name 'token'
+
+|Content-Type|Value|
+|---|---|
+|token| _JWT encrypted token_ |
+
 ``` json
 {
     "user": {
@@ -61,6 +67,8 @@ This endpoint is used to sign up a new user.
 
 **Status: 400**
 
+Returns error if form validation does not pass
+
 ``` json
 {
     "errors": [
@@ -74,6 +82,8 @@ This endpoint is used to sign up a new user.
     ]
 }
 ```
+
+---
 
 ### POST /auth/login
 
@@ -97,7 +107,11 @@ This endpoint allows users to log in and obtain authentication credentials.
 
 **Status: 200 OK**
 
-Returns JWT as a cookie
+Returns JWT as a cookie under the name 'token'
+
+|Content-Type|Value|
+|---|---|
+|token| _JWT encrypted token_ |
     
 
 ``` json
@@ -123,6 +137,8 @@ Returns JWT as a cookie
     ]
 }
 ```
+
+---
 
 ### GET /auth/user
 
@@ -168,6 +184,8 @@ Headers
 }
 ```
 
+---
+
 ### POST /auth/logout
 
 The endpoint logs the user out from the application.
@@ -210,6 +228,8 @@ This request does not require a request body.
     "Mammoth": 1
 }
 ```
+
+---
 
 ### GET /trips/overview
 
@@ -263,6 +283,8 @@ Headers
     ...
 ]
 ```
+
+---
 
 ### POST /trips/create
 
@@ -328,6 +350,8 @@ Headers
     ]
 }
  ```
+
+---
 
 ### GET /trips/:id
 
@@ -410,8 +434,9 @@ Code: 200 OK
         }
     ]
 }
-
  ```
+
+---
 
 ### GET /trips/:trip_id/invite/status
 
@@ -439,6 +464,8 @@ This endpoint retrieves the invitation status for a specific trip.
 ]
 
  ```
+
+---
 
 ### POST /trips/:trip_id/invite/:user_id
 
@@ -484,6 +511,8 @@ Headers
 ``` json
 "user is already invited to trip"
  ```
+
+---
 
 ### POST /trips/:id/comments
 
@@ -593,6 +622,8 @@ Deletes comment from a trip
 }
  ```
 
+---
+
 ### GET /friends/requests
 
 The endpoint retrieves a list of friend requests.
@@ -624,6 +655,8 @@ Status: 200
     ....
 ]
  ```
+
+---
 
 ### POST /friends/add/:user_id
 
@@ -657,6 +690,8 @@ Headers
 }
  ```
 
+---
+
 ### POST /friends/accept/:friend_req_id
 
 This endpoint is used to accept a friend request.
@@ -689,6 +724,8 @@ OK
     ]
 }
  ```
+
+---
 
 ### POST /friends/reject/:friend_req_id
 
@@ -758,6 +795,8 @@ Headers
     ...
 ]
  ```
+
+---
 
 ### POST /avatar/upload
 
