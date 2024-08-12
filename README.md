@@ -54,6 +54,8 @@ https://shredders-client.onrender.com
 **NOTE:** Render spins down a Free web service that goes 15 minutes without receiving inbound traffic. Render spins the service back up whenever it next receives a request to process.
 Spinning up a service takes up to a minute, which causes a noticeable delay for incoming requests until the service is back up and running. For example, a browser page load will hang temporarily.
 
+[Figma Design](https://www.figma.com/design/BddAvshSylaBZxLh8ZFeCQ/Shredders?node-id=0-1&m=dev&t=KhI4qMn9wtrYecOo-1)
+
 ## Usage/Examples
 
 ### Landing page
@@ -184,6 +186,10 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 ## Documentation
 
 [Backend API Reference](./server/README.md)
+
+Database schema
+
+<img src="./shredders-demo/schema.png?raw=true" alt="Database schema" width="400">
 
 ## Obstacles
 ### Issues with Deployment
