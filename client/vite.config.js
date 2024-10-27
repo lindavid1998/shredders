@@ -8,7 +8,10 @@ dns.setDefaultResultOrder('verbatim');
 export default defineConfig({
 	plugins: [react()],
 	server: {
-		host: 'localhost',
-		port: 5100,
+		// host: 'localhost',
+		// port: 5100,
+		watch: {
+			usePolling: true, 
+		},
 	},
 });

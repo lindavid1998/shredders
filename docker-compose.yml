@@ -1,0 +1,43 @@
+services:
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+  # server:
+  #   build: ./server
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - ./server:/app
+  #     - /app/node_modules
+  #   env_file: ./server/.env
+  #   secrets:
+  #     - db_password
+  #   environment:
+  #     DB_HOST: db
+  #     DB_USER: postgres
+  #     DB_PASSWORD_FILE: /run/secrets/db_password
+  #     DB_NAME: $DB_NAME
+  #     DB_PORT: $DB_PORT
+  db:
+    image: "postgres:17-alpine"
+    ports:
+      - "5432:5432"
+    secrets:
+      - db_password
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+    volumes:
+      - shredders-db:/var/lib/postgresql/data
+
+secrets:
+  db_password:
+    file: db_password.txt
+
+volumes:
+  shredders-db:
