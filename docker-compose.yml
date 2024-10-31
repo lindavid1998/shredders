@@ -6,24 +6,25 @@ services:
     volumes:
       - ./client:/app
       - /app/node_modules
-  # server:
-  #   build: ./server
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - ./server:/app
-  #     - /app/node_modules
-  #   env_file: ./server/.env
-  #   secrets:
-  #     - db_password
-  #   environment:
-  #     DB_HOST: db
-  #     DB_USER: postgres
-  #     DB_PASSWORD_FILE: /run/secrets/db_password
-  #     DB_NAME: $DB_NAME
-  #     DB_PORT: $DB_PORT
+    env_file:
+      - ./client/.env.base
+      - ./client/.env.${ENV}
+  server:
+    build: ./server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./server/.env.base
+      - ./server/.env.${ENV}
+    secrets:
+      - db_password
+    environment:
+      DB_PASSWORD_FILE: /run/secrets/db_password
   db:
     image: "postgres:17-alpine"
     ports:
@@ -37,7 +38,7 @@ services:
 
 secrets:
   db_password:
-    file: db_password.txt
+    file: db_password_${ENV}.txt
 
 volumes:
   shredders-db:
