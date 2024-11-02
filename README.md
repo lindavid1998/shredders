@@ -168,6 +168,10 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 - Compact and efficient way to send authentication data between client and server
 - Contains all relevant info in payload about authenticated user
 
+**Docker:**
+- Packages application into containers, making it lightweight and portable to share and/or deploy
+- Can spin up frontend, backend, and db with one command using Docker Compose
+
 **Render:** 
 - Good free tier for hosting both client and server
 - Quick to spin up applications
