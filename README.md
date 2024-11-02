@@ -138,6 +138,9 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 - PostgreSQL
 - JWT (JSON Web Token)
 
+**Containerization**
+- Docker
+
 **Web app hosting:**
 - Render
 
@@ -170,7 +173,7 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 
 **Docker:**
 - Packages application into containers, making it lightweight and portable to share and/or deploy
-- Can spin up frontend, backend, and db with one command using Docker Compose
+- Can spin up development environment for frontend, backend, and db with one command using Docker Compose
 
 **Render:** 
 - Good free tier for hosting both client and server
