@@ -49,7 +49,7 @@ The idea came about last snowboard season when I ran into some friends by chance
 
 ## Demo
 
-https://shredders-client.onrender.com
+https://shredders.onrender.com
 
 **NOTE:** Render spins down a Free web service that goes 15 minutes without receiving inbound traffic. Render spins the service back up whenever it next receives a request to process.
 Spinning up a service takes up to a minute, which causes a noticeable delay for incoming requests until the service is back up and running. For example, a browser page load will hang temporarily.
