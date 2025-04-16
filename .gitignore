@@ -25,3 +25,5 @@ db_password*.txt
 /client/*.sln
 /client/*.sw?
 /client/.env*
+
+/client/coverage

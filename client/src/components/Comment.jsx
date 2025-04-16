@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import Avatar from './Avatar';
-import { getDaysSince } from '../utils/utils';
+import { getDaysBetween } from '../utils/utils';
 import {
 	faEllipsisVertical,
 	faPenToSquare,
@@ -52,6 +52,8 @@ const Comment = ({ data, removeComment }) => {
 		};
 	}, []);
 
+	const daysSinceCreated = getDaysBetween(new Date(created_at), new Date());
+
 	return (
 		<div className='flex flex-col gap-2.5 p-4 shadow rounded-2xl min-w-[340px] max-w-[650px] w-full'>
 			<div className='flex items-center gap-2.5'>
@@ -61,9 +63,7 @@ const Comment = ({ data, removeComment }) => {
 					{first_name} {last_name}
 				</p>
 
-				<p style={{ color: 'var(--caption-color)' }}>
-					{getDaysSince(created_at)}d ago
-				</p>
+				<p style={{ color: 'var(--caption-color)' }}>{daysSinceCreated}d ago</p>
 
 				{user.user_id == user_id && (
 					<div className='hidden md:flex ml-auto items-center justify-center gap-5'>
