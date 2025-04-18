@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 import { useLoad } from '../hooks/useLoad';
-const version = import.meta.env.VITE_API_VERSION;
-const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+// const version = import.meta.env.VITE_API_VERSION;
+// const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+import { API_VERSION as version, BACKEND_BASE_URL } from '../constants'
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -158,7 +159,7 @@ const Plan = () => {
 				<h2>Plan a trip</h2>
 
 				<div className='input-container'>
-					<label>Destination</label>
+					<label htmlFor='destination'>Destination</label>
 					<Dropdown
 						options={options}
 						selected={destination}
@@ -167,7 +168,7 @@ const Plan = () => {
 				</div>
 
 				<div className='input-container'>
-					<label>Start</label>
+					<label htmlFor='start_date'>Start</label>
 					<input
 						type='date'
 						id='start_date'
@@ -179,7 +180,7 @@ const Plan = () => {
 
 				<div className='input-container'>
 					{/* add client side validation that end date cannot be before start date? */}
-					<label>End</label>
+					<label htmlFor='end_date'>End</label>
 					<input
 						type='date'
 						id='end_date'

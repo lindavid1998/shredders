@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-const version = import.meta.env.VITE_API_VERSION;
-const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+// const version = import.meta.env.VITE_API_VERSION;
+// const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+import { API_VERSION as version, BACKEND_BASE_URL } from '../constants';
 import Button from './Button';
 
 const UploadAvatarForm = ({ handleClose, handleSubmit, handleSelectFile }) => {
@@ -9,6 +10,7 @@ const UploadAvatarForm = ({ handleClose, handleSubmit, handleSelectFile }) => {
 			<form
 				onSubmit={handleSubmit}
 				className='flex flex-col w-1/3 bg-white p-8 rounded gap-2 mt-24'
+				data-testid='avatar-upload-form'
 			>
 				<h3>Edit avatar</h3>
 
@@ -17,6 +19,7 @@ const UploadAvatarForm = ({ handleClose, handleSubmit, handleSelectFile }) => {
 					id='avatar'
 					name='avatar'
 					accept='image/png, image/jpeg'
+					data-testid='avatar-input'
 					onChange={handleSelectFile}
 					required={true}
 				/>

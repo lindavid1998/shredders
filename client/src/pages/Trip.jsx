@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
-const version = import.meta.env.VITE_API_VERSION;
-const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+// const version = import.meta.env.VITE_API_VERSION;
+// const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+import { API_VERSION as version, BACKEND_BASE_URL } from '../constants';
 import { getFormattedDate } from '../utils/utils';
 import Button from '../components/Button';
 import Comment from '../components/Comment';
