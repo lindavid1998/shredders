@@ -2,6 +2,7 @@ const router = require('express').Router();
 const pool = require('../db');
 const { check, validationResult } = require('express-validator');
 const { handleError } = require('../utils');
+const redisClient = require('../redis');
 
 const validateInput = [
 	check('destination_id').exists().withMessage('Destination cannot be empty'),
@@ -23,6 +24,12 @@ const validateInput = [
 
 router.get('/destinations', async (req, res) => {
 	try {
+		const cacheData = await redisClient.get('destinations');
+		if (cacheData) {
+			return res.status(200).json(JSON.parse(cacheData));
+		}
+
+		// cache miss
 		const query = 'SELECT * FROM destinations';
 		const result = await pool.query(query);
 		const destinations = result.rows;
@@ -31,6 +38,8 @@ router.get('/destinations', async (req, res) => {
 		destinations.forEach((destination) => {
 			destinationToId[destination.name] = destination.id;
 		});
+
+		await redisClient.set('destinations', JSON.stringify(destinationToId));
 
 		res.status(200).json(destinationToId);
 	} catch (err) {
@@ -133,7 +142,7 @@ router.get(`/overview`, async (req, res) => {
 		const result = await pool.query(query, [userId]);
 
 		// ensure dates are YYYY-MM-DD format
-		const data = result.rows
+		const data = result.rows;
 		for (const trip of data) {
 			for (const field of ['start_date', 'end_date']) {
 				trip[field] = trip[field].toISOString().split('T')[0];
@@ -378,7 +387,7 @@ router.get('/:id', async (req, res) => {
 		// ensure YYYY-MM-DD formatting of dates
 		let tripDetails = tripResult.rows[0];
 		for (const field of ['start_date', 'end_date']) {
-			tripDetails[field] = tripDetails[field].toISOString().split('T')[0]
+			tripDetails[field] = tripDetails[field].toISOString().split('T')[0];
 		}
 
 		res.status(200).json({
