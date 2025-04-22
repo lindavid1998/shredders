@@ -23,16 +23,17 @@ The idea came about last snowboard season when I ran into some friends by chance
    - [Responsive design](#responsive-design)
 4. [Tech Stack](#tech-stack)
 5. [Testing](#testing)
-6. [Features to Add](#features-to-add)
-7. [Documentation](#documentation)
-8. [Obstacles](#obstacles)
+6. [Continuous Integration/Continuous Deployment (CI/CD)](#continuous-integrationcontinuous-deployment-cicd)
+7. [Features to Add](#features-to-add)
+8. [Documentation](#documentation)
+9. [Obstacles](#obstacles)
    - [Issues with Deployment](#issues-with-deployment)
    - [Backend and Frontend Integration](#backend-and-frontend-integration)
    - [Database Queries](#database-queries)
    - [Frontend Behavior](#frontend-behavior)
    - [Authentication and Authorization](#authentication-and-authorization)
-9. [FAQ](#faq)
-10. [Acknowledgements](#acknowledgements)
+10. [FAQ](#faq)
+11. [Acknowledgements](#acknowledgements)
 
 ## Features
 
@@ -233,6 +234,17 @@ npm run test
 ```
 
 The test report will include the test coverage.
+
+## Continuous Integration/Continuous Deployment (CI/CD)
+
+The project uses GitHub Actions for automated testing and deployment. The workflow is configured to:
+
+1. Run on every push to the main branch
+2. Install dependencies and run tests
+3. Build the project
+4. Deploy to Render using a webhook if tests and build pass
+
+The workflow file is located at `.github/workflows/render-deploy.yml`.
 
 ## Features to Add
 
