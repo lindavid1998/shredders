@@ -10,16 +10,13 @@ jobs:
       # Clone the repo to the runner
       - uses: actions/checkout@v4
 
-      - name: test
+      - name: test and build
         run: |
           cd client
           npm install
           npm run test
-      
-      - name: build
-        run: |
           npm run build
-    
+
       - name: deploy
         # Only run if on main branch
         if: github.ref == 'refs/heads/main'
