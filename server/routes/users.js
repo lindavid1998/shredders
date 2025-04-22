@@ -1,10 +1,17 @@
 const router = require('express').Router();
 const pool = require('../db');
+const redisClient = require('../redis');
 const { handleError } = require('../utils');
 
 router.get('/', async (req, res) => {
 	try {
-		const user_id = req.user.user_id;
+    const user_id = req.user.user_id;
+
+    const cacheKey = `user:friendships:${user_id}`;
+    const cacheData = await redisClient.get(cacheKey);
+    if (cacheData) {
+      return res.status(200).json(JSON.parse(cacheData));
+    }
 
 		const query = `
       SELECT DISTINCT
@@ -34,7 +41,9 @@ router.get('/', async (req, res) => {
     // status: 0 -> not friends, 1 -> pending, 2 -> friends
 
 		const result = await pool.query(query, [user_id]);
-		const friends = result.rows;
+    const friends = result.rows;
+    
+    await redisClient.set(cacheKey, JSON.stringify(friends));
 
 		res.status(200).json(friends);
 	} catch (error) {
