@@ -12,6 +12,7 @@ jobs:
 
       - name: test
         run: |
+          cd client
           npm install
           npm run test
       
