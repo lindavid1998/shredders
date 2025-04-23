@@ -8,7 +8,8 @@ The idea came about last snowboard season when I ran into some friends by chance
 
 1. [Features](#features)
 2. [Demo](#demo)
-3. [Usage/Examples](#usageexamples)
+3. [API Reference](#api-reference)
+4. [Usage/Examples](#usageexamples)
    - [Landing page](#landing-page)
    - [Login and signup pages](#login-and-signup-pages)
    - [Home page for authenticated user](#home-page-for-authenticated-user)
@@ -21,11 +22,10 @@ The idea came about last snowboard season when I ran into some friends by chance
    - [Comment and discuss trip plans](#comment-and-discuss-trip-plans)
    - [Upload avatar](#upload-avatar)
    - [Responsive design](#responsive-design)
-4. [Tech Stack](#tech-stack)
-5. [Testing](#testing)
-6. [Continuous Integration/Continuous Deployment (CI/CD)](#continuous-integrationcontinuous-deployment-cicd)
-7. [Features to Add](#features-to-add)
-8. [Documentation](#documentation)
+5. [Tech Stack](#tech-stack)
+6. [Testing](#testing)
+7. [Continuous Integration/Continuous Deployment (CI/CD)](#continuous-integrationcontinuous-deployment-cicd)
+8. [Redis Caching](#redis-caching)
 9. [Obstacles](#obstacles)
    - [Issues with Deployment](#issues-with-deployment)
    - [Backend and Frontend Integration](#backend-and-frontend-integration)
@@ -33,7 +33,8 @@ The idea came about last snowboard season when I ran into some friends by chance
    - [Frontend Behavior](#frontend-behavior)
    - [Authentication and Authorization](#authentication-and-authorization)
 10. [FAQ](#faq)
-11. [Acknowledgements](#acknowledgements)
+11. [Features to Add](#features-to-add)
+12. [Acknowledgements](#acknowledgements)
 
 ## Features
 
@@ -58,6 +59,14 @@ https://shredders.onrender.com
 Spinning up a service takes up to a minute, which causes a noticeable delay for incoming requests until the service is back up and running. For example, a browser page load will hang temporarily.
 
 [Figma Design](https://www.figma.com/design/BddAvshSylaBZxLh8ZFeCQ/Shredders?node-id=0-1&m=dev&t=KhI4qMn9wtrYecOo-1)
+
+## API Reference
+
+[Documentation describing endpoints](./server/README.md)
+
+Database schema
+
+<img src="./shredders-demo/schema.png?raw=true" alt="Database schema" width="400">
 
 ## Usage/Examples
 
@@ -129,77 +138,20 @@ Spinning up a service takes up to a minute, which causes a noticeable delay for 
 
 ## Tech Stack
 
-**Frontend:**
-
-- React
-- Vite
-- Tailwind CSS
-- React Router
-
-**Backend:**
-
-- Node.js
-- Express
-- PostgreSQL
-- JWT (JSON Web Token)
-
-**Containerization**
-
-- Docker
-
-**Web app hosting:**
-
-- Render
-
-**File storage and DB hosting:**
-
-- Supabase
-
-### Why These Technologies?
-
-**React:**
-
-- Standard library for reusable UI components
-
-**Vite:**
-
-- Build tool optimized for React with minimal configuration needed
-
-**Tailwind:**
-
-- Allows applying styles directly in the React components, reducing the need for custom classes
-
-**React Router:**
-
-- Client side routing to reduce server load and seamless transitions between pages
-
-**Node/Express:**
-
-- Keeps coding language consistent between frontend and backend
-
-**PostgreSQL:**
-
-- Supports complex queries that were needed to fetch structured, related data
-
-**JWT:**
-
-- Compact and efficient way to send authentication data between client and server
-- Contains all relevant info in payload about authenticated user
-
-**Docker:**
-
-- Packages application into containers, making it lightweight and portable to share and/or deploy
-- Can spin up development environment for frontend, backend, and db with one command using Docker Compose
-
-**Render:**
-
-- Good free tier for hosting both client and server
-- Quick to spin up applications
-
-**Supabase:**
-
-- Easy to use interface and good free tier option for storage and database
-- Database can be easily configured with their table/SQL editor
+| Category | Technology | Why |
+|----------|------------|-----|
+| Frontend | React | Standard library for reusable UI components |
+| Frontend | Vite | Build tool optimized for React with minimal configuration needed |
+| Frontend | Tailwind CSS | Allows applying styles directly in the React components, reducing the need for custom classes |
+| Frontend | React Router | Client side routing to reduce server load and seamless transitions between pages |
+| Backend | Node.js/Express | Keeps coding language consistent between frontend and backend |
+| Backend | PostgreSQL | Supports complex queries that were needed to fetch structured, related data |
+| Backend | JWT | • Compact and efficient way to send authentication data between client and server<br>• Contains all relevant info in payload about authenticated user |
+| Backend | Redis | • Reduce load on PostgreSQL server<br>• Improve API response times |
+| CI/CD | Docker | • Packages application into containers, making it lightweight and portable to share and/or deploy<br>• Can spin up development environment for frontend, backend, and db with one command using Docker Compose |
+| CI/CD | GitHub Actions | Streamline test, build, and deploy process and reduce manual touchpoints |
+| Web app hosting | Render | • Good free tier for hosting both client and server<br>• Quick to spin up applications |
+| File storage and DB hosting | Supabase | • Easy to use interface and good free tier option for storage and database<br>• Database can be easily configured with their table/SQL editor |
 
 ## Testing
 
@@ -246,20 +198,22 @@ The project uses GitHub Actions for automated testing and deployment. The workfl
 
 The workflow file is located at `.github/workflows/render-deploy.yml`.
 
-## Features to Add
+## Redis Caching
 
-- Add button to edit RSVP to trip
-- Cancel sent friend request
-- Edit comments
-- Edit trip (i.e. destination, dates)
+I wanted to learn how to use Redis, so I added caching to a few endpoints to improve API response time and reduce database load. I used Postman to test the response time with and without caching. Below is an example of one of the endpoints that was tested.
 
-## Documentation
+| Request      | Total requests | Requests/s  | Resp. time (Avg. ms) |
+| ------------ | -------------- | ----------- | -------------------- |
+| GET Overview | 252 ▲ 8        | 1.97 ▲ 0.06 | 7,525 ▼ 412          |
 
-[Backend API Reference](./server/README.md)
+A 412 ms decrease is observed for the average response time, which is about a 5% improvement.
 
-Database schema
+Parameters for the test:
 
-<img src="./shredders-demo/schema.png?raw=true" alt="Database schema" width="400">
+- 25 to 50 virtual users ramp up
+- 2 minutes
+
+Practically, given that the size of my database is only a few rows, the queries aren't that slow so I would consider caching to be over-engineering. But this was more for learning purposes.
 
 ## Obstacles
 
@@ -323,6 +277,13 @@ Provides a modular way to protect routes in the application. By wrapping the app
 #### What is the purpose of the `useLoad` hook?
 
 Accepts a callback and manages the `isLoading` state of asynchronous data fetching. Initializes `isLoading` to true and sets it to false once the callback completes. The state variable can then be used to display a loading spinner.
+
+## Features to Add
+
+- Add button to edit RSVP to trip
+- Cancel sent friend request
+- Edit comments
+- Edit trip (i.e. destination, dates)
 
 ## Acknowledgements
 
