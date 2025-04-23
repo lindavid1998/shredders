@@ -1,8 +1,14 @@
 const redis = require('redis');
+const fs = require('fs');
+const password = fs.readFileSync(process.env.REDIS_PASSWORD_FILE, 'utf-8');
 
 const redisClient = redis.createClient({
-	// connection string format -> redis[s]://[[username][:password]@][host][:port][/db-number]:
-	url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+	username: 'default',
+	password: password,
+	socket: {
+		host: process.env.REDIS_HOST,
+		port: process.env.REDIS_PORT,
+	},
 });
 
 (async () => {

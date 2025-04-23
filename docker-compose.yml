@@ -24,8 +24,10 @@ services:
       - ./server/.env.${ENV}
     secrets:
       - db_password
+      - redis_password
     environment:
       DB_PASSWORD_FILE: /run/secrets/db_password
+      REDIS_PASSWORD_FILE: /run/secrets/redis_password
   db:
     image: "postgres:17-alpine"
     ports:
@@ -48,6 +50,8 @@ services:
 secrets:
   db_password:
     file: db_password_${ENV}.txt
+  redis_password:
+    file: redis_password.txt
 
 volumes:
   shredders-db:
