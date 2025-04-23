@@ -30,11 +30,6 @@ const validateLogin = [
 	check('password').notEmpty().withMessage('Password cannot be empty'),
 ];
 
-// // sign up
-// router.get(`/signup`, (req, res) => {
-// 	res.send('show sign up page');
-// });
-
 router.post(`/signup`, validateSignup, async (req, res) => {
 	const errors = validationResult(req);
 
