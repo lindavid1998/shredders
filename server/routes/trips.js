@@ -102,6 +102,12 @@ router.get(`/overview`, async (req, res) => {
 	const user = req.user;
 	const userId = user.user_id;
 
+	const cacheKey = `overview:${userId}`;
+	const cacheData = await redisClient.get(cacheKey);
+	if (cacheData) {
+		return res.status(200).json(JSON.parse(cacheData));
+	}
+
 	try {
 		const query = `
 			SELECT
@@ -148,6 +154,9 @@ router.get(`/overview`, async (req, res) => {
 				trip[field] = trip[field].toISOString().split('T')[0];
 			}
 		}
+
+		// set exp after 1 hr
+		await redisClient.set(cacheKey, JSON.stringify(data), { EX: 60 * 60 });
 
 		res.status(200).json(data);
 	} catch (err) {
