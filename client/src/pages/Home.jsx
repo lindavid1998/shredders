@@ -146,6 +146,8 @@ const Home = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
 
+	const isDemo = user && user.email == 'demo@email.com';
+
 	const splitTrips = (trips) => {
 		const currentDate = new Date();
 
@@ -209,11 +211,11 @@ const Home = () => {
 			<div className='flex flex-col items-center gap-4'>
 				<h3 className='text-center'>You have no trips</h3>
 				<div className='flex flex-col md:flex-row gap-2'>
-					<Button
+					{isDemo ? <Button text='Create a trip' color='disabled'/> : <Button
 						text='Create a trip'
 						onClick={() => navigate(`/${version}/trips/plan`)}
 						color='tertiary'
-					/>
+					/>}
 
 					<Button text='Add friends' onClick={() => setIsSidebarOpen(true)} />
 				</div>
@@ -235,11 +237,15 @@ const Home = () => {
 				<h2>Welcome, {user.first_name}</h2>
 
 				<div className='flex flex-col md:flex-row gap-2'>
-					<Button
-						text='Create a trip'
-						onClick={() => navigate(`/${version}/trips/plan`)}
-						color='tertiary'
-					/>
+					{isDemo ? (
+						<Button text='Create a trip' color='disabled' />
+					) : (
+						<Button
+							text='Create a trip'
+							onClick={() => navigate(`/${version}/trips/plan`)}
+							color='tertiary'
+						/>
+					)}
 
 					<Button text='Add friends' onClick={() => setIsSidebarOpen(true)} />
 				</div>

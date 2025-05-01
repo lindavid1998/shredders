@@ -10,6 +10,8 @@ const PostComment = ({ tripId, handleAddComment }) => {
 	const [error, setError] = useState('');
 	const [body, setBody] = useState('');
 
+	const isDemo = user && user.email == 'demo@email.com';
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -58,7 +60,11 @@ const PostComment = ({ tripId, handleAddComment }) => {
 				/>
 
 				<div className='ml-auto'>
-					<Button type='submit' text='Post' color='tertiary' size='sm' />
+					{isDemo ? (
+						<Button text='Post' color='disabled' size='sm' />
+					) : (
+						<Button type='submit' text='Post' color='tertiary' size='sm' />
+					)}
 				</div>
 			</div>
 
