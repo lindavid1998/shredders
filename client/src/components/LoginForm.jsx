@@ -52,6 +52,12 @@ const LoginForm = ({ className }) => {
 		<div className={`max-w-lg p-4 flex flex-col gap-4 ${className}`}>
 			<h2>Welcome back!</h2>
 
+			<div className='bg-gray-100 p-4 rounded-lg'>
+				<div className='font-bold'>Demo mode (read-only)</div>
+				<div>Email: demo@email.com</div>
+				<div>Password: demo123</div>
+			</div>
+
 			<form onSubmit={handleSubmit} className='flex flex-col gap-4'>
 				<TextInput
 					type='email'
