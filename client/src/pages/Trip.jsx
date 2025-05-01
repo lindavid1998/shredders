@@ -27,6 +27,8 @@ const Trip = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [overlapFriends, setOverlapFriends] = useState(null);
 
+	const isDemo = user && user.email == 'demo@email.com';
+
 	const sortRsvps = (rsvps) => {
 		let result = [];
 		for (const status of ['Going', 'Tentative', 'Declined']) {
@@ -180,12 +182,21 @@ const Trip = () => {
 				</div>
 
 				<div className='flex flex-col gap-5 md:absolute md:flex-row md:right-0 md:top-0'>
-					<Button text='Edit trip' color='primary' />
-					<Button
-						text='Invite friends'
-						color='secondary'
-						onClick={() => setIsSidebarOpen(true)}
-					/>
+					{isDemo ? (
+						<>
+							<Button text='Edit trip' color='disabled' />
+							<Button text='Invite friends' color='disabled' />
+						</>
+					) : (
+						<>
+							<Button text='Edit trip' color='primary' />
+							<Button
+								text='Invite friends'
+								color='secondary'
+								onClick={() => setIsSidebarOpen(true)}
+							/>
+						</>
+					)}
 				</div>
 			</div>
 
