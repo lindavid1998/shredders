@@ -151,7 +151,8 @@ Database schema
 | CI/CD | Docker | • Packages application into containers, making it lightweight and portable to share and/or deploy<br>• Can spin up development environment for frontend, backend, and db with one command using Docker Compose |
 | CI/CD | GitHub Actions | Streamline test, build, and deploy process and reduce manual touchpoints |
 | Web app hosting | Render | • Good free tier for hosting both client and server<br>• Quick to spin up applications |
-| File storage and DB hosting | Supabase | • Easy to use interface and good free tier option for storage and database<br>• Database can be easily configured with their table/SQL editor |
+| DB hosting | Supabase | • Easy to use interface and good free tier option <br>• Database can be easily configured with their table/SQL editor |
+| Object (image) storage | AWS S3 | S3 is robust and trusted by many applications. However for the purposes of this project, I would consider this choice to be over-engineered. I initially went with the object storage provided by Supabase which is like S3 but completely free, and that was definitely sufficient for my needs. However for the purposes of learning AWS, I migrated the images to S3. 
 
 ## Testing
 
