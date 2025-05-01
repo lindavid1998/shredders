@@ -1,40 +1,50 @@
 # Shredders
 
-Shredders is a **PERN** web application designed to help snowboarders plan trips and see which of their friends have overlapping trips. It was created as an exercise for using PostgreSQL with React/Express and to provide a fun tool for snowboarders.
+Shredders is a fullstack web application made with React, JS, Node.js, and PostgreSQL designed to help snowboarders plan trips and see which of their friends have overlapping trips. It was created as an exercise for using PostgreSQL with React/Express and to provide a fun tool for snowboarders.
 
 The idea came about last snowboard season when I ran into some friends by chance on the mountain and thought it'd be nice if there was a way to know ahead of time which friends had overlapping trips with you!
 
+## Demo
+
+Access the demo at https://shredders.onrender.com. Feel free to log in with the demo credentials (read-only):
+
+```
+email: demo@email.com
+password: demo123
+```
+
+**NOTE:** The backend service is hosted on Render under a free tier. Render spins down a free web service that goes 15 minutes without receiving inbound traffic. I have gotten around this by implementing a GCP Cloud Run function that pings the backend service every 15 minutes. However, if that fails for whatever reason, the page may get stuck on loading and hang temporarily.
+
 ## Table of Contents
 
-1. [Features](#features)
-2. [Demo](#demo)
-3. [API Reference](#api-reference)
-4. [Usage/Examples](#usageexamples)
-   - [Landing page](#landing-page)
-   - [Login and signup pages](#login-and-signup-pages)
-   - [Home page for authenticated user](#home-page-for-authenticated-user)
-   - [Search users and add friends](#search-users-and-add-friends)
-   - [Incoming friend requests](#incoming-friend-requests)
-   - [Creating a trip](#creating-a-trip)
-   - [Inviting friends to an existing trip](#inviting-friends-to-an-existing-trip)
-   - [View RSVPs](#view-rsvps)
-   - [See which friends have overlapping trips with you](#see-which-friends-have-overlapping-trips-with-you)
-   - [Comment and discuss trip plans](#comment-and-discuss-trip-plans)
-   - [Upload avatar](#upload-avatar)
-   - [Responsive design](#responsive-design)
-5. [Tech Stack](#tech-stack)
-6. [Testing](#testing)
-7. [Continuous Integration/Continuous Deployment (CI/CD)](#continuous-integrationcontinuous-deployment-cicd)
-8. [Redis Caching](#redis-caching)
-9. [Obstacles](#obstacles)
-   - [Issues with Deployment](#issues-with-deployment)
-   - [Backend and Frontend Integration](#backend-and-frontend-integration)
-   - [Database Queries](#database-queries)
-   - [Frontend Behavior](#frontend-behavior)
-   - [Authentication and Authorization](#authentication-and-authorization)
-10. [FAQ](#faq)
-11. [Features to Add](#features-to-add)
-12. [Acknowledgements](#acknowledgements)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Usage/Examples](#usageexamples)
+  - [Landing page](#landing-page)
+  - [Login and signup pages](#login-and-signup-pages)
+  - [Home page for authenticated user](#home-page-for-authenticated-user)
+  - [Search users and add friends](#search-users-and-add-friends)
+  - [Incoming friend requests](#incoming-friend-requests)
+  - [Creating a trip](#creating-a-trip)
+  - [Inviting friends to an existing trip](#inviting-friends-to-an-existing-trip)
+  - [View RSVPs](#view-rsvps)
+  - [See which friends have overlapping trips with you](#see-which-friends-have-overlapping-trips-with-you)
+  - [Comment and discuss trip plans](#comment-and-discuss-trip-plans)
+  - [Upload avatar](#upload-avatar)
+  - [Responsive design](#responsive-design)
+- [Tech Stack](#tech-stack)
+- [Testing](#testing)
+- [Continuous Integration/Continuous Deployment (CI/CD)](#continuous-integrationcontinuous-deployment-cicd)
+- [Redis Caching](#redis-caching)
+- [Obstacles](#obstacles)
+  - [Issues with Deployment](#issues-with-deployment)
+  - [Backend and Frontend Integration](#backend-and-frontend-integration)
+  - [Database Queries](#database-queries)
+  - [Frontend Behavior](#frontend-behavior)
+  - [Authentication and Authorization](#authentication-and-authorization)
+- [FAQ](#faq)
+- [Features to Add](#features-to-add)
+- [Acknowledgements](#acknowledgements)
 
 ## Features
 
@@ -51,18 +61,11 @@ The idea came about last snowboard season when I ran into some friends by chance
 - Client side routing
 - Form validation (client-side and Express)
 
-## Demo
+## Documentation
 
-https://shredders.onrender.com
-
-**NOTE:** Render spins down a Free web service that goes 15 minutes without receiving inbound traffic. Render spins the service back up whenever it next receives a request to process.
-Spinning up a service takes up to a minute, which causes a noticeable delay for incoming requests until the service is back up and running. For example, a browser page load will hang temporarily.
+[RESTful API Reference](./server/README.md)
 
 [Figma Design](https://www.figma.com/design/BddAvshSylaBZxLh8ZFeCQ/Shredders?node-id=0-1&m=dev&t=KhI4qMn9wtrYecOo-1)
-
-## API Reference
-
-[Documentation describing endpoints](./server/README.md)
 
 Database schema
 
@@ -138,21 +141,21 @@ Database schema
 
 ## Tech Stack
 
-| Category | Technology | Why |
-|----------|------------|-----|
-| Frontend | React | Standard library for reusable UI components |
-| Frontend | Vite | Build tool optimized for React with minimal configuration needed |
-| Frontend | Tailwind CSS | Allows applying styles directly in the React components, reducing the need for custom classes |
-| Frontend | React Router | Client side routing to reduce server load and seamless transitions between pages |
-| Backend | Node.js/Express | Keeps coding language consistent between frontend and backend |
-| Backend | PostgreSQL | Supports complex queries that were needed to fetch structured, related data |
-| Backend | JWT | • Compact and efficient way to send authentication data between client and server<br>• Contains all relevant info in payload about authenticated user |
-| Backend | Redis | • Reduce load on PostgreSQL server<br>• Improve API response times |
-| CI/CD | Docker | • Packages application into containers, making it lightweight and portable to share and/or deploy<br>• Can spin up development environment for frontend, backend, and db with one command using Docker Compose |
-| CI/CD | GitHub Actions | Streamline test, build, and deploy process and reduce manual touchpoints |
-| Web app hosting | Render | • Good free tier for hosting both client and server<br>• Quick to spin up applications |
-| DB hosting | Supabase | • Easy to use interface and good free tier option <br>• Database can be easily configured with their table/SQL editor |
-| Object (image) storage | AWS S3 | S3 is robust and trusted by many applications. However for the purposes of this project, I would consider this choice to be over-engineered. I initially went with the object storage provided by Supabase which is like S3 but completely free, and that was definitely sufficient for my needs. However for the purposes of learning AWS, I migrated the images to S3. 
+| Category               | Technology      | Why                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Frontend               | React           | Standard library for reusable UI components                                                                                                                                                                                                                                                                                                                              |
+| Frontend               | Vite            | Build tool optimized for React with minimal configuration needed                                                                                                                                                                                                                                                                                                         |
+| Frontend               | Tailwind CSS    | Allows applying styles directly in the React components, reducing the need for custom classes                                                                                                                                                                                                                                                                            |
+| Frontend               | React Router    | Client side routing to reduce server load and seamless transitions between pages                                                                                                                                                                                                                                                                                         |
+| Backend                | Node.js/Express | Keeps coding language consistent between frontend and backend                                                                                                                                                                                                                                                                                                            |
+| Backend                | PostgreSQL      | Supports complex queries that were needed to fetch structured, related data                                                                                                                                                                                                                                                                                              |
+| Backend                | JWT             | • Compact and efficient way to send authentication data between client and server<br>• Contains all relevant info in payload about authenticated user                                                                                                                                                                                                                    |
+| Backend                | Redis           | • Reduce load on PostgreSQL server<br>• Improve API response times                                                                                                                                                                                                                                                                                                       |
+| CI/CD                  | Docker          | • Packages application into containers, making it lightweight and portable to share and/or deploy<br>• Can spin up development environment for frontend, backend, and db with one command using Docker Compose                                                                                                                                                           |
+| CI/CD                  | GitHub Actions  | Streamline test, build, and deploy process and reduce manual touchpoints                                                                                                                                                                                                                                                                                                 |
+| Web app hosting        | Render          | • Good free tier for hosting both client and server<br>• Quick to spin up applications                                                                                                                                                                                                                                                                                   |
+| DB hosting             | Supabase        | • Easy to use interface and good free tier option <br>• Database can be easily configured with their table/SQL editor                                                                                                                                                                                                                                                    |
+| Object (image) storage | AWS S3          | S3 is robust and trusted by many applications. However for the purposes of this project, I would consider this choice to be over-engineered. I initially went with the object storage provided by Supabase which is like S3 but completely free, and that was definitely sufficient for my needs. However for the purposes of learning AWS, I migrated the images to S3. |
 
 ## Testing
 
@@ -251,7 +254,7 @@ Practically, given that the size of my database is only a few rows, the queries 
 ### Frontend Behavior
 
 - **Comment Deletion:**
-  - **Problem:** Deleting a comment other than the last one expanded the adjacent comment’s dropdown menu. The dropdown for any specific comment should only expand when clicked.
+  - **Problem:** Deleting a comment other than the last one expanded the adjacent comment's dropdown menu. The dropdown for any specific comment should only expand when clicked.
   - **Solution:** This behavior was due to event propogation, where clicking a dropdown menu item triggered the dropdown icon's click handler. Fixed by disabling propogation.
 - **Comment Edit Icon Not Shown:**
   - **Problem:** Edit icon for comments was not showing up after user initially logged in
