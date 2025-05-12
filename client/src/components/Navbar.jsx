@@ -101,6 +101,7 @@ const Navbar = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [friendRequestCount, setFriendRequestCount] = useState(0);
 	const dropdownRef = useRef(null);
+	const isDemo = user?.email == 'demo@email.com';
 
 	const handleOutsideClick = (event) => {
 		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -223,7 +224,7 @@ const Navbar = () => {
 							onClick={logout}
 							size='sm'
 						/>
-						<Avatar avatar_url={user.avatar_url} allowEdit={true} />
+						<Avatar avatar_url={user.avatar_url} allowEdit={!isDemo} />
 					</>
 				) : (
 					<>

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-// const version = import.meta.env.VITE_API_VERSION;
-// const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import { API_VERSION as version, BACKEND_BASE_URL } from '../constants';
 import Button from './Button';
 
