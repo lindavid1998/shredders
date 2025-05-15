@@ -56,7 +56,7 @@ router.post(`/create`, validateInput, async (req, res) => {
 
 	const { destination_id, start_date, end_date, addedFriends } = req.body;
 
-	const user_id = req.user.user_id;
+	const user_id = req.user.id;
 
 	try {
 		// insert trip into trips table
@@ -100,7 +100,7 @@ router.post(`/create`, validateInput, async (req, res) => {
 
 router.get(`/overview`, async (req, res) => {
 	const user = req.user;
-	const userId = user.user_id;
+	const userId = user.id;
 
 	const cacheKey = `overview:${userId}`;
 	const cacheData = await redisClient.get(cacheKey);
@@ -213,7 +213,7 @@ router.post('/:id/invite/:user_id', async (req, res) => {
 
 router.get('/:id/invite/status', async (req, res) => {
 	const tripId = req.params.id;
-	const userId = req.user.user_id;
+	const userId = req.user.id;
 	try {
 		const query = `
 			WITH friends AS (
@@ -261,7 +261,7 @@ router.delete('/:id/comments/:comment_id', async (req, res) => {
 
 		// throw error if user doesn't match
 		const userId = result.rows[0]['user_id'];
-		if (userId != req.user.user_id) {
+		if (userId != req.user.id) {
 			return res.status(400).json({
 				errors: [{ msg: 'only the owner of the comment can delete' }],
 			});
@@ -284,7 +284,7 @@ router.delete('/:id/comments/:comment_id', async (req, res) => {
 router.post('/:id/comments', async (req, res) => {
 	try {
 		const tripId = req.params.id;
-		const userId = req.user.user_id;
+		const userId = req.user.id;
 		const { body } = req.body;
 
 		const query = `
@@ -304,7 +304,7 @@ router.post('/:id/comments', async (req, res) => {
 // view trip
 router.get('/:id', async (req, res) => {
 	const tripId = req.params.id;
-	const userId = req.user.user_id;
+	const userId = req.user.id;
 
 	const tripQuery = `
 		SELECT
@@ -423,7 +423,7 @@ router.delete('/:id', async (req, res) => {
 		}
 
 		const creatorId = result.rows[0]['creator_id'];
-		const userId = req.user.user_id;
+		const userId = req.user.id;
 
 		// throw error if current user doesn't match creator
 		if (userId != creatorId) {

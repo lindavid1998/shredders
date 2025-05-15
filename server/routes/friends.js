@@ -91,7 +91,7 @@ router.post('/reject/:id', async (req, res) => {
 
 router.post('/add/:id', async (req, res) => {
 	try {
-		const fromUserId = req.user.user_id;
+		const fromUserId = req.user.id;
 		const toUserId = Number(req.params.id);
 
 		if (await doesFriendRequestExist(fromUserId, toUserId)) {
@@ -121,7 +121,7 @@ router.post('/add/:id', async (req, res) => {
 router.get('/requests', async (req, res) => {
 	try {
 		// get all incoming friend requests
-		const userId = req.user.user_id;
+		const userId = req.user.id;
 		const query = `
 			SELECT friend_requests.id, friend_requests.from_user_id, users.first_name, users.last_name, users.avatar_url
 			FROM friend_requests
@@ -138,7 +138,7 @@ router.get('/requests', async (req, res) => {
 
 router.get('/', async (req, res) => {
 	try {
-		const user_id = req.user.user_id;
+		const user_id = req.user.id;
 
 		const query = `
 			SELECT users.first_name, users.last_name, users.id, CONCAT(users.first_name, ' ', users.last_name) AS full_name

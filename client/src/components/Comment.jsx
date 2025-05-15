@@ -65,7 +65,7 @@ const Comment = ({ data, removeComment }) => {
 
 				<p style={{ color: 'var(--caption-color)' }}>{daysSinceCreated}d ago</p>
 
-				{user.user_id == user_id && (
+				{user.id == user_id && (
 					<div className='hidden md:flex ml-auto items-center justify-center gap-5'>
 						<div className='comment-edit-delete'>
 							<FontAwesomeIcon icon={faPenToSquare} />
@@ -78,7 +78,7 @@ const Comment = ({ data, removeComment }) => {
 					</div>
 				)}
 
-				{user.user_id == user_id && (
+				{user.id == user_id && (
 					<div className='md:hidden ml-auto cursor-pointer relative'>
 						<FontAwesomeIcon
 							icon={faEllipsisVertical}

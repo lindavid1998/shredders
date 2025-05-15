@@ -42,7 +42,7 @@ const SignupForm = ({ className }) => {
 			}
 
 			setError('');
-			setUser(data.user);
+			setUser(data);
 			navigate(`/${version}`);
 		} catch (error) {
 			setError(error);

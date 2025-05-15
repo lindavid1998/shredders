@@ -3,7 +3,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 // mock useAuth hook
-const mockUser = { user_id: 1 };
+const mockUser = { id: 1 };
 jest.mock('../src/hooks/useAuth', () => ({
 	useAuth: () => ({
 		user: mockUser,

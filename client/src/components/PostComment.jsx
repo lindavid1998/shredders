@@ -10,7 +10,7 @@ const PostComment = ({ tripId, handleAddComment }) => {
 	const [error, setError] = useState('');
 	const [body, setBody] = useState('');
 
-	const isDemo = user && user.email == 'demo@email.com';
+	const isDemo = user?.email == 'demo@email.com';
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -48,7 +48,7 @@ const PostComment = ({ tripId, handleAddComment }) => {
 		<form onSubmit={handleSubmit} className='flex flex-col gap-2.5'>
 			<div className='flex gap-2.5 min-h-11 relative'>
 				<div className='hidden md:block'>
-					<Avatar avatar_url={user.avatar_url} size='sm' />
+					<Avatar avatar_url={user.avatarUrl} size='sm' />
 				</div>
 
 				<textarea

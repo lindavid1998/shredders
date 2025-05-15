@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { getFormattedDate } from '../src/utils/utils';
 
 // mock useAuth
-const mockUser = { user_id: 1 };
+const mockUser = { id: 1 };
 jest.mock('../src/hooks/useAuth', () => ({
 	useAuth: () => ({
 		user: mockUser,

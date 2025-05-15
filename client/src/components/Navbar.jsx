@@ -21,27 +21,25 @@ const Dropdown = forwardRef(
 					<h6 className='nav-dropdown-item'>Pricing</h6>
 
 					{user && (
-						<h6 className='nav-dropdown-item' onClick={handleOpenRequests}>
-							Friend requests ({friendRequestCount})
-						</h6>
-					)}
-
-					{user && (
-						<h6 className='nav-dropdown-item' onClick={logout}>
-							Sign out
-						</h6>
-					)}
-
-					{!user && (
-						<h6 className='nav-dropdown-item'>
-							<Link to={`/${version}/auth/login`}>Log in</Link>
-						</h6>
+						<>
+							<h6 className='nav-dropdown-item' onClick={handleOpenRequests}>
+								Friend requests ({friendRequestCount})
+							</h6>
+							<h6 className='nav-dropdown-item' onClick={logout}>
+								Sign out
+							</h6>
+						</>
 					)}
 
 					{!user && (
-						<h6 className='nav-dropdown-item'>
-							<Link to={`/${version}/auth/signup`}>Sign up</Link>
-						</h6>
+						<>
+							<h6 className='nav-dropdown-item'>
+								<Link to={`/${version}/auth/login`}>Log in</Link>
+							</h6>
+							<h6 className='nav-dropdown-item'>
+								<Link to={`/${version}/auth/signup`}>Sign up</Link>
+							</h6>
+						</>
 					)}
 				</ul>
 			</div>
@@ -224,7 +222,7 @@ const Navbar = () => {
 							onClick={logout}
 							size='sm'
 						/>
-						<Avatar avatar_url={user.avatar_url} allowEdit={!isDemo} />
+						<Avatar avatar_url={user.avatarUrl} allowEdit={!isDemo} />
 					</>
 				) : (
 					<>

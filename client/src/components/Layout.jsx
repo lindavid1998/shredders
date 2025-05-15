@@ -9,7 +9,7 @@ const Layout = () => {
 	const { user } = useAuth();
 	const isLanding = location.pathname === '/';
 
-	const isDemo = user && user.email == 'demo@email.com';
+	const isDemo = user?.email == 'demo@email.com';
 
 	return (
 		<div className='flex flex-col items-center w-screen h-screen'>

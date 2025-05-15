@@ -27,7 +27,7 @@ const Trip = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [overlapFriends, setOverlapFriends] = useState(null);
 
-	const isDemo = user && user.email == 'demo@email.com';
+	const isDemo = user?.email == 'demo@email.com';
 
 	const sortRsvps = (rsvps) => {
 		let result = [];

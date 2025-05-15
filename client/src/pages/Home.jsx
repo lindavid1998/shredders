@@ -146,7 +146,7 @@ const Home = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
 
-	const isDemo = user && user.email == 'demo@email.com';
+	const isDemo = user?.email == 'demo@email.com';
 
 	const splitTrips = (trips) => {
 		const currentDate = new Date();
@@ -234,7 +234,7 @@ const Home = () => {
 	return (
 		<div className='home flex flex-col gap-10 w-full items-center md:items-start'>
 			<div className='section'>
-				<h2>Welcome, {user.first_name}</h2>
+				<h2>Welcome, {user.firstName}</h2>
 
 				<div className='flex flex-col md:flex-row gap-2'>
 					{isDemo ? (

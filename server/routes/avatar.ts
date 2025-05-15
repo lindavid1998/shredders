@@ -3,13 +3,21 @@ const { handleError } = require('../utils');
 const multer = require('multer');
 const upload = multer();
 const { createClient } = require('@supabase/supabase-js');
+const jwt = require('jsonwebtoken');
 const { decode } = require('base64-arraybuffer');
-const jwtGenerator = require('../jwtGenerator');
 const {
 	S3Client,
 	PutObjectCommand,
 	GetObjectCommand,
 } = require('@aws-sdk/client-s3');
+
+interface User {
+	id: number;
+	email: string;
+	firstName: string;
+	lastName: string;
+	avatarUrl: string;
+}
 
 // Initialize S3 client
 const s3Client = new S3Client({
@@ -28,14 +36,13 @@ const supabase = createClient(
 router.post('/upload', upload.single('avatar'), async (req, res) => {
 	try {
 		const user = req.user;
-		const user_id = user.user_id;
 
 		// get file from req object
 		const file = req.file;
 		const fileType = file.mimetype.split('/')[1];
 
 		// Generate unique file key
-		const fileKey = `avatars/user_${user_id}_${Date.now()}.${fileType}`;
+		const fileKey = `avatars/user_${user.id}_${Date.now()}.${fileType}`;
 
 		// Put an object into an Amazon S3 bucket.
 		await s3Client.send(
@@ -49,23 +56,18 @@ router.post('/upload', upload.single('avatar'), async (req, res) => {
 
 		// Generate the public URL for the uploaded file
 		const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
-		console.log(url)
 
 		// update url in users db table
 		await supabase
 			.from('users')
 			.update({ avatar_url: url })
-			.eq('id', user_id)
+			.eq('id', user.id)
 			.select();
 
-		// update JWT token payload with new avatar url
-		token = jwtGenerator(
-			user_id,
-			user.first_name,
-			user.last_name,
-			user.email,
-			url
-		);
+		user.avatarUrl = url;
+		const token: string = jwt.sign(user, process.env.JWT_KEY, {
+			expiresIn: '1h',
+		});
 
 		res.cookie('token', token, {
 			maxAge: 900000,

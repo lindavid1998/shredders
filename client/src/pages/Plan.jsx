@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Button from '../components/Button';
 import { useAuth } from '../hooks/useAuth';
 import { useLoad } from '../hooks/useLoad';
-// const version = import.meta.env.VITE_API_VERSION;
-// const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 import { API_VERSION as version, BACKEND_BASE_URL } from '../constants'
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
@@ -15,8 +13,8 @@ import HeroImg from '/chairlift.jpg';
 const Plan = () => {
 	const [destinationToId, setDestinationToId] = useState({});
 	const [destination, setDestination] = useState(null);
-	const [start_date, setStartDate] = useState(null);
-	const [end_date, setEndDate] = useState(null);
+	const [startDate, setStartDate] = useState(null);
+	const [endDate, setEndDate] = useState(null);
 	const [error, setError] = useState('');
 	const [friends, setFriends] = useState([]);
 	const [addedFriends, setAddedFriends] = useState([]);
@@ -48,7 +46,7 @@ const Plan = () => {
 			setError('Failed to fetch friends.');
 			console.error(error);
 		}
-	}, [user.user_id, version]);
+	}, [user.id, version]);
 
 	const fetchDestinations = useCallback(async () => {
 		try {
@@ -95,7 +93,8 @@ const Plan = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const user_id = user.user_id;
+			const user_id = user.id;
+			console.log(user);
 
 			const response = await fetch(
 				`${BACKEND_BASE_URL}/${version}/trips/create`,
@@ -107,8 +106,8 @@ const Plan = () => {
 					credentials: 'include',
 					body: JSON.stringify({
 						destination_id: destinationToId[destination],
-						start_date,
-						end_date,
+						startDate,
+						endDate,
 						user_id,
 						addedFriends,
 					}),
@@ -168,10 +167,10 @@ const Plan = () => {
 				</div>
 
 				<div className='input-container'>
-					<label htmlFor='start_date'>Start</label>
+					<label htmlFor='start-date'>Start</label>
 					<input
 						type='date'
-						id='start_date'
+						id='start-date'
 						required
 						onChange={(e) => setStartDate(e.target.value)}
 						className='input-field max-w-64'
@@ -180,10 +179,10 @@ const Plan = () => {
 
 				<div className='input-container'>
 					{/* add client side validation that end date cannot be before start date? */}
-					<label htmlFor='end_date'>End</label>
+					<label htmlFor='end-date'>End</label>
 					<input
 						type='date'
-						id='end_date'
+						id='end-date'
 						required
 						onChange={(e) => setEndDate(e.target.value)}
 						className='input-field max-w-64'

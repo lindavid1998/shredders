@@ -1,16 +1,30 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useCookies } from 'react-cookie';
 const version = import.meta.env.VITE_API_VERSION;
 const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
-const AuthContext = createContext(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [cookies, setCookies, removeCookie] = useCookies(['token']);
+interface User {
+	id: number;
+	firstName: string;
+	lastName: string;
+	email: string;
+	avatarUrl: string;
+}
+
+export interface AuthContextType {
+	user: User | null;
+	setUser: React.Dispatch<React.SetStateAction<User | null>>;
+	logout: () => void;
+	isLoading: boolean;
+	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+	const [user, setUser] = useState<User | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	const logout = async () => {
 		try {
@@ -41,20 +55,22 @@ export const AuthProvider = ({ children }) => {
 						},
 					}
 				);
+
 				if (response.ok) {
-					const { user } = await response.json();
-					setUser(user);
+					const data: User = await response.json();
+					setUser(data);
 				}
 			} catch (error) {
 				console.log(error);
+			} finally {
+				setIsLoading(false);
 			}
-			setIsLoading(false);
 		};
 
 		checkAuth();
 	}, []);
 
-	const value = {
+	const value: AuthContextType = {
 		user,
 		setUser,
 		logout,

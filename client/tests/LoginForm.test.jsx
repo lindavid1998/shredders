@@ -45,7 +45,7 @@ describe('LoginForm', () => {
 	});
 
 	// mock return value of fetch for successful login
-	const mockData = { user: 'test@email.com' };
+	const mockData = { id: 1, email: 'test@email.com' };
 	global.fetch = jest.fn().mockResolvedValue({
 		ok: true,
 		json: () => Promise.resolve(mockData),
@@ -72,7 +72,7 @@ describe('LoginForm', () => {
 			fireEvent.change(password, { target: { value: 'password' } });
 			fireEvent.click(screen.getByText('Login'));
 		});
-		expect(mockSetUser).toHaveBeenCalledWith(mockData.user); // the mocked return value from handleSubmit
+		expect(mockSetUser).toHaveBeenCalledWith(mockData); // the mocked return value from handleSubmit
 	});
 
 	test('displays error if incorrect password', async () => {

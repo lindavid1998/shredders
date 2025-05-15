@@ -11,11 +11,11 @@ const pool = require('./db');
 const path = require('path');
 
 // import routers
-const authRouter = require('./routes/jwtAuth');
+const authRouter = require('./routes/auth.ts');
 const tripRouter = require('./routes/trips');
 const friendsRouter = require('./routes/friends');
 const usersRouter = require('./routes/users');
-const avatarRouter = require('./routes/avatar');
+const avatarRouter = require('./routes/avatar.ts');
 
 // MIDDLEWARE
 
