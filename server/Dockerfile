@@ -20,4 +20,4 @@ ENV REDIS_PASSWORD_FILE=/etc/secrets/redis_password
 EXPOSE 3000
 
 # start the server
-CMD ["npm", "start:all"]
+CMD ["npm", "run", "start:all"]
