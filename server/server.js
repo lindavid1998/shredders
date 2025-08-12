@@ -46,6 +46,10 @@ app.use(`/${apiVersion}/users`, authorization, usersRouter);
 
 app.use(`/${apiVersion}/avatar`, authorization, avatarRouter);
 
+app.get('/ping', (req, res) => {
+	res.send('pong')
+})
+
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client', 'index.html'));
