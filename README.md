@@ -157,6 +157,10 @@ Database schema
 | DB hosting             | Supabase        | • Easy to use interface and good free tier option <br>• Database can be easily configured with their table/SQL editor                                                                                                                                                                                                                                                    |
 | Object (image) storage | AWS S3          | S3 is robust and trusted by many applications. However for the purposes of this project, I would consider this choice to be over-engineered. I initially went with the object storage provided by Supabase which is like S3 but completely free, and that was definitely sufficient for my needs. However for the purposes of learning AWS, I migrated the images to S3. |
 
+**Update Aug 11, 2025**
+
+The Redis database was about to be deleted due to inactivity. To keep it active, I added a cron job to run every week. This job executes a script that connects to the Redis instance and inserts/deletes a key.
+
 ## Testing
 
 The application includes comprehensive test coverage for frontend components using Jest and React Testing Library. Tests are located in the `client/tests` directory.
